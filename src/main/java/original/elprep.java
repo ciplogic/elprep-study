@@ -95,8 +95,6 @@ public class elprep {
                 } else {
                     throw new RuntimeException("Unknown sorting order.");
                 }
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
         });
     }
