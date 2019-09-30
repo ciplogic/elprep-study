@@ -2,11 +2,12 @@ import commons.Utilities;
 
 public class StartUp {
     public static void main(String[] args) {
-
         var algos = new String[]{
-                "original",
-                "optimized",
-                "buffers",
+//                "original",
+//                "optimized",
+//                "buffers",
+
+                "compact",
         };
         System.out.println("Warmup ...");
         for (var algo : algos)
@@ -34,6 +35,9 @@ public class StartUp {
                         break;
                     case "buffers":
                         buffers.elprep.main(args);
+                        break;
+                    case "compact":
+                        compact.elprep.main(args);
                         break;
                     case "optimized":
                         optimized.elprep.main(args);

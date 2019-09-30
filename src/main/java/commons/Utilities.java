@@ -11,7 +11,8 @@ public class Utilities {
                 var start = System.currentTimeMillis();
                 f.apply();
                 var end = System.currentTimeMillis();
-                System.out.println("" + (end - start) + " ms.");
+                var msCount = (end - start) / 1000.0;
+                System.out.println("" + msCount + " ms.");
             } else {
                 f.apply();
             }
