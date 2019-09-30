@@ -1,54 +1,48 @@
 package compact;
 
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
+import commons.Utilities;
+import compact.reader.BatchWrapperReader;
 
+import java.io.FileInputStream;
+import java.util.Arrays;
+
+import static commons.Utilities.combine;
 import static commons.Utilities.timedRun;
-
-class BatchWrapper{
-    
-    ArrayList<SamBatch> batches = new ArrayList<>();
-    int counter;
-    private int batchSize;
-    SamBatch batch ;
-
-    StringScanner sc = new StringScanner();
-    BatchWrapper(int batchSize) {
-        this.batchSize = batchSize;
-        batch = new SamBatch(batchSize);
-    }
-
-    public void processRow(String row) {
-        counter++;
-        if(counter==batchSize){
-            batch.shrink();
-            batches.add(batch);
-            batch = new SamBatch(batchSize);
-            counter = 0;
-            if(batches.size()% 100 == 0){
-                System.out.println("Batch count: "+batches.size());
-            }
-        }
-        sc.SetText(row);
-        batch.readRow(sc);
-    }
-}
 
 public class elprep {
     public static void main(String[] args) {
-        timedRun(true, "Read file reactive.", () -> {
+        timedRun(true, "Read file stream.", () -> {
             var inputFileName = args[1];
-            var batchSize = 10000;
-            var batchWrapper = new BatchWrapper(batchSize);
-            Files.lines(Paths.get(inputFileName)).forEach(row->{
-                if(row.length()==0 || row.charAt(0)== '@')
-                    return;
-                batchWrapper.processRow(row);
-            });
-            System.out.println(batchWrapper.batches.size());
-//            System.in.read();
-//            System.out.println(batchWrapper.batches.size());
+            var batchSize = 3600;
+            var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors()*4);
+            try(FileInputStream fileInputStream = new FileInputStream(inputFileName)){
+                byte[] b;;
+                byte[] remainder = new byte[0];
+                while ((b = fileInputStream.readNBytes(1250000)).length>0)
+                {
+                    var startIndex = Utilities.indexOfByte(b, '\n', 0);
+                    var row =startIndex!=-1? combine(remainder, Arrays.copyOfRange(b, 0, startIndex))
+                            :remainder;
+                    addRowToBatchWrapper(batchWrapper, row);
+                    var endIndex = -1;
+                    startIndex++;
+                    while ((endIndex = Utilities.indexOfByte(b, '\n', startIndex))>0)
+                    {
+                        row = Arrays.copyOfRange(b, startIndex, endIndex);
+                        addRowToBatchWrapper(batchWrapper, row);
+                        startIndex = endIndex+1;
+                    }
+                    remainder = Arrays.copyOfRange(b, startIndex, b.length);
+                }
+                addRowToBatchWrapper(batchWrapper, remainder);
+            }
+            batchWrapper.flushBatched();
         });
+    }
+
+    private static void addRowToBatchWrapper(BatchWrapperReader batchWrapper, byte[] row) {
+        if(0 ==row.length || row[0]== '@')
+            return;
+        batchWrapper.processBatched(row);
     }
 }

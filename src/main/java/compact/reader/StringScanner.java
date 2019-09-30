@@ -1,26 +1,30 @@
-package compact;
+package compact.reader;
+
+import commons.Utilities;
+
+import java.util.Arrays;
 
 public class StringScanner
 {
-    private String _line;
+    private byte[] _line;
     private int Pos;
 
-    void SetText(String line)
+    public void setText(byte[] line)
     {
         _line = line;
         Pos = 0;
     }
 
 
-    public String doSlice()
+    public byte[] doSlice()
     {
-        var endIndex = _line.indexOf('\t', Pos);
+        var endIndex = Utilities.indexOfByte(_line, '\t', Pos);
         if (endIndex == -1)
         {
-            return _line.substring(Pos);
+            return Arrays.copyOf(_line, Pos);
         }
 
-        var result = _line.substring(Pos, endIndex);
+        var result = Arrays.copyOfRange(_line, Pos, endIndex);
         Pos = endIndex + 1;
         return result;
     }
@@ -29,7 +33,7 @@ public class StringScanner
     {
         int result = 0;
         var isNegative = false;
-        if (_line.charAt(Pos) == '-')
+        if (_line[Pos] == '-')
         {
             isNegative = true;
             Pos++;
@@ -37,7 +41,7 @@ public class StringScanner
 
         while (true)
         {
-            char ch = _line.charAt(Pos);
+            var ch = _line[Pos];
             Pos++;
             if (ch == '\t')
                 return isNegative ? -result : result;

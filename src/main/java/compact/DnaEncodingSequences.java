@@ -10,14 +10,14 @@ public class DnaEncodingSequences {
     LongArrayList fullSequences;
     IntArrayList startIndex;
 
-    public DnaEncodingSequences(int expectedLength)
+    DnaEncodingSequences(int expectedLength)
     {
         lengths = new ShortArrayList(expectedLength);
         fullSequences = new LongArrayList(expectedLength);
         startIndex = new IntArrayList(expectedLength);
     }
 
-    static long CharLetterEncode(char ch)
+    private static long charLetterEncode(byte ch)
     {
         switch (ch)
         {
@@ -29,11 +29,10 @@ public class DnaEncodingSequences {
                 return 0;
         }
     }
-    static char CharLetterDecode(int ch)
+    private static char charLetterDecode(int ch)
     {
         switch (ch)
         {
-            case 0: return 'A';
             case 1: return 'C';
             case 2: return 'G';
             case 3: return 'T';
@@ -42,16 +41,16 @@ public class DnaEncodingSequences {
                 return 'A';
         }
     }
-    public static long[] EncodeSequence(String sequence)
+    public static long[] EncodeSequence(byte[] sequence)
     {
-        var sequenceLength = sequence.length();
+        var sequenceLength = sequence.length;
         var result = new LongArrayList(sequenceLength/21+1);
         long combinedCode = 0;
         var remainder = 0;
         var shifter = 0;
         for (var index = 0; index < sequenceLength; index++)
         {
-            var dnaLetter = sequence.charAt(index);
+            var dnaLetter = sequence[index];
             if (remainder == 0)
             {
                 if (index != 0)
@@ -62,7 +61,7 @@ public class DnaEncodingSequences {
                 combinedCode = 0;
             }
 
-            var encodedLetter = CharLetterEncode(dnaLetter);
+            var encodedLetter = charLetterEncode(dnaLetter);
             combinedCode += encodedLetter << (shifter);
 
             remainder ++;
@@ -83,7 +82,7 @@ public class DnaEncodingSequences {
         return encodeSequence;
     }
 
-    public static String DecodeSequence(long[] input, int length)
+    public static String decodeSequence(long[] input, int length)
     {
         var sb = new StringBuilder();
         for (var i = 0; i < length; i++)
@@ -92,13 +91,13 @@ public class DnaEncodingSequences {
             var remainderIndex = i % 21;
             var charSeq = input[divide];
             var charShifted = (int)(charSeq >> (remainderIndex * 3)) & 7;
-            var charDecoded = CharLetterDecode(charShifted);
+            var charDecoded = charLetterDecode(charShifted);
             sb.append(charDecoded);
         }
         return sb.toString();
     }
 
-    public void Add(String seqText)
+    public void add(byte[] seqText)
     {
         var encoded = EncodeSequence(seqText);
         for(var l : encoded)
@@ -106,7 +105,7 @@ public class DnaEncodingSequences {
             fullSequences.add(l);
         }
         startIndex.add(lengths.size());
-        lengths.add((short) seqText.length());
+        lengths.add((short) seqText.length);
     }
 
     public void shrink() {
