@@ -1,20 +1,17 @@
-package compact;
+package compact.model;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
-import it.unimi.dsi.fastutil.shorts.ShortArrayList;
 
 public class DnaEncodingSequences {
 
-    ShortArrayList lengths;
-    LongArrayList fullSequences;
-    IntArrayList startIndex;
+    private IntArrayList _lengths;
+    private LongArrayList _fullSequences;
 
     DnaEncodingSequences(int expectedLength)
     {
-        lengths = new ShortArrayList(expectedLength);
-        fullSequences = new LongArrayList(expectedLength);
-        startIndex = new IntArrayList(expectedLength);
+        _lengths = new IntArrayList(expectedLength);
+        _fullSequences = new LongArrayList(expectedLength);
     }
 
     private static long charLetterEncode(byte ch)
@@ -97,18 +94,30 @@ public class DnaEncodingSequences {
         return sb.toString();
     }
 
+    int roundUpValue(int value, int base){
+        var rem = value% base;
+        var div = value / base;
+        if (rem==0)
+            return value;
+        return (div+1)*base;
+    }
+
     public void add(byte[] seqText)
     {
         var encoded = EncodeSequence(seqText);
         for(var l : encoded)
         {
-            fullSequences.add(l);
+            _fullSequences.add(l);
         }
-        startIndex.add(lengths.size());
-        lengths.add((short) seqText.length);
+        var startIndex = 0;
+        if (_lengths.size()!=0){
+            startIndex = roundUpValue(_lengths.getInt(_lengths.size()-1), 21);
+
+        }
+        _lengths.add(startIndex+seqText.length);
     }
 
     public void shrink() {
-        fullSequences.trim();
+        _fullSequences.trim();
     }
 }

@@ -1,6 +1,6 @@
 package compact.reader;
 
-import compact.SamBatch;
+import compact.model.SamBatch;
 
 import java.util.ArrayList;
 import java.util.stream.IntStream;
@@ -35,7 +35,9 @@ class StringBufferBatches
     }
 
     void flushAllToWrapper() {
-        IntStream.range(0, _size).parallel().mapToObj(i -> {
+        IntStream.range(0, _size)
+                .parallel()
+                .mapToObj(i -> {
             var rows = _bufferBatches.get(i);
             return flushBatch(rows);
         }).forEachOrdered(
@@ -60,6 +62,10 @@ class StringBufferBatches
 
 public class BatchWrapperReader {
 
+    public ArrayList<SamBatch> getBatches() {
+        return batches;
+    }
+
     ArrayList<SamBatch> batches = new ArrayList<>();
 
     private StringBufferBatches stringBufferBatches;
@@ -73,5 +79,6 @@ public class BatchWrapperReader {
 
     public void flushBatched() {
         stringBufferBatches.flushAllToWrapper();
+        stringBufferBatches = null;
     }
 }

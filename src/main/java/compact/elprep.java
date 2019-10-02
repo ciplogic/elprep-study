@@ -13,8 +13,8 @@ public class elprep {
     public static void main(String[] args) {
         timedRun(true, "Read file stream.", () -> {
             var inputFileName = args[1];
-            var batchSize = 3600;
-            var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors()*4);
+            var batchSize = 4000;
+            var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors()*8);
             try(FileInputStream fileInputStream = new FileInputStream(inputFileName)){
                 byte[] b;;
                 byte[] remainder = new byte[0];
@@ -37,6 +37,9 @@ public class elprep {
                 addRowToBatchWrapper(batchWrapper, remainder);
             }
             batchWrapper.flushBatched();
+            var batches = batchWrapper.getBatches();
+            System.out.println("Batches count: "+batches.size());
+            System.gc();
         });
     }
 
