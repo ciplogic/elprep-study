@@ -1,5 +1,7 @@
 package commons;
 
+import it.unimi.dsi.fastutil.ints.IntArrayList;
+
 import java.io.IOException;
 
 public class Utilities {
@@ -11,6 +13,12 @@ public class Utilities {
                 return i;
         }
         return -1;
+    }
+
+    public static int lastItem(IntArrayList values){
+        if(values.size()==0)
+            return 0;
+        return values.getInt(values.size()-1);
     }
 
     public static byte[] combine(byte[] one, byte[] two)

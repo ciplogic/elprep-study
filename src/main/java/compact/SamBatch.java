@@ -8,7 +8,7 @@ import it.unimi.dsi.fastutil.ints.IntArrayList;
 import java.util.ArrayList;
 
 public class SamBatch {
-    ArrayList<byte[]> QNAME;
+    StringSequence QNAME;
     CharArrayList FLAG;
     DeduplicatedDictionary RNAME;
     IntArrayList POS;
@@ -18,13 +18,12 @@ public class SamBatch {
     IntArrayList PNEXT;
     IntArrayList TLEN;
 
-    //ArrayList<byte[]> SEQ;
     DnaEncodingSequences SeqPacked;
-    ArrayList<byte[]> QUAL;
+    StringSequence QUAL;
 
 
     public SamBatch(int expectedLength) {
-        QNAME = new ArrayList<>();
+        QNAME = new StringSequence();
         FLAG = new CharArrayList(expectedLength);
         RNAME = new DeduplicatedDictionary();
         POS = new IntArrayList(expectedLength);
@@ -35,7 +34,7 @@ public class SamBatch {
         PNEXT = new IntArrayList(expectedLength);
         TLEN = new IntArrayList(expectedLength);
         SeqPacked = new DnaEncodingSequences(expectedLength);
-        QUAL = new ArrayList<>(expectedLength);
+        QUAL = new StringSequence();
     }
 
     public void readRow(StringScanner sc) {
@@ -55,6 +54,9 @@ public class SamBatch {
     }
 
     public void shrink(){
+        QNAME.shrink();
+        QUAL.shrink();
         SeqPacked.shrink();
+
     }
 }
