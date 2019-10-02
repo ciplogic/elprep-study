@@ -13,7 +13,7 @@ public class elprep {
     public static void main(String[] args) {
         timedRun(true, "Read file stream.", () -> {
             var inputFileName = args[1];
-            var batchSize = 3600;
+            var batchSize = 2000;
             var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors()*4);
             try(FileInputStream fileInputStream = new FileInputStream(inputFileName)){
                 byte[] b;;
