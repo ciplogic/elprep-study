@@ -1,0 +1,65 @@
+\documentclass[a4paper,twoside]{article}
+
+\usepackage{epsfig}
+\usepackage{subcaption}
+\usepackage{calc}
+\usepackage{amssymb}
+\usepackage{amstext}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{multicol}
+\usepackage{pslatex}
+\usepackage{apalike}
+\usepackage{SCITEPRESS}     % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
+
+
+\begin{document}
+
+\title{A Case Study on Performance Optimization Techniques in Java Programming}
+
+\author{\authorname{Cirpian Khlud\sup{1}\orcidAuthor{0000-0000-0000-0000}
+  and Cristian Fr\u asinaru\sup{1}\orcidAuthor{0000-0002-5246-7396} }
+\affiliation{\sup{1}Institute of Problem Solving, XYZ University, My Street, MyTown, MyCountry}
+\affiliation{\sup{2}"Alexandru Ioan Cuza University", Ia\c si, Romania}
+\email{ciprian.mustiata@gmail.com, acf@info.uaic.ro}
+}
+
+\keywords{Java, Runtime performance, Memory usage, Garbage collection, Sequence analysis, SAM/BAM files}
+
+\abstract{
+Choosing the right programming platform for processor or memory intensive applications is a subject that is debated in all types of contexts.
+When analyzing the performance of a specific platform, equally important is the usage of appropriate language specific constructions and 
+programming interfaces (APIs).
+In this paper we investigate how a state-of-the art implementation, part of a multi-threaded framework for sequence analysis (elPrep)
+could benefit from various optimization techniques dedicated to improving the runtime performance of Java applications.
+ElPrep is an established tool for processing SAM and BAM files in sequencing pipelines. 
+In order to migrate from its original implementation to a different software platform, more suitable for memory intensive tasks, 
+the authors have reimplemented elPrep in Java, Go and C++ and benchmarked their performance.
+Overall, the Go implementation won by a good margin, considering a metric that involved both the RAM usage and the runtime performance.
+We show that, without changing the semantics of the algorithm, by using appropriate programming techniques we are able to significantly improve
+the behavior of the Java implementation, to a point that may even alter the conclusions of the original study.
+}
+
+\onecolumn \maketitle \normalsize \setcounter{footnote}{0} \vfill
+
+\section{\uppercase{Introduction}}
+\label{sec:introduction}
+
+Here we cite the original paper \cite{costanza:2019}.
+
+
+\begin{small}
+\begin{verbatim}
+     System.out.println("Hello World!!");
+\end{verbatim}
+\end{small}
+
+
+
+\bibliographystyle{apalike}
+{\small
+\bibliography{elprep-study}}
+
+
+\end{document}
+
