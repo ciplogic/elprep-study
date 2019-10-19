@@ -34,7 +34,7 @@ In this paper we investigate how a state-of-the art implementation, part of a mu
 could benefit from various optimization techniques dedicated to improving the runtime performance of Java applications.
 ElPrep is an established tool for processing SAM and BAM files in sequencing pipelines. 
 In order to migrate from its original implementation to a different software platform, more suitable for memory intensive tasks, 
-the authors have reimplemented elPrep in Java, Go and C++ and benchmarked their performance.
+the authors have re-implemented elPrep in Java, Go and C++ and benchmarked their performance.
 Overall, the Go implementation won by a good margin, considering a metric that involved both the RAM usage and the runtime performance.
 We show that, without changing the semantics of the algorithm, by using appropriate programming techniques we are able to significantly improve
 the behavior of the Java implementation, to a point that may even alter the conclusions of the original study.
@@ -45,14 +45,51 @@ the behavior of the Java implementation, to a point that may even alter the conc
 \section{\uppercase{Introduction}}
 \label{sec:introduction}
 
-Here we cite the original paper \cite{costanza:2019}.
+In the field of bioinformatics, DNA sequence analysis generally consists of processing large amounts of data and performing various operations on it, 
+such as sequence alignment, variant detection, searches against biological databases, etc.
+A large variety of software tools exists for these operations, most of them having specific uses cases but with a common denominator 
+regarding the fact they need to perform processor and memory intensive tasks: 
+I/O operations on large file, compression/decompression, text processing, etc. \cite{?}
+
+Choosing a programming platform that offers all the required instruments to handle the specific challenges in bioinformatics is important, 
+as pointed out in a recent study dedicated to migrating an existing Common Lisp application, called elPrep, 
+to another platform with better support for memory management and concurrency \cite{costanza:2019}.
+ElPrep \cite{herzeel:2019} is a a multithreaded tool for preparing sequence alignment/map files (SAM/BAM)
+for variant calling in DNA sequencing pipelines. 
+A key feature of elPrep is the ability to avoid the standard practice of creating a pipeline consisting of multiple command line tools invocations, 
+executing a single pass through a SAM/BAM file and keeping data as much as possible in main memory.
+%As the software executes concurrently different steps of the algorithm, it needs to process large amounts of data (hundreds of gigabytes) in an efficient way.
+In \cite{costanza:2019} the authors investigated Go, Java and C++ programming platforms, as an alternative to Common Lisp.
+%Go and Java using a concurrent, parallel garbage collector on the one hand, and C++17 using reference counting on the other hand for handling
+Te result of their study concluded that the Go implementation performed best, using a metric that involved both the RAM usage and the runtime performance.
+The benchmarks of the study showed that Java had a faster runtime, but a significantly higher memory usage, while Go offered a better balance between the two.
+
+As the Java source code for elPrep is available at {\tt https://github.com/exascience/elprep-bench}, we have analyzed key aspects regarding the memory management and
+thread synchronization, and propose a series of improvements that could increase significantly the performance of the Java implementation. 
+%benefit other studies of this kind.
 
 
-\begin{small}
-\begin{verbatim}
-     System.out.println("Hello World!!");
-\end{verbatim}
-\end{small}
+\section{\uppercase{Background}}
+
+\subsection{\uppercase{Garbage Collection}}
+
+In order to analyze the behavior of memory intensive applications,
+%especially those based on frequent allocation and deallocation, 
+it is important to understand how garbage collection works and especially how Java \cite{java} implements its garbage collectors.
+
+The Java Virtual Machine (JVM) \cite{lindholm:2014} offers an automatic storage management system, called {\it garbage collector (GC)} which reclaims heap storage occupied by objects which are no longer used.
+The garbage collection process \cite{gc:oracle} works typically by splitting the heap into two regions: a {\it young generation} region and an {\it old generation}.
+All new objects are allocated in the young region, in a very fast manner, using typically a "bump-pointer" strategy. When this region becomes full  a {\it minor} garbage collection occurs and all dead objects are deleted very quickly. The objects which are still referenced survive and they  are moved to the old generation. This minor collection is always a "stop the world" event, meaning that all of the application threads will be paused until the GC is finished. 
+In the old generation, objects are expected to live longer and they are collected more seldom but with a more expensive algorithm, called {\it major} garbage collection.
+
+The algorithm used by GC has two steps. The first one is to {\it mark} the objects that are still used from the heap. In the second step, it {\it sweeps (deletes)} the objects which have not been marked (dead), leaving only referenced objects and pointers to free space. 
+%To further improve performance, in addition to deleting unreferenced objects, you can also compact the remaining referenced objects. By moving referenced object together, this makes new memory allocation much easier and faster.
+Therefore, the speed of GC depends on two factors: the number of objects it has to analyze and the complexity of the relationships between them. %collecting graph
+
+Considering the behavior we have described so far, we will analyze the impact of some simple tweaks
+meant to reduce the impact of GC over the application performance, such as:
+reducing the unnecessary small allocations in young region, controlling the scope in which objects are referenced in order to minimize the number of times when expensive collection of old region is triggered, simplifying the object graph and controlling the amount of memory JVM is allowed to use.
+
 
 
 

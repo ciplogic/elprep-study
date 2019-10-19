@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  5 OCT 2019 09:05
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  19 OCT 2019 12:08
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -382,10 +382,10 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.69997> not available
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5.5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 43.
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2018-12-11 12:40:00
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-10-05 08:11:02
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
@@ -399,10 +399,10 @@ File: orcid-eps-converted-to.pdf Graphic file (type pdf)
 Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 43.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2018-12-11 12:40:00
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-10-05 08:11:02
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
@@ -424,10 +424,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 43--43
  []
 
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2018-12-11 12:40:00
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-10-05 08:11:02
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
@@ -438,10 +438,10 @@ File: orcid-eps-converted-to.pdf Graphic file (type pdf)
 Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 43.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2018-12-11 12:40:00
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2019-10-05 08:11:02
+(epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
@@ -453,31 +453,69 @@ Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 43.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <13> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
-
-(elprep-study.bbl) [1{C:/Users/Cristi/AppData/Local/MiKTeX/2.9/pdftex/config/pd
-ftex.map}
-
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
 
 
+LaTeX Warning: Citation `?' on page 1 undefined on input line 52.
 
 
- <./orcid-eps-converted-to.pdf>] (elprep-study.aux) ) 
+Overfull \hbox (3.28455pt too wide) in paragraph at lines 67--70
+\OT1/pcr/m/n/10 https://github.com/exascience/elprep-bench\OT1/ptm/m/n/10 ,
+ []
+
+
+Underfull \hbox (badness 1112) in paragraph at lines 67--70
+\OT1/ptm/m/n/10 pro-pose a se-ries of im-prove-ments that could in-
+ []
+
+
+Underfull \hbox (badness 1748) in paragraph at lines 67--70
+\OT1/ptm/m/n/10 crease sig-nif-i-cantly the per-for-mance of the Java
+ []
+
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 74.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+ [1{C:/Users/Cristi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+
+
+
+
+ <./orcid-eps-converted-to.pdf>] (elprep-study.bbl
+Underfull \hbox (badness 3078) in paragraph at lines 15--19
+[]\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--19
+\OT1/ptm/m/n/9 vel-op-ment Kit Ver-sion 11 API Spec-i-fi-ca-tion.
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--19
+\OT1/ptm/m/n/9 https://docs.oracle.com/en/java/javase/11/docs/api.
+ []
+
+) [2] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
- 4090 strings out of 493333
- 59515 string characters out of 3139192
- 123590 words of memory out of 3000000
- 7535 multiletter control sequences out of 15000+200000
- 37614 words of font info for 86 fonts, out of 3000000 for 9000
+ 4103 strings out of 493333
+ 59663 string characters out of 3139192
+ 126694 words of memory out of 3000000
+ 7545 multiletter control sequences out of 15000+200000
+ 43057 words of font info for 93 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,7n,40p,275b,261s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2
-.9/fonts/enc/dvips/base/8r.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/urw/cou
-rier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><
-C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/
-MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on elprep-study.pdf (1 page, 68288 bytes).
+ 42i,7n,40p,504b,261s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.
+enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program
+ Files/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9
+/fonts/type1/urw/times/utmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/
+times/utmri8a.pfb>
+Output written on elprep-study.pdf (2 pages, 78142 bytes).
 PDF statistics:
- 28 PDF objects out of 1000 (max. 8388607)
+ 31 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

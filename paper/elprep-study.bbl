@@ -2,8 +2,31 @@
 
 \bibitem[Costanza et~al., 2019]{costanza:2019}
 Costanza, P., Herzeel, C., and Verachtert, W. (2019).
-\newblock Comparing ease of programming in c++, go, and java for implementing a
-  next-generation sequencing tool.
+\newblock Comparing ease of programming in {C++}, {Go}, and {Java} for
+  implementing a next-generation sequencing tool.
 \newblock {\em Evolutionary Bioinformatics}, 15:1176934319869015.
+
+\bibitem[Herzeel et~al., 2019]{herzeel:2019}
+Herzeel, C., Costanza, P., Decap, D., Fostier, J., and Verachtert, W. (2019).
+\newblock elprep 4: A multithreaded framework for sequence analysis.
+\newblock {\em PLOS ONE}, 14(2):1--16.
+
+\bibitem[{Java Platform, Standard Edition}, 2019]{java}
+{Java Platform, Standard Edition} (2019).
+\newblock {Java Development Kit Version 11 API Specification}.
+\newblock https://docs.oracle.com/en/java/javase/11/docs/api.
+\newblock Accessed: 2019-06-01.
+
+\bibitem[Lindholm et~al., 2014]{lindholm:2014}
+Lindholm, T., Yellin, F., Bracha, G., and Buckley, A. (2014).
+\newblock {\em {The Java Virtual Machine Specification, Java SE 8 Edition}}.
+\newblock Addison-Wesley Professional, 1st edition.
+
+\bibitem[Oracle, 2019]{gc:oracle}
+Oracle (2019).
+\newblock Java garbage collection basics - oracle.
+\newblock https://www.oracle.com/webfolder/technetwork/
+  //tutorials/obe/java/gc01/index.html.
+\newblock Accessed: 2019-06-01.
 
 \end{thebibliography}
