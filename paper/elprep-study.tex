@@ -17,10 +17,9 @@
 
 \title{A Case Study on Performance Optimization Techniques in Java Programming}
 
-\author{\authorname{Ciprian Khlud\sup{1}\orcidAuthor{0000-0000-0000-0000}
+\author{\authorname{Ciprian Khlud\sup{1}\orcidAuthor{0000-0001-6211-3199}
   and Cristian Fr\u asinaru\sup{1}\orcidAuthor{0000-0002-5246-7396} }
-\affiliation{\sup{1}Institute of Problem Solving, XYZ University, My Street, MyTown, MyCountry}
-\affiliation{\sup{2}"Alexandru Ioan Cuza University", Ia\c si, Romania}
+\affiliation{\sup{1}"Alexandru Ioan Cuza University", Ia\c si, Romania}
 \email{ciprian.mustiata@gmail.com, acf@info.uaic.ro}
 }
 
@@ -91,6 +90,80 @@ meant to reduce the impact of GC over the application performance, such as:
 reducing the unnecessary small allocations in young region, controlling the scope in which objects are referenced in order to minimize the number of times when expensive collection of old region is triggered, simplifying the object graph and controlling the amount of memory JVM is allowed to use.
 
 
+\subsection{\uppercase{Threads, Locks and the File System}}
+
+Java platform supports concurrent programming by using threads \cite{gosling:2014}.
+Multiple threads can execute at the same time, taking advantage of computing units that have more than one processor and of processors that have more than one core. Threads performing operations that are not atomic will interleave when they access shared data.
+A {\it synchronized} statement acquires a mutual-exclusion lock when entering a critical section, executes the block that references the shared data, then releases the lock.
+While one thread owns the lock for that data, no other thread may access it. 
+The proper use of this mechanism is crucial for the concurrent implementation of an algorithm. If threads are waiting to much on locked resources, the overall performance of the application will suffer.
+
+In our case study, multiple threads are performing operations on the file system, reading and writing large amounts of strings from and into text files.
+Regardless of the operating system and programming language, the underlying hardware is optimized to work with streams of bytes. In an atomic operation, data is read into a buffer of bytes, in a contiguous manner. Similarly, data is written into a buffer of bytes that is flushed afterwards to the file. Both these operations are single threaded by design and historical reasons, so Java libraries have locks to make the access to streams single-threaded. A \texttt{write} method usually looks like this:
+\begin{small}
+\begin{verbatim}
+public void write(String s, int off, int len){
+  synchronized (lock) { ... }
+}
+\end{verbatim}
+\end{small}
+
+%The algorithm for writing to disk is the following:
+%
+%\begin{small}
+%	\begin{verbatim}
+%	allSamAlignments.map(
+%	  samAlignment -> formatRow(samAlignment);
+%	)
+%	.forEach(
+%	  formattedRow -> writeToBuffer(formattedRow));
+%	\end{verbatim}
+%\end{small}
+
+We will show that creating a large number of short lived strings and writing them to a file in a multithreaded manner will generate a behavior similar to using a single thread, plus the overhead of acquiring and releasing the synchronization lock.
+
+
+%So what we did, we rewrote the code to be single threaded, so we don't call any OS to lock and release a mutex and the pseudo-code would look like following:
+%
+%\begin{small}
+%	\begin{verbatim}
+%allSamAlignments.forEach(samAlignment ->
+%{
+%  writeToBufferFormatted(samAlignment);
+%});
+%	\end{verbatim}
+%\end{small}
+
+%The main take away is that the updated code can write directly to underlying buffer and it can be made quite fast and it will need basically no allocation, as it will be shown.
+
+
+\section{\uppercase{Memory Usage}}
+
+The Java Virtual Machine allocates memory either on stack or on heap \cite{lindholm:2014}. 
+The {\it heap} is the place where all class instances and arrays are allocated and it is shared among all threads. Each JVM thread has a private {\it stack} which holds local variables and partial results  during successive method invocations and returns. 
+%The JVM might do escape analysis and decide to allocate objects directly on the stack, which means cleaning them up when the method ends is free.
+When working with large amounts of objects, it is quite important to assess the memory consumption of a data structure, in similar way as the {\it sizeof} construct in C or C++.
+%JVMs may move some heap allocations to stack allocations, but this would not matter if we allocate long running objects and as we talked in section about GC, the GC will have also some pre-allocated memory to do future expected allocations.
+An object allocated on the heap has a {\it header} which contains information used for locking, garbage collection or the identity of that object. The size of the header depends on the operating system, and it may be 8 bytes on 32 bit architectures or 16 bytes on 64 bit architectures. 
+Also, for performance reasons and in order to conform with most of the hardware architectures, JVM will {\it align} data.
+That means that if we have an object that wraps just one byte, it will not use: $8 \text{(object header)} + 1 \text{(content)} = 9 $ bytes of memory on the heap, but it will use $16$ bytes as it needs to be aligned to the next $8$ byte boundary.
+%A technical brief description made by a JVM engineer describes why and how was it done: https://shipilev.net/jvm/anatomy-quarks/24-object-alignment/
+
+In Java, strings are objects and they are allocated on the heap. That fact that string literals are stored in a shared object pool, in order to reduce memory consumption, is of no relevance in our context.
+Inspecting the source code of the \texttt{String} class, one can observe the following instance fields:
+\begin{small}
+\begin{verbatim}
+private final byte[] value;
+private final byte coder;
+private int hash; // Default to 0
+\end{verbatim}
+\end{small}
+
+As expected, a \texttt{String} object keeps a reference to an internal byte array. However, the other two fields will make the size of the object equal to: $8$ (header) $+$ $4$ \texttt{value} reference $+$ $1$  \texttt{coder} value $+$ $4$ \texttt{hash} value $= 17$ bytes. Being aligned to $8$ bytes, it will actually use $24$ bytes.
+When creating many \texttt{String} instances (like millions of them, as in our case study), the extra information included in this class will add up, consuming memory and  triggering the garbage collector more often then necessary. 
+
+We will show that replacing the \texttt{String} usage to the underlying \texttt{value} byte array will improve the performance of the application, and this approach should be implemented in every scenario that involves processing large amounts of text data.
+% especially if it is done at million times scale, will be translated both in fewer GCs (as are saved few tenths of MB), fewer 24 bytes * million instances bytes to copy and visit for marking. 
 
 
 \bibliographystyle{apalike}

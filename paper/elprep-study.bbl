@@ -6,6 +6,11 @@ Costanza, P., Herzeel, C., and Verachtert, W. (2019).
   implementing a next-generation sequencing tool.
 \newblock {\em Evolutionary Bioinformatics}, 15:1176934319869015.
 
+\bibitem[Gosling et~al., 2014]{gosling:2014}
+Gosling, J., Joy, B., Steele, G.~L., Bracha, G., and Buckley, A. (2014).
+\newblock {\em {The Java Language Specification, Java SE 8 Edition}}.
+\newblock Addison-Wesley Professional, 1st edition.
+
 \bibitem[Herzeel et~al., 2019]{herzeel:2019}
 Herzeel, C., Costanza, P., Decap, D., Fostier, J., and Verachtert, W. (2019).
 \newblock elprep 4: A multithreaded framework for sequence analysis.
@@ -26,7 +31,7 @@ Lindholm, T., Yellin, F., Bracha, G., and Buckley, A. (2014).
 Oracle (2019).
 \newblock Java garbage collection basics - oracle.
 \newblock https://www.oracle.com/webfolder/technetwork/
-  //tutorials/obe/java/gc01/index.html.
+  tutorials/obe/java/gc01/index.html.
 \newblock Accessed: 2019-06-01.
 
 \end{thebibliography}
