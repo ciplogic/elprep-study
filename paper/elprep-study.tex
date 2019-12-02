@@ -246,11 +246,6 @@ For the $1.27$ GB BAM file, the numbers are much larger as there are a $17.6$ mi
 At the point when GC executes, there are $9$ objects per row 
 ({\tt SamAlignment} $+ 6$ {\tt Slice} $+ 1$ {\tt String} $+ 1$ byte array) on heap.
 
-\textcolor{red}{
-The ElPrep algorithm will duplicate all the {\tt SamAlignment}s once, as it looks for duplicate objects, so the required memory will double. On top of it, there are the underlying strings which keep the data. For $2.1$ million entries the grand total is around $700,000,000$ bytes, and $6,050,000,000$ bytes for the $1$ GB entry.
-}
-
-
 
 \subsection{\uppercase{The Column-Based Model}}
 
@@ -351,16 +346,23 @@ As before, the GC will also benefit from the reduced number of objects that must
 Running the smaller input file (144 MB), we have estimated that the original ElPrep algorithm would use around three times more memory than the size of the input SAM file.
 However, when trying to process the larger input file (1.2 GB), on a 32 GB machine, we have obtained an {\tt OutOfMemoryError}, meaning that the penalty of using too many objects in order to represent the information was preventing us in loading the entire data set into memory.
 \\ \textcolor{red}{JVM using how much memory?}
+\\ \textcolor{brown}{
+	1 GB input:
+	Original algorithm: 32 024 799 640 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk. This is the lowest maximum memory consumption for 1.2 GB BAM file
+	Optimized algo: 31 463 351 904
+	Compact algo: 4 703 674 464 bytes	
+	Live data memory usage: 6.8x less.
+}
 
+\\ \textcolor{brown}{
+	144 MB input:
+	Original algorithm: 2 234 575 120 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk. This is the lowest maximum memory consumption for 1.2 GB BAM file
+	Optimized algo: 2 273 444 096
+	Compact algo: 607 589 728 bytes	
+	Live data memory usage: 3.67x less.
+}
 With memory compaction, the memory needed to represent all the objects was estimated to 17.6 million rows * $39$ bytes per row $=$ $686,400,000$ bytes ($655$ MB), plus the DNA sequences  $17.6$ millions $* 44 = 774 MB$.
 
-\textcolor{red}{
-As the string data was estimated to at most $3$ GB, in $4.4$ GB we have stored both the entire SAM file and the fields associated with the alignments.
-}
-
-\textcolor{red}{
-Duplicating all this (as elPrep does it) will make the entire live set go to $9$ GB, which is still around half of the original live set (what is the size of the original live set? definition of "the live set".
-}
 
 On top of this, there is the cost of tags.
 In the original implementation, every {\tt SamAlignment} object has references to {\tt temps} and {\tt TAGS} arrays. These arrays have an initial size of $16$, respectively $4$, and contain references to {\tt Field} objects, which in turn contain a reference to a {\tt Slice} object.
@@ -371,7 +373,9 @@ The memory usage for tags/temps is 5.9 GB.
 
 In order to address {\tt temps} and {\tt TAGS} we have implemented the {\tt TagSequence} class, which is a combination between {\tt StringSequence} and {\tt DeduplicatedDictionary}.
 Since the {\tt tags} are repeating frequently, we save them using one {\tt short} value per tag, but instead of using a list of tags, we define a sequence of indices.
-\textcolor{red}{Aici nu e prea clar.}
+\textcolor{brown}{
+	TagSequence does memory compaction by using a mix of short per-tag encoding and a full sequence of tags is joined together.
+}
 
 For example, for the input {\tt "tag0 tag1 tag2", "tag1 tag2 tag3"}, the representation would be:
 \begin{verbatim}
@@ -385,6 +389,8 @@ tagSequence = [0,1,2,1,2,3];
 For a 20K rows, we found following numbers:
 Unique tag values: approx 2400
 Total number of tags: approx 200000 (10 tags per row on average)
+}
+\textcolor{brown}{ Numbers were correct, it was simply looking into some random batches when debugging.
 }
 
 
