@@ -1,5 +1,11 @@
 \begin{thebibliography}{}
 
+\bibitem[Abadi et~al., 2013]{abadi:2013}
+Abadi, D., Boncz, P., and Harizopoulos, S. (2013).
+\newblock {\em The Design and Implementation of Modern Column-Oriented Database
+  Systems}.
+\newblock Now Publishers Inc., Hanover, MA, USA.
+
 \bibitem[Costanza et~al., 2019]{costanza:2019}
 Costanza, P., Herzeel, C., and Verachtert, W. (2019).
 \newblock Comparing ease of programming in {C++}, {Go}, and {Java} for
@@ -10,6 +16,11 @@ Costanza, P., Herzeel, C., and Verachtert, W. (2019).
 Gosling, J., Joy, B., Steele, G.~L., Bracha, G., and Buckley, A. (2014).
 \newblock {\em {The Java Language Specification, Java SE 8 Edition}}.
 \newblock Addison-Wesley Professional, 1st edition.
+
+\bibitem[He et~al., 2010]{he:2010}
+He, Q., Li, Z., and Zhang, X. (2010).
+\newblock Data deduplication techniques.
+\newblock volume~21, pages 430 -- 433.
 
 \bibitem[Herzeel et~al., 2019]{herzeel:2019}
 Herzeel, C., Costanza, P., Decap, D., Fostier, J., and Verachtert, W. (2019).
@@ -27,11 +38,22 @@ Lindholm, T., Yellin, F., Bracha, G., and Buckley, A. (2014).
 \newblock {\em {The Java Virtual Machine Specification, Java SE 8 Edition}}.
 \newblock Addison-Wesley Professional, 1st edition.
 
+\bibitem[Manogar and Abirami, 2014]{manogar:2014}
+Manogar, E. and Abirami, S. (2014).
+\newblock A study on data deduplication techniques for optimized storage.
+\newblock pages 161--166.
+
 \bibitem[Oracle, 2019]{gc:oracle}
 Oracle (2019).
 \newblock Java garbage collection basics - oracle.
 \newblock https://www.oracle.com/webfolder/technetwork/
   tutorials/obe/java/gc01/index.html.
+\newblock Accessed: 2019-06-01.
+
+\bibitem[Vigna, 2019]{fastutil}
+Vigna, S. (2019).
+\newblock Fastutil 8.1.0.
+\newblock http://fastutil.di.unimi.it/.
 \newblock Accessed: 2019-06-01.
 
 \end{thebibliography}

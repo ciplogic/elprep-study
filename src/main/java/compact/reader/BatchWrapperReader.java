@@ -60,7 +60,7 @@ class StringBufferBatches
 
 public class BatchWrapperReader {
 
-    ArrayList<SamBatch> batches = new ArrayList<>();
+    public ArrayList<SamBatch> batches = new ArrayList<>();
 
     private StringBufferBatches stringBufferBatches;
     public BatchWrapperReader(int batchSize, int bufferBatchesCount) {

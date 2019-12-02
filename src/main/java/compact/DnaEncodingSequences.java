@@ -1,8 +1,11 @@
 package compact;
 
+import compact.writer.BatchWrapperWriter;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 import it.unimi.dsi.fastutil.longs.LongArrayList;
 import it.unimi.dsi.fastutil.shorts.ShortArrayList;
+
+import java.io.IOException;
 
 public class DnaEncodingSequences {
 
@@ -29,7 +32,7 @@ public class DnaEncodingSequences {
                 return 0;
         }
     }
-    private static char charLetterDecode(int ch)
+    public static char charLetterDecode(int ch)
     {
         switch (ch)
         {
@@ -100,15 +103,22 @@ public class DnaEncodingSequences {
     public void add(byte[] seqText)
     {
         var encoded = EncodeSequence(seqText);
+        startIndex.add(fullSequences.size());
         for(var l : encoded)
         {
             fullSequences.add(l);
         }
-        startIndex.add(lengths.size());
         lengths.add((short) seqText.length);
     }
 
     public void shrink() {
         fullSequences.trim();
+    }
+
+    public void writeSequence(BatchWrapperWriter sc, int index) throws IOException {
+        var start = startIndex.getInt(index);
+        var len = (int) lengths.getShort(index);
+        sc.writeSequence(this.fullSequences, start, len);
+
     }
 }

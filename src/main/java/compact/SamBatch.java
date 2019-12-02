@@ -1,11 +1,12 @@
 package compact;
 
 import compact.reader.StringScanner;
+import compact.writer.BatchWrapperWriter;
 import it.unimi.dsi.fastutil.bytes.ByteArrayList;
 import it.unimi.dsi.fastutil.chars.CharArrayList;
 import it.unimi.dsi.fastutil.ints.IntArrayList;
 
-import java.util.ArrayList;
+import java.io.IOException;
 
 public class SamBatch {
     StringSequence QNAME;
@@ -20,6 +21,7 @@ public class SamBatch {
 
     DnaEncodingSequences SeqPacked;
     StringSequence QUAL;
+    TagSequence TAG;
 
 
     public SamBatch(int expectedLength) {
@@ -35,6 +37,7 @@ public class SamBatch {
         TLEN = new IntArrayList(expectedLength);
         SeqPacked = new DnaEncodingSequences(expectedLength);
         QUAL = new StringSequence();
+        TAG = new TagSequence();
     }
 
     public void readRow(StringScanner sc) {
@@ -48,15 +51,53 @@ public class SamBatch {
         RNEXT.add(new String(sc.doSlice()));
         PNEXT.add(sc.doInt());
         TLEN.add(sc.doInt());
-        var seqText = sc.doSlice();
-        SeqPacked.add(seqText);
+        SeqPacked.add(sc.doSlice());
         QUAL.add(sc.doSlice());
+        TAG.readRow(sc);
     }
 
     public void shrink(){
         QNAME.shrink();
         QUAL.shrink();
         SeqPacked.shrink();
+        TAG.shrink();
 
+    }
+
+    public void writeToWriter(BatchWrapperWriter sc) throws IOException {
+        var len = FLAG.size();
+        for(var i = 0; i<len; i++) {
+            QNAME.writeToWriter(sc, i);
+            sc.writeByte((byte) '\t');
+            sc.printInt(FLAG, i);
+            sc.writeByte((byte) '\t');
+
+            sc.writeStringByIndex(RNAME, i);
+            sc.writeByte((byte) '\t');
+
+            sc.printInt(POS, i);
+            sc.writeByte((byte) '\t');
+            sc.printInt(MAPQ, i);
+            sc.writeByte((byte) '\t');
+
+            sc.writeStringByIndex(CIGAR, i);
+            sc.writeByte((byte) '\t');
+            sc.writeStringByIndex(RNEXT, i);
+            sc.writeByte((byte) '\t');
+            sc.printInt(PNEXT, i);
+            sc.writeByte((byte) '\t');
+            sc.printInt(TLEN, i);
+            sc.writeByte((byte) '\t');
+            SeqPacked.writeSequence(sc, i);
+            sc.writeByte((byte) '\t');
+            QUAL.writeToWriter(sc, i);
+            sc.writeByte((byte) '\n');
+            TAG.writeToWriter(sc, i);
+
+        }
+    }
+
+    public int size() {
+        return FLAG.size();
     }
 }

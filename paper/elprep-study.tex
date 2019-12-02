@@ -3,6 +3,7 @@
 \usepackage{epsfig}
 \usepackage{subcaption}
 \usepackage{calc}
+\usepackage{comment}
 \usepackage{amssymb}
 \usepackage{amstext}
 \usepackage{amsmath}
@@ -10,7 +11,8 @@
 \usepackage{multicol}
 \usepackage{pslatex}
 \usepackage{apalike}
-\usepackage{SCITEPRESS}     % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
+\usepackage{xcolor}
+\usepackage{SCITEPRESS} % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
 
 
 \begin{document}
@@ -137,7 +139,7 @@ We will show that creating a large number of short lived strings and writing the
 %The main take away is that the updated code can write directly to underlying buffer and it can be made quite fast and it will need basically no allocation, as it will be shown.
 
 
-\section{\uppercase{Memory Usage}}
+\subsection{\uppercase{Memory Usage}}
 
 The Java Virtual Machine allocates memory either on stack or on heap \cite{lindholm:2014}. 
 The {\it heap} is the place where all class instances and arrays are allocated and it is shared among all threads. Each JVM thread has a private {\it stack} which holds local variables and partial results  during successive method invocations and returns. 
@@ -160,10 +162,410 @@ private int hash; // Default to 0
 \end{small}
 
 As expected, a \texttt{String} object keeps a reference to an internal byte array. However, the other two fields will make the size of the object equal to: $8$ (header) $+$ $4$ \texttt{value} reference $+$ $1$  \texttt{coder} value $+$ $4$ \texttt{hash} value $= 17$ bytes. Being aligned to $8$ bytes, it will actually use $24$ bytes.
-When creating many \texttt{String} instances (like millions of them, as in our case study), the extra information included in this class will add up, consuming memory and  triggering the garbage collector more often then necessary. 
+When creating many \texttt{String} instances (like millions of them, as in our case study), the extra information included in this class will add up, consuming memory and  triggering the garbage collector more often than necessary. 
 
 We will show that replacing the \texttt{String} usage to the underlying \texttt{value} byte array will improve the performance of the application, and this approach should be implemented in every scenario that involves processing large amounts of text data.
 % especially if it is done at million times scale, will be translated both in fewer GCs (as are saved few tenths of MB), fewer 24 bytes * million instances bytes to copy and visit for marking. 
+
+
+
+\subsection{\uppercase{Memory Compactation}}
+Another important part of working with large data sets that have to be accessible in memory regards the format in which they are represented. Choosing the right format will not only reduce the amount of consumed memory but it will also reduce the GC cost to copy the objects between regions and the cost of visiting and marking them.
+
+The most common approach of representing information is in row based form, where a {\it row} is a record of some kind and a {\it column} is a certain property of that row. This type of representation is used in most relational databases management systems, where sets of rows of the same type form {\it tables}.
+Despite having many advantages, this format is not necessarily optimum when it comes to data representation in memory.
+
+A {\it column store} model \cite{abadi:2013} "reverses" the orientation of the tables. It stores data by columns and uses row identifiers in order to access a specific cell of the table. 
+By storing each column separately, query performance is increased in certain contexts as they are able to read only the required attributes, rather than having to read entire rows from disk and discard unneeded attributes once they are in memory.
+Another benefit is that column stores are very efficient at data compression, since representing information of the same type inside of a column helps the {\it data alignment} process that we have previously mentioned.
+
+Let's consider a simple example, using the class {\tt Point}, defined as a pair of two integer fields {\tt x} and {\tt y}.
+The basic idea is that instead of having a row-based model consisting of an array {\tt Point[]} of instances (each {\tt Point} object is a row and its members {\tt x} and {\tt y} are the columns), to use two arrays of integers {\tt x[]} and {\tt y[]}, representing the two columns. 
+%and one integer index for each {\tt Point}.
+This way we can store the same data, minus the object headers corresponding to all the {\tt Point} instances. Not only the memory consumption will be lower (so the GC will be triggered less often), but the structure will also take shorter time to visit, since there are only two objects now (the two arrays).
+
+Though a column store is a very good solution for size reduction, it has the downside of requiring more computational effort in order to work with multiple properties of the same object.
+However, when saving memory is the major concern, and especially when it comes to hundreds of GB per instance, the execution slowdown becomes far less important if we can achieve significant reductions in consumed memory.
+
+
+
+\section{\uppercase{Representing the Data Store}}
+
+\subsection{\uppercase{The Row-Based Model}}
+
+The data structure which is used in original ElPrep algorithm is represented by the class {\tt SamAlignment}, an object of this type storing one row of a SAM file.
+The class contains the following declaration of instance variables:
+
+\begin{small}
+\begin{verbatim}
+public Slice QNAME;
+public char FLAG;
+public Slice RNAME;
+public int POS;
+public byte MAPQ;
+public Slice CIGAR;
+public Slice RNEXT;
+public int PNEXT;
+public int TLEN;
+public Slice SEQ;
+public Slice QUAL;
+public List<Field> TAGS = new ArrayList<>(16);
+public List<Field> temps = new ArrayList<>(4);
+\end{verbatim}
+\end{small}
+
+For a small BAM file of 144 MB there will be created around $2.1$ million {\tt SamAlignment} instances and for a $1.27$ GB BAM file there will be created around $17.6$ million objects.
+
+For simplicity, let's disregard {\tt TAGS} and {\tt temps} fields (which can have different lengths) as it makes the calculation simpler and analyze the memory consumption in both cases.
+We suppose also that the JVM uses 32 bits for representing an object header.
+
+One {\tt SamAlignment} object contains:
+8 bytes object header, 6 instances of {\tt Slice} objects ({\tt QNAME}, {\tt RNAME}, {\tt CIGAR}, {\tt RNEXT}, {\tt SEQ}, {\tt QUAL}) of 4 bytes each, 3 integer fields ({\tt POS}, {\tt PNEXT}, {\tt TLEN}) of 4 bytes each, 1 character ({\tt FLAG}) of 2 bytes, and an additional byte ({\tt MAPQ}).
+So, the total size of the object is: $8 + 6 * 4 + 3*4  + 1 * 2+ 1 * 1 = 47$ bytes, and as it is rounded up to a multiple of $8$, the result is $48$ bytes.
+%For a 64 bit JVM without compressed OPS, the comsumption is of only SAMAlignment instances is: 12 + 6*8+3*4+1*2+1*1 = 75 and as it is 8 bytes rounded up, the consumption is 80 bytes
+
+In order to save memory, the string representing a row scanned from the original file is shared between multiple objects. All $6$ {\tt Slice} instances contain a reference to the  underlying string and two integers pointing to the start index and length. So, a {\tt Slice} instance uses: $8$ (object header) $+4$ (reference to the string) $ + 4 + 4 = 20$ bytes, being rounded to $24$.
+
+%For 64 bit references:
+%(12 (object header) + 8 (reference to string) + 4 + 4) = 28 bytes and 32 is the final usage
+
+As {\tt Slice} instances point to a {\tt String} object, the {\tt String} itself adds another $24$ bytes, as we have already seen, and the byte array object referenced from the {\tt String} adds another $24$ bytes (not counting its content size).
+
+
+Adding all these numbers up, we conclude that for representing a {\tt SamAlignment} object, the JVM needs: $48$ (the object itself) $+ 6*24$ (Slice) $ + 24 + 24 = 240$ bytes.
+
+For a $144$ MB file there are $2.1$ million entries, so the memory requirement for storing the graph of objects and the integer fields is approximately $504,000,000$ bytes, which equals to more than $480$ MB (not counting the $144$ MB of content in byte array).
+
+For the $1.27$ GB BAM file, the numbers are much larger as there are a $17.6$ million rows. The total is $4,224,000,000$ bytes, representing almost $4$ GB.
+
+%On a 64 bit JVM numbers grow as follows:
+%80 + 6*32 + 24 + 24 = 320
+%So for 2.1 million entries the size is: 672,000,000 bytes.
+%And for 17.6 million entries the size is: 5,632,000,000
+
+At the point when GC executes, there are $9$ objects per row 
+({\tt SamAlignment} $+ 6$ {\tt Slice} $+ 1$ {\tt String} $+ 1$ byte array) on heap.
+
+\textcolor{red}{
+The ElPrep algorithm will duplicate all the {\tt SamAlignment}s once, as it looks for duplicate objects, so the required memory will double. On top of it, there are the underlying strings which keep the data. For $2.1$ million entries the grand total is around $700,000,000$ bytes, and $6,050,000,000$ bytes for the $1$ GB entry.
+}
+
+
+
+\subsection{\uppercase{The Column-Based Model}}
+
+Let us analyze how much memory can be saved by switching to a column-based approach.
+We have defined the following data structures: {\tt StringSequence} for representing in a compact manner a collection of strings, {\tt DeduplicatedDictionary} for eliminating duplicate copies of repeating strings, {\tt DnaEncodingSequence} for storing {\tt A,C,G,T,N} sequences using an encoding of $21$ letters per {\tt long} and {\tt TagSequence} for representing tags encoded in an array of {\tt short} values.
+We have also used the classes {\tt CharArrayList}, {\tt IntArrayList} and {\tt ByteArrayList} from FastUtil library \cite{fastutil}, which offers implementations with a small memory footprint and fast access and insertion.
+
+The new definition of the data store is described by the class {\tt SamBatch}, containing the following members:
+\begin{small}
+\begin{verbatim}
+StringSequence QNAME;
+CharArrayList FLAG;
+DeduplicatedDictionary RNAME;
+IntArrayList POS;
+ByteArrayList MAPQ;
+DeduplicatedDictionary CIGAR;
+DeduplicatedDictionary RNEXT;
+IntArrayList PNEXT;
+IntArrayList TLEN;
+
+DnaEncodingSequence SeqPacked;
+StringSequence QUAL;
+\end{verbatim}
+\end{small}
+
+So, instead of having a large number of {\tt SamAlignment} instances, we will have a single object of type {\tt SamBatch} which contains references to the "columns", i.e. our data structures holding all the information of a specific type.
+
+
+Regardless of VM bitness, the memory consumption for representing one row of the input file is: 
+\begin{center}
+\begin{tabular}{ l l l }
+ {\bf Data Type} 				& {\bf Count} 		& {\bf Bytes} \\ 
+ {\tt StringSequence} 			& $2$ 				& $4$ \\ 
+ {\tt DeduplicatedDictionary}	& $3$ 				& $4$ \\  
+ {\tt IntArraySequence}			& $3$		 		& $4$ \\  
+ {\tt CharArraySequence}		& $1$				& $2$ \\  
+ {\tt ByteArrayList}			& $1$				& $1$ \\  
+ {\tt DnaEncodingSequence}	 	& $1$ 				& $4$ \\
+ 								& {\bf Total}		& $\mathbf{39}$
+\end{tabular}
+\end{center}
+
+Considering that no rounding up is necessary, for $2.1$ million rows this sums up to $81,900,000$ bytes,
+equivalent to $78$ MB. The header sizes of the column objects ($11*8$ bytes) become negligible in this context.
+\\ \textcolor{red}{{\it of just 60 MB of indices and after that we have the joined data.}}
+
+As this is a major reduction in memory consumption, let us analyze the technique used to achieve this result.
+
+The basic idea is that instead of storing an array of {\tt String} objects, for example:
+\begin{verbatim}
+String items[] = { "abc", "def" };
+\end{verbatim}
+each consuming memory due to their headers, we can use 
+a single object of type {\tt String}, storing all the characters, and an additional array for their lengths.
+\begin{verbatim}
+String dataPool = "abcdef";
+int[] endLengths = {3, 6};
+\end{verbatim}
+
+For such a small array, the save is minor, but for a large number of items (millions), the memory reduction becomes significant. Even more important, the GC work is also reduced, since no matter how many items are in the {\tt dataPool} and {\tt endLengths} fields, there are only two objects to visit.
+The technique described above was implemented in the class {\tt StringSequence}.
+
+If the strings that are to be stored are repeated frequently, we can apply another optimization:
+instead of keeping them joined, we will use an indexed collection containing all the distinct strings and an array holding one index for each string.
+For example, {\tt \{"abc", "def", "abc", "xyz", "abc"\} } becomes: 
+\begin{verbatim}
+table   : {abc=>0, def=>1, xyz=>2}
+items   : [0, 1, 0, 2, 0]
+\end{verbatim}
+The {\tt table} structure is based on the class {\tt Object2IntOpenHashMap<String>} from FastUtil library, instead of the standard {\tt HashMap<Integer, String>}, since it uses the primitive data type {\tt int} for representing the keys, which also saves some memory.
+This data deduplication technique \cite{he:2010}, \cite{manogar:2014} was implemented in the class {\tt DeduplicatedDictionary}.
+
+When storing strings containing characters from a restricted alphabet, one optimization that can be performed is using an array of primitive values, for example a {\tt long[]}, and encoding each character into a block of bits. The number of bits required for a character depends on the size of the alphabet.
+DNA sequences use four letters {\tt A,C,G,T}, but it is possible for a machine to read incorrectly a symbol and to return {\tt N}. In order to represent $5$ possible characters we need at least $3$ bits,
+which means that a {\tt long} can store in its $64$ bits $21$ DNA letters. 
+The class {\tt DnaEncodingSequence} which implements this string encoding technique contains the following members:
+\begin{verbatim}
+  LongArrayList content;
+  ShortArrayList lengths;      
+  IntArrayList positions;     
+\end{verbatim}
+For example, encoding the $21$ letters string "AAAACCCCGGGGTTTTNNNNA" would produce a single long value, containing the bits:\\
+{\tt
+00001001001001000110110110110100
+10010010001001001001000000000000
+}
+
+From right to left, $000$ represents A, $001$ represents C, and so on.
+
+In the sample files, one DNA sequence is typically around $100$ letters, so the memory needed in order to represent it would be $1$ {\tt int} (encoding length) and $5$ {\tt long}s (the content), that is $44$ bytes. This reduces the memory consumption by a factor of two.
+
+Another advantage of using such an encoding is that when checking if two sequences are exactly the same, we can compare first their lengths and, if they are equal, comparing {\tt long} values means comparing $21$ characters at once.
+As before, the GC will also benefit from the reduced number of objects that must be visited.
+
+
+
+
+Running the smaller input file (144 MB), we have estimated that the original ElPrep algorithm would use around three times more memory than the size of the input SAM file.
+However, when trying to process the larger input file (1.2 GB), on a 32 GB machine, we have obtained an {\tt OutOfMemoryError}, meaning that the penalty of using too many objects in order to represent the information was preventing us in loading the entire data set into memory.
+\\ \textcolor{red}{JVM using how much memory?}
+
+With memory compaction, the memory needed to represent all the objects was estimated to 17.6 million rows * $39$ bytes per row $=$ $686,400,000$ bytes ($655$ MB), plus the DNA sequences  $17.6$ millions $* 44 = 774 MB$.
+
+\textcolor{red}{
+As the string data was estimated to at most $3$ GB, in $4.4$ GB we have stored both the entire SAM file and the fields associated with the alignments.
+}
+
+\textcolor{red}{
+Duplicating all this (as elPrep does it) will make the entire live set go to $9$ GB, which is still around half of the original live set (what is the size of the original live set? definition of "the live set".
+}
+
+On top of this, there is the cost of tags.
+In the original implementation, every {\tt SamAlignment} object has references to {\tt temps} and {\tt TAGS} arrays. These arrays have an initial size of $16$, respectively $4$, and contain references to {\tt Field} objects, which in turn contain a reference to a {\tt Slice} object.
+Using the row-based model, for every row the memory consumption is:
+\textcolor{red}{20 references * 4 bytes + 2 * 64 (an empty {\tt ArrayList} costs 64 bytes)$= 256 + 80$ bytes.}
+The memory usage for tags/temps is 5.9 GB. 
+\textcolor{red}{Tags only will be 80\% of usage = 4.2 GB}
+
+In order to address {\tt temps} and {\tt TAGS} we have implemented the {\tt TagSequence} class, which is a combination between {\tt StringSequence} and {\tt DeduplicatedDictionary}.
+Since the {\tt tags} are repeating frequently, we save them using one {\tt short} value per tag, but instead of using a list of tags, we define a sequence of indices.
+\textcolor{red}{Aici nu e prea clar.}
+
+For example, for the input {\tt "tag0 tag1 tag2", "tag1 tag2 tag3"}, the representation would be:
+\begin{verbatim}
+table = {"tag0":0, "tag1":1, 
+         "tag2":2, "tag3":3},
+lengths: [0,3], 
+tagSequence = [0,1,2,1,2,3]; 
+\end{verbatim}
+
+\textcolor{red}{
+For a 20K rows, we found following numbers:
+Unique tag values: approx 2400
+Total number of tags: approx 200000 (10 tags per row on average)
+}
+
+
+\begin{comment}
+
+\section{\uppercase{Results}}
+
+\subsection{\uppercase{Memory usage}}
+
+\subsection*{Original}
+As Java GC does use more system memory to speedup allocations, it is important to see how real life memory usage is calculated.
+
+To calculate live memory usage we took VisualVM toolset and we got a memory snapshot just before all writing to disk was done. In this way we know that all data set is processed in memory and no data is discarded.
+
+
+Here is a screenshot of the original algorithm with a heap dump:
+\includegraphics[scale=0.33]{images/VisualVM_Orig_144MB_heap_dump}
+
+The main difference over the "Optimized" algorithm is the 2.5M strings and 78M bytes associated with them
+
+\subsection*{Optimized}
+
+As "Optimized" algorithm is mostly a tuned implementation of Original, but it tries to materialize as little intermediate objects, the heap will look very similar:
+
+\includegraphics[scale=0.33]{images/VisualVM_Optimized_144MB_heap_dump}
+
+\subsection*{Compact}
+
+\includegraphics[scale=0.33]{images/VisualVM_Compact_144MB_heap_dump}
+
+What is critical to be observed is simply that the Compact uses for all types that use up-to 1M instances of live data, the full heap dump was only of: 624.066 M Bytes, 
+when compared with Original or Optimized implementations that they were floating over 4.5 times more live memory usage (or 3 GB).
+
+\subsection{\uppercase{Runtime performance}}
+
+As we didn't have access to original large machine, we did most of testing with smallest file (the 144 MB BAM file). As results in the original paper are from the 8 GB file our result is only an extrapolation of the original paper.
+
+Also, as the algorithm to be implemented using Compact memory model would take too long time to be quite significant to the final results of the conclusions of the paper, we did implement a full reading and writing of the biggest file we could fit into our machine (a 32 GB system), namely an input of 8 GB BAM file (which is 27.18 GB SAM).
+
+So the results are great considering the following considerations:
+
+* we did work with a machine that had 12 times less memory
+
+* our machine had 3 times less cores
+
+* we have 2.5x timess less frequency
+
+* our numbers were comparable in performance with our best "optimized" numbers, yet using at least 4 times less data
+
+So, in the original implementation, they claim to do the processing of the file in: 6 min:54sec to 7 min:31sec and memory usage is in 330-340 GB.
+
+In our measurement, isolating reading/writing which takes at least on our machine a significant part of runtime, but pointing to Compact implementation, the numbers are the following:
+
+\begin{small}
+	\begin{verbatim}
+Run: 1 / 3
+Read file stream. ... 		Time: 162.544 sec.
+Write file stream. ... 		Time: 83.687 sec.
+Run: 2 / 3
+Read file stream. ... 		Time: 171.593 sec.
+Write file stream. ... 		Time: 41.359 sec.
+	\end{verbatim}
+\end{small}
+
+As data-set is large and it is on the limit of the actual's machine RAM, swapping and GCs can make the variation to be of 40 seconds, but we could read the entire file in comparable time with original implementation. 
+
+Using Oracle JDK (defaults)
+\begin{small}
+	\begin{verbatim}
+(...)
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.628 sec.
+Write to file. ... 		Time: 3.13 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.575 sec.
+Write to file. ... 		Time: 3.196 sec.
+Time: 62.408 sec.
+End algorithm: original ...
+=============================
+(...)
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.912 sec.
+Write to file. ... 		Time: 1.631 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.88 sec.
+Write to file. ... 		Time: 1.544 sec.
+Time: 48.468 sec.
+End algorithm: optimized ...
+=============================
+(...)
+Run: 9 / 10
+Read file stream. ... 		Time: 2.929 sec.
+Write file stream. ... 		Time: 0.626 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 3.191 sec.
+Write file stream. ... 		Time: 0.744 sec.
+Time: 37.873 sec.
+End algorithm: compact ...
+=============================
+	\end{verbatim}
+\end{small}
+
+Using OpenJ9
+
+\begin{small}
+	\begin{verbatim}
+(...)
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 3.5 sec.
+Write to file. ... 		Time: 2.651 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 3.574 sec.
+Write to file. ... 		Time: 2.427 sec.
+Time: 61.158 sec.
+End algorithm: original ...
+=============================
+
+Reading SAM into memory and applying filters. ... 		Time: 4.786 sec.
+Write to file. ... 		Time: 1.759 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 4.726 sec.
+Write to file. ... 		Time: 1.824 sec.
+Time: 64.243 sec.
+End algorithm: optimized ...
+=============================
+Run: 9 / 10
+Read file stream. ... 		Time: 2.676 sec.
+Write file stream. ... 		Time: 1.03 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 2.568 sec.
+Write file stream. ... 		Time: 1.07 sec.
+Time: 38.452 sec.
+End algorithm: compact ...
+=============================
+	\end{verbatim}
+\end{small}
+
+Using JDK/Graal
+\begin{small}
+	\begin{verbatim}
+(...)
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.935 sec.
+Write to file. ... 		Time: 3.738 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.985 sec.
+Write to file. ... 		Time: 4.063 sec.
+Time: 71.255 sec.
+End algorithm: original ...
+=============================
+(...)
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 4.203 sec.
+Write to file. ... 		Time: 1.704 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 3.064 sec.
+Write to file. ... 		Time: 1.631 sec.
+Time: 53.692 sec.
+End algorithm: optimized ...
+=============================
+(...)
+Run: 9 / 10
+Read file stream. ... 		Time: 2.544 sec.
+Write file stream. ... 		Time: 0.692 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 2.508 sec.
+Write file stream. ... 		Time: 0.678 sec.
+Time: 34.239 sec.
+End algorithm: compact ...
+=============================
+	\end{verbatim}
+\end{small}
+
+Our algorithm is requiring more CPU power to compact/expand the data, so, it would be possible that our algorithm of compaction to have some performance hit, but it is still much more efficient when combined with memory usage. 
+
+What is even more important, is that the cost of processing on a machine that uses less memory and it is made from off the shelf components (i.e. a basic desktop computer), it gives the potential to have a comparable (even if it is slower) performance with ElPrep, but the machine to cost 
+up to one order of magnitude less:
+
+Configuring a server at minimal configuration based with closest architecture from the original paper, the cost of the machine is around 5000 USD
+https://www.metservers.com/Dell-PowerEdge-R730-8-Bay-SFF-2U-Rackmount-Server compared with an upgraded CPU (so numbers will be better than in this paper) would cost around a third (https://pcpartpicker.com/list/2KRCzN with 1722.23 USD) and it would be 30% faster than the machine we used in our testing. We could recommend a 64 GB machine and a 12 or 16 core desktop machine which would put prices into 2500 USD range, so we can process larger files, but the point remains: compacting memory makes possible either to work with larger files, or to process the same files on much cheaper machines.
+\end{comment}
 
 
 \bibliographystyle{apalike}

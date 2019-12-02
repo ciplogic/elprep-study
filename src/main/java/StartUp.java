@@ -3,11 +3,11 @@ import commons.Utilities;
 public class StartUp {
     public static void main(String[] args) {
         var algos = new String[]{
-//                "original",
+                "original",
 //                "optimized",
 //                "buffers",
 
-                "compact",
+//                "compact",
         };
         System.out.println("Warmup ...");
         for (var algo : algos)
@@ -16,7 +16,7 @@ public class StartUp {
         for (var algo : algos) {
             System.out.println("Algorithm: " + algo + " ...");
 
-            runAlgorithmOnTest(args, algo, true, 20);
+            runAlgorithmOnTest(args, algo, true, 10);
 
             System.out.println("End algorithm: " + algo + " ...");
             System.out.println("=============================");
@@ -44,6 +44,7 @@ public class StartUp {
                         break;
                 }
             }
+            System.gc();
         });
 
     }

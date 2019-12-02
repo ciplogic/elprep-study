@@ -28,12 +28,11 @@ public class elprep {
 
     public static File initialFile;
 
-
     public static void runBestPracticesPipelineIntermediateSam
             (FileInputStream input, OutputStream output, Slice sortingOrder,
              List<Function<SamHeader, Predicate<SamAlignment>>> preFilters,
              List<Function<SamHeader, Predicate<SamAlignment>>> postFilters,
-             boolean timed) {
+             boolean timed) throws IOException {
 
 
         Sam filteredReads = new Sam();
@@ -76,6 +75,7 @@ public class elprep {
                 throw new RuntimeException(e);
             }
         });
+
         timedRun(timed, "Write to file.", () -> {
             BufferedWriter buf = new BufferedWriter(new OutputStreamWriter(output, StandardCharsets.ISO_8859_1), 4000_000);
             try (PrintWriter out = new PrintWriter(buf)) {
