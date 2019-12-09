@@ -169,7 +169,7 @@ We will show that replacing the \texttt{String} usage to the underlying \texttt{
 
 
 
-\subsection{\uppercase{Memory Compactation}}
+\subsection{\uppercase{Memory Compaction}}
 Another important part of working with large data sets that have to be accessible in memory regards the format in which they are represented. Choosing the right format will not only reduce the amount of consumed memory but it will also reduce the GC cost to copy the objects between regions and the cost of visiting and marking them.
 
 The most common approach of representing information is in row based form, where a {\it row} is a record of some kind and a {\it column} is a certain property of that row. This type of representation is used in most relational databases management systems, where sets of rows of the same type form {\it tables}.
@@ -352,32 +352,16 @@ However, when trying to process the larger input file (1.2 GB), on a 32 GB machi
 	Optimized algo: 31 463 351 904
 	Compact algo: 4 703 674 464 bytes	
 	Live data memory usage: 6.8x less.
-}
-
-\\ \textcolor{brown}{
 	144 MB input:
 	Original algorithm: 2 234 575 120 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk. This is the lowest maximum memory consumption for 1.2 GB BAM file
 	Optimized algo: 2 273 444 096
 	Compact algo: 607 589 728 bytes	
 	Live data memory usage: 3.67x less.
-}
-
-
-\\ \textcolor{brown}{
 	8 GB input: 20 334 009 424 B.
-	
 	Obviously we had a too small machine to process a live data set that is using as minimum 3
-	
-	
-}
-\\ \textcolor{brown}{
 	12 GB input: 35 401 115 712 B.
-	
 	Time is 300 seconds as the machine touches Swap file, but being able to process 12 GB BAM file on a 48 GB machine is a feature in itself.
-	
-	
 }
-
 
 
 

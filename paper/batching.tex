@@ -1,0 +1,45 @@
+When having a large data set in memory, even there is system memory, when it is chunked, and it benefits more high volume processing as described later.
+
+So let's assume we have a column-based stored list of millions of points, so as before we would have:
+
+class Points
+{
+	int[] xs = [...];
+	int[] ys = [...];
+} 
+
+compared with:
+
+class PointBatch
+{
+    int size;	
+	int[] xs = new int [4000];
+	int[] ys = new int [4000];
+} 
+
+class PointsBatched
+{
+	var data = new ArrayList<PointsBatch>();
+}
+
+Even both store in column-based data, and the PointsBatched class does have more objects to work with, the ratio to original number of row based storage is still orders of magnitude less, it will be able to have some advantages over the non-batched version.
+
+Similarly, if the algorithm storing SamAlignments is instead of a full array of the fields, a separate set of batches, some properties could be seen:
+* GC: when GC happens and it considers to remove/move objects, the cost of moving a batch is much smaller than moving the entire array
+* parallelism: when batches are defined, the full algorithm can be parallel and if the data is not dependent of other batches, the code inside is single-threaded and as easy to understand as the original non-parallel code compared with the code against full array implementation. 
+This is also important as batches give less contention: meaning that even if the batches wait for a resource (for example when writing to disk), when the batch gets access to the mutex, will do a large operation which will get no interruptions, being very friendly of how most OSes and file systems work.
+
+This is why when we tuned ("optimized" algorthm) the original implementation, we got a speedup when writing single-threaded to disk, as there was a mutex on every row (because the underlying Java class would have a "synchronized" block), but right now we have the opposite: every batch writes in parallel the text and just writing of buffers is synchronized
+
+* compaction: if we use for example string deduplication and we reuse indices, but if the array of strings can be as long as the entire data-set is concerned, we have to use for worst case scenarios indices that allow low rates of duplications, so for 2 million entries, we have to use a type that can store up-to 2 million values.
+When using a chunk that is under 32K of strings, a short type can be used. This means that for every batch we will save 2 bytes per type of column and as we use 3 columns, the savings will be 6 bytes per row.
+
+Some specifics of our algorithm of batching:
+
+step 1. We assume a buffer size which is hard-coded but it is smaller than 65500 (because we use an unsigned short - char type in Java - to index string deduplication and tags numbers) and we extract the: row count of the batch size x numbers of cores x 4 (to make sure that we can give enough work for CPUs). 
+step 2. a. Parallel: from extracted rows we created in parallel SamBatch instances which are chunked column-based store of the SamAlignment data. A complete implementation could do filtering.
+step 2. b. Parallel We have a method "shrink" which would allow cases when there would be implemented a full implementatin like filtering, to reduce the internal structures to the real size of the data.
+
+step 3. Writing to disk: Parallel: we write to in-memory stream buffers the content of batch and we drop the reference to the instance. If any GC happens, the memory tends to stay constant as much as buffers are not flushed to disk so GC can dispose them.
+
+In our timings on an 8 core machine processing of reading is around 155 seconds for reading and 25 seconds for writing, as we have sequential reading that blocks parallelism, vs a fully in-memory parallel writing.
