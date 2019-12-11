@@ -1,0 +1,17 @@
+WIP:
+
+StreamByteWriter and BatchWrapperWriter class
+
+When writing the output of the "Original" algorithm, we noticed few limitations:
+* high count of object creation which can and will trigger GC
+* even though every row (SamAlignment) is converted to a String on a separate task (using all cores), the final writing is single-threaded as it is locked on the underlying Buffer
+* SamAlignment is implemented using 3 types of text: strings, numbers and a separator (tab or new-line)
+
+Given we write in a SamAlignment in 3 types of texts, we can write a single-threaded code that will have the benefit of not
+using OS Locks (like Mutexes/synchronize blocks), but it can generate the same output without creating any intermediary
+buffer, and when the internal buffer is filled, that buffer is flushed on disk.
+
+Writing an integer is done by firstly setting a small array with the representation of the values.
+
+And then writing the array using previous method
+

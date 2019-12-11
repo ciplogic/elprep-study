@@ -43,7 +43,6 @@ public class BatchWrapperWriter {
         internalBuffer[pos++] = value;
         if (pos == fullLen)
             flush();
-
     }
 
     public void write(byte[] arr, int arrPos, int len) throws IOException {
@@ -65,7 +64,7 @@ public class BatchWrapperWriter {
         pos = 0;
     }
 
-    static char charLetterDecode(int ch)
+    private static char charLetterDecode(int ch)
     {
         switch (ch)
         {
