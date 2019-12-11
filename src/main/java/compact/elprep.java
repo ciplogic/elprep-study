@@ -15,15 +15,20 @@ import static commons.Utilities.timedRun;
 public class elprep {
     public static void main(String[] args) {
         var batchSize = 20000;
-        var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors()*4);
+        var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors()*3);
         var headers = new ArrayList<String>();
         timedRun(true, "Read file stream.", () -> {
             var inputFileName = args[1];
             try(FileInputStream fileInputStream = new FileInputStream(inputFileName)){
-                byte[] b;;
+                byte[] b = new byte[1_000_000];;
                 byte[] remainder = new byte[0];
-                while ((b = fileInputStream.readNBytes(1250000)).length>0)
+                int readLen;
+                while ((readLen = fileInputStream.read(b))>0)
                 {
+                    if (readLen!=b.length)
+                    {
+                        b = Arrays.copyOfRange(b, 0, readLen);
+                    }
                     var startIndex = Utilities.indexOfByte(b, '\n', 0);
                     var row =startIndex!=-1? combine(remainder, Arrays.copyOfRange(b, 0, startIndex))
                             :remainder;
@@ -47,8 +52,6 @@ public class elprep {
         timedRun(true, "Write file stream.", () -> {
             writeToDisk(outputFile, batchWrapper, headers);
         });
-        return;
-
     }
 
     private static void writeToDisk(String outputFile, BatchWrapperReader batchWrapper, ArrayList<String> headers)  {

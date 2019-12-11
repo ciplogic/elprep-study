@@ -1,0 +1,45 @@
+D:\apps\jdk-13.0.1\bin\java.exe -Dvisualvm.id=645728120135600 -Xmx40000M "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\lib\idea_rt.jar=64429:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\bin" -Dfile.encoding=UTF-8 -classpath G:\UserFiles\Dropbox\ElPrepStudy\target\classes;C:\Users\cipri\.m2\repository\it\unimi\dsi\fastutil\8.1.0\fastutil-8.1.0.jar StartUp filter c:\paper\input_8G.sam process.sam --filter-unmapped-reads --replace-reference-sequences ucsc.hg19.dict --replace-read-group "ID:group1 LB:lib1 PL:illumina PU:unit1 SM:sample1" --mark-duplicates --sorting-order coordinate
+Warmup ...
+Run: 1 / 2
+Read file stream. ... 		Time: 65.131 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 2 / 2
+Read file stream. ... 		Time: 19.206 sec.
+Write file stream. ... 		Time: 0.0 sec.
+ Finished.
+Algorithm: compact ...
+compact ... 		Run: 1 / 10
+Read file stream. ... 		Time: 19.156 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 2 / 10
+Read file stream. ... 		Time: 19.47 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 3 / 10
+Read file stream. ... 		Time: 19.146 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 4 / 10
+Read file stream. ... 		Time: 19.162 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 5 / 10
+Read file stream. ... 		Time: 19.142 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 6 / 10
+Read file stream. ... 		Time: 19.181 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 7 / 10
+Read file stream. ... 		Time: 19.177 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 8 / 10
+Read file stream. ... 		Time: 19.136 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 9 / 10
+Read file stream. ... 		Time: 19.144 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 19.265 sec.
+Write file stream. ... 		Time: 0.0 sec.
+Time: 191.989 sec.
+End algorithm: compact ...
+=============================
+
+Process finished with exit code 0

@@ -1,0 +1,134 @@
+D:\apps\jdk-13.0.1\bin\java.exe -Dvisualvm.id=8000763493900 -Xmx38800M "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\lib\idea_rt.jar=50726:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\bin" -Dfile.encoding=UTF-8 -classpath G:\UserFiles\Dropbox\ElPrepStudy\target\classes;C:\Users\cipri\.m2\repository\it\unimi\dsi\fastutil\8.1.0\fastutil-8.1.0.jar StartUp filter c:/paper/1_2GB.sam process.sam --filter-unmapped-reads --replace-reference-sequences ucsc.hg19.dict --replace-read-group "ID:group1 LB:lib1 PL:illumina PU:unit1 SM:sample1" --mark-duplicates --sorting-order coordinate
+Warmup ...
+Run: 1 / 3
+Reading SAM into memory and applying filters. ... 		Time: 32.565 sec.
+Write to file. ... 		Time: 71.152 sec.
+Run: 2 / 3
+Reading SAM into memory and applying filters. ... 		Time: 36.945 sec.
+Write to file. ... 		Time: 89.156 sec.
+Run: 3 / 3
+Reading SAM into memory and applying filters. ... 		Time: 35.678 sec.
+Write to file. ... 		Time: 89.862 sec.
+Run: 1 / 3
+Reading SAM into memory and applying filters. ... 		Time: 50.655 sec.
+Write to file. ... 		Time: 26.783 sec.
+Run: 2 / 3
+Reading SAM into memory and applying filters. ... 		Time: 54.147 sec.
+Write to file. ... 		Time: 26.428 sec.
+Run: 3 / 3
+Reading SAM into memory and applying filters. ... 		Time: 51.707 sec.
+Write to file. ... 		Time: 26.584 sec.
+Run: 1 / 3
+Read file stream. ... 		Time: 25.853 sec.
+Write file stream. ... 		Time: 4.841 sec.
+Run: 2 / 3
+Read file stream. ... 		Time: 10.256 sec.
+Write file stream. ... 		Time: 4.802 sec.
+Run: 3 / 3
+Read file stream. ... 		Time: 10.18 sec.
+Write file stream. ... 		Time: 4.548 sec.
+ Finished.
+Algorithm: original ...
+original ... 		Run: 1 / 10
+Reading SAM into memory and applying filters. ... 		Time: 25.414 sec.
+Write to file. ... 		Time: 89.101 sec.
+Run: 2 / 10
+Reading SAM into memory and applying filters. ... 		Time: 33.71 sec.
+Write to file. ... 		Time: 91.472 sec.
+Run: 3 / 10
+Reading SAM into memory and applying filters. ... 		Time: 33.236 sec.
+Write to file. ... 		Time: 87.574 sec.
+Run: 4 / 10
+Reading SAM into memory and applying filters. ... 		Time: 34.125 sec.
+Write to file. ... 		Time: 87.087 sec.
+Run: 5 / 10
+Reading SAM into memory and applying filters. ... 		Time: 34.086 sec.
+Write to file. ... 		Time: 97.519 sec.
+Run: 6 / 10
+Reading SAM into memory and applying filters. ... 		Time: 34.079 sec.
+Write to file. ... 		Time: 96.226 sec.
+Run: 7 / 10
+Reading SAM into memory and applying filters. ... 		Time: 33.958 sec.
+Write to file. ... 		Time: 87.577 sec.
+Run: 8 / 10
+Reading SAM into memory and applying filters. ... 		Time: 34.913 sec.
+Write to file. ... 		Time: 91.881 sec.
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 39.332 sec.
+Write to file. ... 		Time: 80.682 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 33.562 sec.
+Write to file. ... 		Time: 87.85 sec.
+Time: 1239.112 sec.
+End algorithm: original ...
+=============================
+Algorithm: optimized ...
+optimized ... 		Run: 1 / 10
+Reading SAM into memory and applying filters. ... 		Time: 48.231 sec.
+Write to file. ... 		Time: 31.63 sec.
+Run: 2 / 10
+Reading SAM into memory and applying filters. ... 		Time: 50.172 sec.
+Write to file. ... 		Time: 26.691 sec.
+Run: 3 / 10
+Reading SAM into memory and applying filters. ... 		Time: 50.465 sec.
+Write to file. ... 		Time: 28.021 sec.
+Run: 4 / 10
+Reading SAM into memory and applying filters. ... 		Time: 50.225 sec.
+Write to file. ... 		Time: 27.328 sec.
+Run: 5 / 10
+Reading SAM into memory and applying filters. ... 		Time: 51.732 sec.
+Write to file. ... 		Time: 39.91 sec.
+Run: 6 / 10
+Reading SAM into memory and applying filters. ... 		Time: 50.153 sec.
+Write to file. ... 		Time: 26.848 sec.
+Run: 7 / 10
+Reading SAM into memory and applying filters. ... 		Time: 50.754 sec.
+Write to file. ... 		Time: 27.349 sec.
+Run: 8 / 10
+Reading SAM into memory and applying filters. ... 		Time: 50.206 sec.
+Write to file. ... 		Time: 28.874 sec.
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 50.393 sec.
+Write to file. ... 		Time: 27.77 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 51.969 sec.
+Write to file. ... 		Time: 26.9 sec.
+Time: 801.829 sec.
+End algorithm: optimized ...
+=============================
+Algorithm: compact ...
+compact ... 		Run: 1 / 10
+Read file stream. ... 		Time: 24.757 sec.
+Write file stream. ... 		Time: 5.217 sec.
+Run: 2 / 10
+Read file stream. ... 		Time: 10.152 sec.
+Write file stream. ... 		Time: 4.799 sec.
+Run: 3 / 10
+Read file stream. ... 		Time: 10.134 sec.
+Write file stream. ... 		Time: 4.42 sec.
+Run: 4 / 10
+Read file stream. ... 		Time: 10.255 sec.
+Write file stream. ... 		Time: 4.739 sec.
+Run: 5 / 10
+Read file stream. ... 		Time: 10.32 sec.
+Write file stream. ... 		Time: 4.651 sec.
+Run: 6 / 10
+Read file stream. ... 		Time: 10.301 sec.
+Write file stream. ... 		Time: 4.819 sec.
+Run: 7 / 10
+Read file stream. ... 		Time: 10.151 sec.
+Write file stream. ... 		Time: 4.568 sec.
+Run: 8 / 10
+Read file stream. ... 		Time: 10.228 sec.
+Write file stream. ... 		Time: 4.598 sec.
+Run: 9 / 10
+Read file stream. ... 		Time: 10.316 sec.
+Write file stream. ... 		Time: 4.648 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 10.334 sec.
+Write file stream. ... 		Time: 4.616 sec.
+Time: 166.239 sec.
+End algorithm: compact ...
+=============================
+
+Process finished with exit code 0
