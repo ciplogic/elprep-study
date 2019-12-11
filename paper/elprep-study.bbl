@@ -43,6 +43,11 @@ Manogar, E. and Abirami, S. (2014).
 \newblock A study on data deduplication techniques for optimized storage.
 \newblock pages 161--166.
 
+\bibitem[Oaks, 2014]{oaks:2014}
+Oaks, S. (2014).
+\newblock {\em {Java Performance: The Definitive Guide}}.
+\newblock O'Reilly Media, Inc., 1st edition.
+
 \bibitem[Oracle, 2019]{gc:oracle}
 Oracle (2019).
 \newblock Java garbage collection basics - oracle.

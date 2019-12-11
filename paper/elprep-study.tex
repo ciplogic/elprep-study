@@ -12,6 +12,7 @@
 \usepackage{pslatex}
 \usepackage{apalike}
 \usepackage{xcolor}
+\usepackage{multirow}
 \usepackage{SCITEPRESS} % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
 
 
@@ -388,65 +389,152 @@ Total number of tags: approx 200000 (10 tags per row on average)
 }
 
 
-\begin{comment}
 
-\section{\uppercase{Results}}
+\section{\uppercase{Optimizing I/O Operations}}
 
-\subsection{\uppercase{Memory usage}}
+The first and most simple technique that could improve performance when working with large files
+is I/O {\tt buffering} \cite{oaks:2014}. Invoking a Java {\it read} method, for example, will eventually trigger an invocation of the operating system method responsible with reading data from the disk.
+Although most operating systems use I/O buffering by default, an invocation of a method outside JVM is nevertheless expensive. Another reason to minimize the number of I/O operations is that, for each one of them, temporary objects needed to store the data must be created, meaning that GC will have more work to do when recovering the memory.
 
-\subsection*{Original}
-As Java GC does use more system memory to speedup allocations, it is important to see how real life memory usage is calculated.
+The original code that we are analyzing uses correctly the {\tt BufferedReader}, respectively the {\tt BufferedWriter} classes in order to perform I/O operations on the SAM file.
+Checking the definition of the {\tt BufferedReader} class we notice that the default buffer size is set to $8192$ characters, which is reasonable for most scenarios. The {\it read} operation is implemented in a concurrent fashion, using Java parallel streams:
+\begin{verbatim}
+var alnStream = inputStream.parallel()
+  .map((s) -> new SamAlignment(s));
+\end{verbatim}
+In this context, for larger files (as in our case), and in the presence of multiple cores, increasing the size of the character buffer may offer a better performance, estimated by our experiments at around $5\%$. \textcolor{red}{Este corect? Pe laptop-ul meu nu obtin nicio imbunatatire}
 
-To calculate live memory usage we took VisualVM toolset and we got a memory snapshot just before all writing to disk was done. In this way we know that all data set is processed in memory and no data is discarded.
+The same simple optimization can be made for writing, by presizing the {\tt BufferedWriter} object to a more suitable value than the default one.
+
+When it comes to writing, we notice another possible improvements. The following code sequence iterates through the {\tt SamAlignment} objects found in the input stream and, for each one of them, it creates a string representation containing the fields of the  {\tt SamAlignment} class and tabs as separators.
+This is implemented using a {\tt StringWriter}, which is a character stream collecting its output in a memory buffer.
+\begin{verbatim}
+var outputStream = 
+ alnStream.parallel().map((aln) -> {
+   var sw = new StringWriter();
+   try (var swout = new PrintWriter(sw)) {
+     aln.format(swout);
+   }
+   return sw.toString();
+});
+\end{verbatim}
+
+The initial size of the {\tt StringWriter} internal buffer is by default $16$ characters. A line in the output file is more than $200$ characters. By presizing the buffer to a value of $256$, we have obtained a speed-up of the writing process estimated by our experiments to more than $10\%$.
+
+If we take a closer look at the {\tt StringWriter} class we notice that it uses an internal {\tt StringBuffer} object. To quote from its documentation, a {\tt StringBuffer} is  a thread-safe, mutable sequence of characters. That means that most of its methods are declared as {\it synchronized} in order to control the access to the buffer of characters in a multithreaded environment.
+However, in our case, each writing thread spawned by the parallel stream implementation gets his own copy of a {\tt StringWriter} so there is no resource contention that would require synchronization.
+So, instead of using a {\tt StringWriter}, it would be better to simply use a common buffer, with no synchronization. To maximize the performance gain, the buffer could be implemented as a byte array. 
+Using bytes instead of characters is quite trivial as Java {\tt String} class has the method {\tt getBytes()} and recreating a {\tt String} object can be done by simply using one of its constructors: {\tt new String(bytes)}.
+
+Writing to the file is implemented by simply invoking the {\tt println} method of a {\tt PrintWriter} output stream, decorating a {\tt BufferedWriter}, which in turns decorates a {\tt FileWriter}.
+\begin{verbatim}
+var out = new PrintWriter(
+  new BufferedWriter(
+    new OutputStreamWriter(output)));
+...    
+outputStream.forEachOrdered(
+  (s) -> out.println(s));
+\end{verbatim}
+
+Again, the {\tt PrintWriter.println} method is using a {\tt synchronized} block in order to fulfill its task, which is eventually an invocation to {\tt BufferedWriter.write} method.
+\begin{verbatim}
+public void println(String x) {
+  synchronized (lock) {
+    print(x); println();
+   }
+}
+\end{verbatim}
+The {\tt BuffereWriter.write} method is also synchronized and so is {\tt FileWriter.write}, which is the last one invoked in this chain.
+
+Since more than half of the I/O time is spent writing, we have analyzed the CPU utilization, using the operating system profiler.
+\begin{center}
+\includegraphics[scale=0.5]{images/cpu_original.png}
+\end{center}
+The graph looks like a chainsaw, which is a sign that the code is bottle-necked on a single thread. This is no surprise, since the {\tt outputStream} is written in a sequential fashion.
+On top of that, for every row there has to be a mutex check whenever a synchronized block of code is invoked. Since there is a large number of rows, all these checks will add up and produce a significant slowdown of the overall writing process.
+
+The technique that should have been used in this context involves using a single byte array.
+Instead of creating and storing individual string representations of all the {\tt SamAlignment} objects, and writing them one by one to disk, we add progressively information into the buffer. Only when the buffer becomes full, we write its content on disk. Obviously, all these steps will be performed in a single thread, but the bottleneck will be less obvious. The class implementing the byte array is called {\tt StreamByteWriter}.
+\begin{verbatim}
+StreamByteWriter streamByteWriter 
+  = new StreamByteWriter(output);
+for (SamAlignment aln: alignments) {
+  aln.formatBuffer(streamByteWriter);
+}
+\end{verbatim}
+Even if we are using now a single core for all the writing, the necessary time for creating the output file was reduced by half. The following graph shows the CPU utilization for this approach:
+\begin{center}
+\includegraphics[scale=0.5]{images/cpu_optimized.png}
+\end{center}
+
+\textcolor{red}{Putem scapa si mai mult de portiunile albe?}
 
 
-Here is a screenshot of the original algorithm with a heap dump:
-\includegraphics[scale=0.33]{images/VisualVM_Orig_144MB_heap_dump}
 
-The main difference over the "Optimized" algorithm is the 2.5M strings and 78M bytes associated with them
 
-\subsection*{Optimized}
 
-As "Optimized" algorithm is mostly a tuned implementation of Original, but it tries to materialize as little intermediate objects, the heap will look very similar:
+\section{\uppercase{Experimental Results}}
 
-\includegraphics[scale=0.33]{images/VisualVM_Optimized_144MB_heap_dump}
+The computer we have used in order to perform the experiments is a Ryzen 7-1700, having 8 cores and using 32 GB of RAM.
+Since we didn't have access to the hardware necessary to run all the tests in memory, as the original paper, we have used the smaller SAM files and ran the same processing repeatedly in order to obtain an accurate result of the running time.
+For example, running $10$ times the algorithm on the smallest input SAM file, which is approximately $700$ MB, will produce a total running time of around $70$ seconds. 
+Running the algorithm repeatedly will trigger the garbage collector and this will be the cause of variations in the collected results, ranging from around $2$ to $3$ seconds, when reading the smallest file, and $3$ to $4$ seconds for writing.
 
-\subsection*{Compact}
+Before executing the timed invocations, we have {\it warmed-up} the JVM. 
+This is usually achieved by simply running a couple of times an initial test (not timed) that uses all the classes involved in the algorithm. Such a warm-up is necessary because Java is using a lazy class loading mechanism and just-in-time compilation. After this step, all important classes are stored into the JVM cache (native code), making them available at runtime with no additional penalty.
 
-\includegraphics[scale=0.33]{images/VisualVM_Compact_144MB_heap_dump}
+The original elPrep benchmarks have been performed on a Supermicro SuperServer 1029U-TR4T node with two
+Intel Xeon Gold 6126 processors consisting of 12 pro-cessor cores each, clocked at 2.6 GHz, with 384 GB
+RAM \cite{costanza:2019}. The authors claim to do the processing of the 8 GB BAM file in 6 min:54sec to 7 min:31sec and memory usage is $330-340$ GB.
 
-What is critical to be observed is simply that the Compact uses for all types that use up-to 1M instances of live data, the full heap dump was only of: 624.066 M Bytes, 
-when compared with Original or Optimized implementations that they were floating over 4.5 times more live memory usage (or 3 GB).
+As we didn't have access to such a performing machine, we did most of testing with the smallest file, the $144$ MB BAM file ($673.3$ MB SAM file). For the $8$ GB BAM file ($27.18$ GB SAM) our results will be an extrapolation of the former ones. \textcolor{red}{Sau nu?}
+
+%Also, as the algorithm to be implemented using Compact memory model would take too long time to be quite significant to the final results of the conclusions of the paper, we did implement a full reading and writing of the biggest file we could fit into our machine (a 32 GB system), namely an input of 8 GB BAM file (which is 27.18 GB SAM).
 
 \subsection{\uppercase{Runtime performance}}
 
-As we didn't have access to original large machine, we did most of testing with smallest file (the 144 MB BAM file). As results in the original paper are from the 8 GB file our result is only an extrapolation of the original paper.
+\textcolor{red} {Aici trebuie sa punem niste teste comparative, care sa surpinda impactul fiecarei optimizari vs. original si la sfarsit castigul total}
 
-Also, as the algorithm to be implemented using Compact memory model would take too long time to be quite significant to the final results of the conclusions of the paper, we did implement a full reading and writing of the biggest file we could fit into our machine (a 32 GB system), namely an input of 8 GB BAM file (which is 27.18 GB SAM).
+In terms of running time, the performance gain for reading the input file is negligible.  \textcolor{red}{Sau nu?}
 
+\par
+\textbf{Writing} \\
+\vspace{-0.4cm}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+						& 144 MB BAM  	& 8 GB BAM			\\ \hline
+Original				& .... s		& .... s			\\ \hline
+I/O Buffering       	& .... s		& .... s			\\ \hline
+{\it StreamByteArray}	& .... s		& .... s			\\ \hline
+Overall					& .... s		& .... s			\\ \hline
+\end{tabular}
+\end{center}
+
+
+\subsection{\uppercase{Memory Usage}}
+\textcolor{red} {Aici trebuie sa punem cifre comparative, care sa surpinda castigul de memorie + pozele scalate }
+
+
+
+\begin{comment}
 So the results are great considering the following considerations:
-
 * we did work with a machine that had 12 times less memory
-
 * our machine had 3 times less cores
-
 * we have 2.5x timess less frequency
-
 * our numbers were comparable in performance with our best "optimized" numbers, yet using at least 4 times less data
-
-So, in the original implementation, they claim to do the processing of the file in: 6 min:54sec to 7 min:31sec and memory usage is in 330-340 GB.
 
 In our measurement, isolating reading/writing which takes at least on our machine a significant part of runtime, but pointing to Compact implementation, the numbers are the following:
 
 \begin{small}
-	\begin{verbatim}
+\begin{verbatim}
 Run: 1 / 3
 Read file stream. ... 		Time: 162.544 sec.
 Write file stream. ... 		Time: 83.687 sec.
 Run: 2 / 3
 Read file stream. ... 		Time: 171.593 sec.
 Write file stream. ... 		Time: 41.359 sec.
-	\end{verbatim}
+\end{verbatim}
 \end{small}
 
 As data-set is large and it is on the limit of the actual's machine RAM, swapping and GCs can make the variation to be of 40 seconds, but we could read the entire file in comparable time with original implementation. 
@@ -519,12 +607,12 @@ Write file stream. ... 		Time: 1.07 sec.
 Time: 38.452 sec.
 End algorithm: compact ...
 =============================
-	\end{verbatim}
+\end{verbatim}
 \end{small}
 
 Using JDK/Graal
 \begin{small}
-	\begin{verbatim}
+\begin{verbatim}
 (...)
 Run: 9 / 10
 Reading SAM into memory and applying filters. ... 		Time: 2.935 sec.
@@ -555,7 +643,7 @@ Write file stream. ... 		Time: 0.678 sec.
 Time: 34.239 sec.
 End algorithm: compact ...
 =============================
-	\end{verbatim}
+\end{verbatim}
 \end{small}
 
 Our algorithm is requiring more CPU power to compact/expand the data, so, it would be possible that our algorithm of compaction to have some performance hit, but it is still much more efficient when combined with memory usage. 
@@ -565,6 +653,39 @@ up to one order of magnitude less:
 
 Configuring a server at minimal configuration based with closest architecture from the original paper, the cost of the machine is around 5000 USD
 https://www.metservers.com/Dell-PowerEdge-R730-8-Bay-SFF-2U-Rackmount-Server compared with an upgraded CPU (so numbers will be better than in this paper) would cost around a third (https://pcpartpicker.com/list/2KRCzN with 1722.23 USD) and it would be 30% faster than the machine we used in our testing. We could recommend a 64 GB machine and a 12 or 16 core desktop machine which would put prices into 2500 USD range, so we can process larger files, but the point remains: compacting memory makes possible either to work with larger files, or to process the same files on much cheaper machines.
+\end{comment}
+
+
+
+
+
+
+\begin{comment}
+
+\subsection*{Original}
+As Java GC does use more system memory to speedup allocations, it is important to see how real life memory usage is calculated.
+
+To calculate live memory usage we took VisualVM toolset and we got a memory snapshot just before all writing to disk was done. In this way we know that all data set is processed in memory and no data is discarded.
+
+
+Here is a screenshot of the original algorithm with a heap dump:
+\includegraphics[scale=0.33]{images/VisualVM_Orig_144MB_heap_dump}
+
+The main difference over the "Optimized" algorithm is the 2.5M strings and 78M bytes associated with them
+
+\subsection*{Optimized}
+
+As "Optimized" algorithm is mostly a tuned implementation of Original, but it tries to materialize as little intermediate objects, the heap will look very similar:
+
+\includegraphics[scale=0.33]{images/VisualVM_Optimized_144MB_heap_dump}
+
+\subsection*{Compact}
+
+\includegraphics[scale=0.33]{images/VisualVM_Compact_144MB_heap_dump}
+
+What is critical to be observed is simply that the Compact uses for all types that use up-to 1M instances of live data, the full heap dump was only of: 624.066 M Bytes, 
+when compared with Original or Optimized implementations that they were floating over 4.5 times more live memory usage (or 3 GB).
+
 \end{comment}
 
 

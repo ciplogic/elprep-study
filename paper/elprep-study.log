@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  1 DEC 2019 19:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  11 DEC 2019 11:26
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -282,41 +282,47 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
-(SCITEPRESS.sty
+("C:\Program Files\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
+Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
+\multirow@colwidth=\skip55
+\multirow@cntb=\count115
+\multirow@dima=\skip56
+\bigstrutjot=\dimen134
+) (SCITEPRESS.sty
 Conference Style for SCITEPRESS for LaTeX 2e -- version of December 2018
-\titlebox=\skip55
+\titlebox=\skip57
 ) (elprep-study.aux)
 \openout1 = `elprep-study.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 18.
-LaTeX Font Info:    Try loading font information for OMS+pzccm on input line 18
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 19.
+LaTeX Font Info:    Try loading font information for OMS+pzccm on input line 19
 .
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspzccm.fd"
 File: omspzccm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/pzccm.
 )
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 18.
-LaTeX Font Info:    ... okay on input line 18.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 19.
+LaTeX Font Info:    ... okay on input line 19.
  (C:\Users\Cristi\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count115
-\scratchdimen=\dimen134
+\scratchcounter=\count116
+\scratchdimen=\dimen135
 \scratchbox=\box54
-\nofMPsegments=\count116
-\nofMParguments=\count117
+\nofMPsegments=\count117
+\nofMParguments=\count118
 \everyMPshowfont=\toks27
-\MPscratchCnt=\count118
-\MPscratchDim=\dimen135
-\MPnumerator=\count119
-\makeMPintoPDFobject=\count120
+\MPscratchCnt=\count119
+\MPscratchDim=\dimen136
+\MPnumerator=\count120
+\makeMPintoPDFobject=\count121
 \everyMPtoPDFconversion=\toks28
 ) ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
 Package: pdftexcmds 2016/05/21 v0.22 Utility functions of pdfTeX for LuaTeX (HO
@@ -366,42 +372,42 @@ G,.JBIG2,.JB2,.eps]
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 44.
-LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 44
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 45.
+LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 45
 .
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptmcm.fd"
 File: ot1ptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 44
+LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 45
 .
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omlptmcm.fd"
 File: omlptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+psycm on input line 44
+LaTeX Font Info:    Try loading font information for OMX+psycm on input line 45
 .
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omxpsycm.fd"
 File: omxpsycm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/psycm.
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 44.
+LaTeX Font Info:    Try loading font information for U+msa on input line 45.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 44.
+LaTeX Font Info:    Try loading font information for U+msb on input line 45.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <11> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.69997> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5.5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
 Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    date: 2019-10-19 10:05:52
 (epstopdf)                    size: 975258 bytes
@@ -410,14 +416,14 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 44.
+(epstopdf)             \includegraphics on input line 45.
 Package epstopdf Info: Output file is already uptodate.
 
 <orcid-eps-converted-to.pdf, id=1, 598.235pt x 598.235pt>
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
 
 <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 44.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 45.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    date: 2019-10-19 10:05:52
@@ -427,20 +433,20 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 44.
+(epstopdf)             \includegraphics on input line 45.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
  <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 44.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 45.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 44.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 45.
 
-Underfull \hbox (badness 10000) in paragraph at lines 44--44
+Underfull \hbox (badness 10000) in paragraph at lines 45--45
 
  []
 
@@ -452,11 +458,11 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 44.
+(epstopdf)             \includegraphics on input line 45.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
 <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 44.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 45.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    date: 2019-10-19 10:05:52
@@ -466,37 +472,37 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 44.
+(epstopdf)             \includegraphics on input line 45.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
  <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 44.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 45.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <13> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 46.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 47.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 53.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 54.
 
 
-LaTeX Warning: Citation `?' on page 1 undefined on input line 53.
+LaTeX Warning: Citation `?' on page 1 undefined on input line 54.
 
 
-Overfull \hbox (3.28455pt too wide) in paragraph at lines 68--71
+Overfull \hbox (3.28455pt too wide) in paragraph at lines 69--72
 \OT1/pcr/m/n/10 https://github.com/exascience/elprep-bench\OT1/ptm/m/n/10 ,
  []
 
 
-Underfull \hbox (badness 1112) in paragraph at lines 68--71
+Underfull \hbox (badness 1112) in paragraph at lines 69--72
 \OT1/ptm/m/n/10 pro-pose a se-ries of im-prove-ments that could in-
  []
 
 
-Underfull \hbox (badness 1748) in paragraph at lines 68--71
+Underfull \hbox (badness 1748) in paragraph at lines 69--72
 \OT1/ptm/m/n/10 crease sig-nif-i-cantly the per-for-mance of the Java
  []
 
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 75.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 76.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
@@ -507,90 +513,133 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 
  <./orcid-eps-converted-to.pdf>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 151.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 152.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 151.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 152.
  [2] [3]
-Underfull \hbox (badness 3029) in paragraph at lines 251--252
+Underfull \hbox (badness 3029) in paragraph at lines 252--253
 [][]\OT1/ptm/m/n/10 The El-Prep al-go-rithm will du-pli-cate all the
  []
 
 
-Underfull \hbox (badness 5008) in paragraph at lines 257--260
+Underfull \hbox (badness 5008) in paragraph at lines 258--261
 \OT1/ptm/m/n/10 for rep-re-sent-ing in a com-pact man-ner a col-
  []
 
 
-Underfull \hbox (badness 1259) in paragraph at lines 257--260
+Underfull \hbox (badness 1259) in paragraph at lines 258--261
 \OT1/ptm/m/n/10 lec-tion of strings, \OT1/pcr/m/n/10 DeduplicatedDictionary \OT
 1/ptm/m/n/10 for
  []
 
 
-Underfull \hbox (badness 1484) in paragraph at lines 257--260
+Underfull \hbox (badness 1484) in paragraph at lines 258--261
 \OT1/ptm/m/n/10 elim-i-nat-ing du-pli-cate copies of re-peat-ing strings,
  []
 
 
-Underfull \hbox (badness 1286) in paragraph at lines 257--260
+Underfull \hbox (badness 1286) in paragraph at lines 258--261
 \OT1/ptm/m/n/10 an ar-ray of \OT1/pcr/m/n/10 short \OT1/ptm/m/n/10 val-ues. We 
 have also used
  []
 
 
-Underfull \hbox (badness 2635) in paragraph at lines 257--260
+Underfull \hbox (badness 2635) in paragraph at lines 258--261
 \OT1/ptm/m/n/10 the classes \OT1/pcr/m/n/10 CharArrayList\OT1/ptm/m/n/10 , \OT1
 /pcr/m/n/10 IntArrayList \OT1/ptm/m/n/10 and
  []
 
 
-Underfull \hbox (badness 5681) in paragraph at lines 279--280
+Underfull \hbox (badness 5681) in paragraph at lines 280--281
 []\OT1/ptm/m/n/10 So, in-stead of hav-ing a large num-ber of
  []
 
 [4]
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 318.
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 319.
 
  ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 318.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 319.
 
-Underfull \hbox (badness 2772) in paragraph at lines 316--319
+Underfull \hbox (badness 2772) in paragraph at lines 317--320
 \OT1/ptm/m/n/10 am-ple, \OMS/cmsy/m/n/10 f\OT1/pcr/m/n/10 "abc", "def", "abc", 
 "xyz", "abc"\OMS/cmsy/m/n/10 g
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 323--325
+Underfull \hbox (badness 10000) in paragraph at lines 324--326
 \OT1/ptm/m/n/10 The \OT1/pcr/m/n/10 table \OT1/ptm/m/n/10 struc-ture is based o
 n the class
  []
 
 
-Underfull \hbox (badness 2689) in paragraph at lines 323--325
+Underfull \hbox (badness 2689) in paragraph at lines 324--326
 \OT1/pcr/m/n/10 Object2IntOpenHashMap<String> \OT1/ptm/m/n/10 from Fas-tU-til
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 335--340
+Underfull \hbox (badness 10000) in paragraph at lines 336--341
 \OT1/pcr/m/n/10 00001001001001000110110110110100
  []
 
 
-Underfull \hbox (badness 6625) in paragraph at lines 372--375
+Underfull \hbox (badness 6625) in paragraph at lines 373--376
 []\OT1/ptm/m/n/10 In or-der to ad-dress \OT1/pcr/m/n/10 temps \OT1/ptm/m/n/10 a
 nd \OT1/pcr/m/n/10 TAGS \OT1/ptm/m/n/10 we
  []
 
 
-Underfull \hbox (badness 2080) in paragraph at lines 372--375
+Underfull \hbox (badness 2080) in paragraph at lines 373--376
 \OT1/ptm/m/n/10 is a com-bi-na-tion be-tween \OT1/pcr/m/n/10 StringSequence \OT
 1/ptm/m/n/10 and
  []
 
-[5] Excluding 'comment' comment. (elprep-study.bbl
+[5]
+Underfull \hbox (badness 3895) in paragraph at lines 399--401
+\OT1/ptm/m/n/10 cor-rectly the \OT1/pcr/m/n/10 BufferedReader\OT1/ptm/m/n/10 , 
+re-spec-tively the
+ []
+
+
+Overfull \hbox (0.78455pt too wide) in paragraph at lines 420--420
+[]   \OT1/pcr/m/n/10 try (var swout = new PrintWriter(sw)) {[] 
+ []
+
+
+Underfull \hbox (badness 4205) in paragraph at lines 424--428
+\OT1/ptm/m/n/10 ob-ject. To quote from its doc-u-men-ta-tion, a
+ []
+
+
+Underfull \hbox (badness 1735) in paragraph at lines 439--440
+[]\OT1/ptm/m/n/10 Again, the \OT1/pcr/m/n/10 PrintWriter.println \OT1/ptm/m/n/1
+0 method is
+ []
+
+
+Underfull \hbox (badness 3792) in paragraph at lines 439--440
+\OT1/ptm/m/n/10 us-ing a \OT1/pcr/m/n/10 synchronized \OT1/ptm/m/n/10 block in 
+or-der to ful-
+ []
+
+<images/cpu_original.png, id=29, 304.13625pt x 184.43906pt>
+File: images/cpu_original.png Graphic file (type png)
+
+<use images/cpu_original.png>
+Package pdftex.def Info: images/cpu_original.png used on input line 451.
+(pdftex.def)             Requested size: 152.06775pt x 92.2193pt.
+ [6]
+<images/cpu_optimized.png, id=33, 316.93407pt x 182.93344pt>
+File: images/cpu_optimized.png Graphic file (type png)
+
+<use images/cpu_optimized.png>
+Package pdftex.def Info: images/cpu_optimized.png used on input line 467.
+(pdftex.def)             Requested size: 158.46664pt x 91.46649pt.
+ Excluding 'comment' comment.
+Excluding 'comment' comment. (elprep-study.bbl [7 <./images/cpu_original.png> <
+./images/cpu_optimized.png>]
 Underfull \hbox (badness 3078) in paragraph at lines 31--35
 []\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
  []
@@ -605,14 +654,14 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--35
 \OT1/ptm/m/n/9 https://docs.oracle.com/en/java/javase/11/docs/api.
  []
 
-) [6
+) [8
 
 ] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
- 4660 strings out of 493333
- 66422 string characters out of 3139192
- 138896 words of memory out of 3000000
- 8086 multiletter control sequences out of 15000+200000
+ 4724 strings out of 493333
+ 67497 string characters out of 3139192
+ 139424 words of memory out of 3000000
+ 8142 multiletter control sequences out of 15000+200000
  53981 words of font info for 121 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,631b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -623,9 +672,9 @@ ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files
 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
 /urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a
 .pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on elprep-study.pdf (6 pages, 132056 bytes).
+Output written on elprep-study.pdf (8 pages, 162041 bytes).
 PDF statistics:
- 55 PDF objects out of 1000 (max. 8388607)
+ 65 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 6 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 16 words of extra memory for PDF output out of 10000 (max. 10000000)
 
