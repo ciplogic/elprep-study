@@ -1,0 +1,50 @@
+Notes:
+Initial numbers that are better is because of CPU's Turbo
+
+/home/ciprian/apps/zulu13.27.9-ca-jdk13-linux_x64/bin/java -Xmx8000M -javaagent:/home/ciprian/apps/idea-IC-192.6817.14/lib/idea_rt.jar=37333:/home/ciprian/apps/idea-IC-192.6817.14/bin -Dfile.encoding=UTF-8 -classpath /home/ciprian/Dropbox/ElPrepStudy/target/classes:/home/ciprian/.m2/repository/it/unimi/dsi/fastutil/8.1.0/fastutil-8.1.0.jar StartUp filter /home/ciprian/Downloads/1_2GB.sam process.sam --filter-unmapped-reads --replace-reference-sequences ucsc.hg19.dict --replace-read-group "ID:group1 LB:lib1 PL:illumina PU:unit1 SM:sample1" --mark-duplicates --sorting-order coordinate
+
+Warmup ...
+Run: 1 / 3
+Read file stream. ... 		Time: 24.673 sec.
+Write file stream. ... 		Time: 8.006 sec.
+Run: 2 / 3
+Read file stream. ... 		Time: 26.815 sec.
+Write file stream. ... 		Time: 7.824 sec.
+Run: 3 / 3
+Read file stream. ... 		Time: 28.407 sec.
+Write file stream. ... 		Time: 7.764 sec.
+ Finished.
+Algorithm: compact ...
+compact ... 		Run: 1 / 10
+Read file stream. ... 		Time: 30.142 sec.
+Write file stream. ... 		Time: 8.858 sec.
+Run: 2 / 10
+Read file stream. ... 		Time: 25.818 sec.
+Write file stream. ... 		Time: 9.156 sec.
+Run: 3 / 10
+Read file stream. ... 		Time: 29.612 sec.
+Write file stream. ... 		Time: 9.217 sec.
+Run: 4 / 10
+Read file stream. ... 		Time: 26.363 sec.
+Write file stream. ... 		Time: 8.959 sec.
+Run: 5 / 10
+Read file stream. ... 		Time: 27.186 sec.
+Write file stream. ... 		Time: 8.927 sec.
+Run: 6 / 10
+Read file stream. ... 		Time: 28.176 sec.
+Write file stream. ... 		Time: 8.324 sec.
+Run: 7 / 10
+Read file stream. ... 		Time: 28.639 sec.
+Write file stream. ... 		Time: 9.206 sec.
+Run: 8 / 10
+Read file stream. ... 		Time: 28.366 sec.
+Write file stream. ... 		Time: 9.106 sec.
+Run: 9 / 10
+Read file stream. ... 		Time: 28.89 sec.
+Write file stream. ... 		Time: 9.119 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 28.595 sec.
+Write file stream. ... 		Time: 9.0 sec.
+Time: 371.8 sec.
+End algorithm: compact ...
+=============================
