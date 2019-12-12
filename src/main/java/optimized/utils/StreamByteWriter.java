@@ -30,6 +30,7 @@ public class StreamByteWriter {
     public void close() throws IOException {
 
         out.write(internalBuffer, 0, pos);
+        out.close();
     }
 
     public void writeByte(byte value) throws IOException {
@@ -39,7 +40,7 @@ public class StreamByteWriter {
 
     }
 
-    void write(byte[] arr, int arrPos, int len) throws IOException {
+    public void write(byte[] arr, int arrPos, int len) throws IOException {
         while (len >= fullLen - pos) {
             int subLen = fullLen - pos;
             System.arraycopy(arr, arrPos, internalBuffer, this.pos, subLen);
@@ -110,7 +111,7 @@ public class StreamByteWriter {
         printBigInt(flag);
     }
 
-    private void write(byte[] bytes) throws IOException {
+    public void write(byte[] bytes) throws IOException {
         write(bytes, 0, bytes.length);
     }
 

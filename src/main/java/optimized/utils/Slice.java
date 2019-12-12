@@ -15,7 +15,7 @@ public final class Slice implements CharSequence {
     private static byte[] EmptyByteArray = new byte[0];
     private static ConcurrentMap<Slice, Slice> interned = new ConcurrentHashMap<>();
     public final int length;
-    private final byte[] storage;
+    public final byte[] storage;
     private final int pos;
 
     public Slice(String s) {

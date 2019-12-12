@@ -30,12 +30,7 @@ public class Fields {
             this.tag = tag;
         }
 
-        public void format(PrintWriter out) {
-            out.print('\t');
-            tag.write(out);
-        }
-
-        public void formatBuffer(StreamByteWriter out) throws IOException {
+        public void format(StreamByteWriter out) throws IOException {
             out.writeByte((byte) '\t');
             tag.writeBuffer(out);
         }
@@ -49,11 +44,13 @@ public class Fields {
             this.value = value;
         }
 
+        private static byte[] iSeparator = ":A:".getBytes();
+
         @Override
-        public void format(PrintWriter out) {
+        public void format(StreamByteWriter out) throws IOException {
             super.format(out);
-            out.print(":A:");
-            out.print(value);
+            out.write(iSeparator);
+            out.writeByte((byte) value);
         }
     }
 
@@ -65,11 +62,14 @@ public class Fields {
             this.value = value;
         }
 
+        private static byte[] iSeparator = ":Z:".getBytes();
+
         @Override
-        public void format(PrintWriter out) {
-            super.format(out);
-            out.print(":Z:");
-            value.write(out);
+        public void format(StreamByteWriter out) throws IOException {
+            out.writeByte((byte) '\t');
+            tag.writeBuffer(out);
+            out.write(iSeparator);
+            value.writeBuffer(out);
         }
     }
 
@@ -81,11 +81,14 @@ public class Fields {
             this.value = value;
         }
 
+        private static byte[] iSeparator = ":i:".getBytes();
+
         @Override
-        public void format(PrintWriter out) {
-            super.format(out);
-            out.print(":i:");
-            out.print(value);
+        public void format(StreamByteWriter out) throws IOException {
+            out.writeByte((byte) '\t');
+            tag.writeBuffer(out);
+            out.write(iSeparator);
+            out.printInt(value);
         }
     }
 
@@ -97,11 +100,13 @@ public class Fields {
             this.value = value;
         }
 
+        private static byte[] iSeparator = ":f:".getBytes();
+
         @Override
-        public void format(PrintWriter out) {
+        public void format(StreamByteWriter out) throws IOException {
             super.format(out);
-            out.print(":f:");
-            out.print(value);
+            out.write(iSeparator);
+            out.write(Float.toString(value).getBytes());
         }
     }
 
@@ -113,15 +118,17 @@ public class Fields {
             this.value = value;
         }
 
+        private static byte[] iSeparator = ":H:".getBytes();
+
         @Override
-        public void format(PrintWriter out) {
+        public void format(StreamByteWriter out) throws IOException {
             super.format(out);
-            out.print(":H:");
+            out.write(iSeparator);
             for (short val : value) {
                 if (val < 16) {
-                    out.print('0');
+                    out.writeByte((byte) '0');
                 }
-                out.print(Integer.toHexString(val));
+                out.write(Integer.toHexString(val).getBytes());
             }
         }
     }
@@ -136,14 +143,17 @@ public class Fields {
             this.value = value;
         }
 
+        private static byte[] iSeparator = ":B:".getBytes();
+
         @Override
-        public void format(PrintWriter out) {
+        public void format(StreamByteWriter out) throws IOException {
             super.format(out);
-            out.print(":B:");
-            out.print(ntype);
+            out.write(iSeparator);
+
+            out.writeByte((byte) ntype);
             for (T val : value) {
-                out.print(',');
-                out.print(val);
+                out.writeByte((byte) ',');
+                out.write(val.toString().getBytes());
             }
         }
     }

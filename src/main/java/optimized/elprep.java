@@ -98,7 +98,6 @@ public class elprep {
                 StreamByteWriter streamByteWriter = new StreamByteWriter(output);
                 for (int i = 0, alignmentsLength = alignments.length; i < alignmentsLength; i++) {
                     SamAlignment aln = alignments[i];
-
                     aln.formatBuffer(streamByteWriter);
                     alignments[i] = null;
                     /*
@@ -118,6 +117,7 @@ public class elprep {
                 } else {
                     throw new RuntimeException("Unknown sorting order.");
                 }*/
+
                 streamByteWriter.close();
             }
         });
@@ -168,7 +168,7 @@ public class elprep {
                 Stream<String> outputStream = alnStream.map((aln) -> {
                     StringWriter sw = new StringWriter();
                     try (PrintWriter swout = new PrintWriter(sw)) {
-                        aln.format(swout);
+//                        aln.format(swout);
                     }
                     try {
                         aln.formatBuffer(outputStr);

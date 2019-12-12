@@ -211,33 +211,6 @@ public class SamAlignment {
         return (FLAG & flag) == 0;
     }
 
-    public void format(PrintWriter out) {
-        QNAME.write(out);
-        out.print('\t');
-        out.print((int) FLAG);
-        out.print('\t');
-        RNAME.write(out);
-        out.print('\t');
-        out.print(POS);
-        out.print('\t');
-        out.print(MAPQ);
-        out.print('\t');
-        CIGAR.write(out);
-        out.print('\t');
-        RNEXT.write(out);
-        out.print('\t');
-        out.print(PNEXT);
-        out.print('\t');
-        out.print(TLEN);
-        out.print('\t');
-        SEQ.write(out);
-        out.print('\t');
-        QUAL.write(out);
-
-        for (Field f : TAGS) {
-            f.format(out);
-        }
-    }
 
     public void formatBuffer(StreamByteWriter out) throws IOException {
         QNAME.writeBuffer(out);
@@ -264,8 +237,9 @@ public class SamAlignment {
         QUAL.writeBuffer(out);
 
         for (Field f : TAGS) {
-            f.formatBuffer(out);
+            f.format(out);
         }
+        out.writeByte((byte) '\n');
     }
 
     private void writeTab(StreamByteWriter out) throws IOException {
