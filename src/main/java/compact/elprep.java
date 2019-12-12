@@ -15,31 +15,28 @@ import static commons.Utilities.timedRun;
 public class elprep {
     public static void main(String[] args) {
         var batchSize = 20000;
-        var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors()*3);
+        var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 3);
         var headers = new ArrayList<String>();
         timedRun(true, "Read file stream.", () -> {
             var inputFileName = args[1];
-            try(FileInputStream fileInputStream = new FileInputStream(inputFileName)){
-                byte[] b = new byte[1_000_000];;
+            try (FileInputStream fileInputStream = new FileInputStream(inputFileName)) {
+                byte[] b = new byte[1_000_000];
                 byte[] remainder = new byte[0];
                 int readLen;
-                while ((readLen = fileInputStream.read(b))>0)
-                {
-                    if (readLen!=b.length)
-                    {
+                while ((readLen = fileInputStream.read(b)) > 0) {
+                    if (readLen != b.length) {
                         b = Arrays.copyOfRange(b, 0, readLen);
                     }
                     var startIndex = Utilities.indexOfByte(b, '\n', 0);
-                    var row =startIndex!=-1? combine(remainder, Arrays.copyOfRange(b, 0, startIndex))
-                            :remainder;
+                    var row = startIndex != -1 ? combine(remainder, Arrays.copyOfRange(b, 0, startIndex))
+                            : remainder;
                     addRowToBatchWrapper(batchWrapper, row, headers);
                     var endIndex = -1;
                     startIndex++;
-                    while ((endIndex = Utilities.indexOfByte(b, '\n', startIndex))>0)
-                    {
+                    while ((endIndex = Utilities.indexOfByte(b, '\n', startIndex)) > 0) {
                         row = Arrays.copyOfRange(b, startIndex, endIndex);
                         addRowToBatchWrapper(batchWrapper, row, headers);
-                        startIndex = endIndex+1;
+                        startIndex = endIndex + 1;
                     }
                     remainder = Arrays.copyOfRange(b, startIndex, b.length);
                 }
@@ -54,7 +51,7 @@ public class elprep {
         });
     }
 
-    private static void writeToDisk(String outputFile, BatchWrapperReader batchWrapper, ArrayList<String> headers)  {
+    private static void writeToDisk(String outputFile, BatchWrapperReader batchWrapper, ArrayList<String> headers) {
         OutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(outputFile);
@@ -63,8 +60,7 @@ public class elprep {
         }
         try {
             var writer = new BatchWrapperWriter(outputStream);
-            for(var it : headers)
-            {
+            for (var it : headers) {
                 writer.write(it.getBytes());
             }
 
@@ -72,7 +68,7 @@ public class elprep {
             writeBatchesParallel(writer, batchWrapper);
 
             writer.close();
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
     }
@@ -90,11 +86,11 @@ public class elprep {
 
         IntStream.range(0, batches.size())
                 .parallel()
-                .mapToObj(i->{
+                .mapToObj(i -> {
                     try {
                         var batch = batches.get(i);
                         batches.set(i, null);
-                        var outputStream = new ByteArrayOutputStream(400*batch.size());
+                        var outputStream = new ByteArrayOutputStream(400 * batch.size());
                         BatchWrapperWriter localWriter = new BatchWrapperWriter(outputStream);
                         batch.writeToWriter(localWriter);
                         outputStream.close();
@@ -104,7 +100,7 @@ public class elprep {
                         return null;
                     }
                 })
-                .forEachOrdered(bytes->{
+                .forEachOrdered(bytes -> {
                     try {
                         writer.write(bytes);
                     } catch (IOException e) {
@@ -114,7 +110,7 @@ public class elprep {
     }
 
     private static void addRowToBatchWrapper(BatchWrapperReader batchWrapper, byte[] row, ArrayList<String> headers) {
-        if(0 ==row.length || row[0]== '@') {
+        if (0 == row.length || row[0] == '@') {
             if (0 != row.length)
                 headers.add(new String(row));
             return;

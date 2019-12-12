@@ -4,29 +4,25 @@ import commons.Utilities;
 
 import java.util.Arrays;
 
-public class StringScanner
-{
+public class StringScanner {
     private byte[] _line;
     private int Pos;
 
-    public void setText(byte[] line)
-    {
+    public void setText(byte[] line) {
         _line = line;
         Pos = 0;
     }
 
     @Override
     public String toString() {
-        if (Pos>=_line.length)
-            return Pos+ ": empty";
-        return Pos+ ": '" + new String(_line).substring(Pos) + "'";
+        if (Pos >= _line.length)
+            return Pos + ": empty";
+        return Pos + ": '" + new String(_line).substring(Pos) + "'";
     }
 
-    public byte[] doSlice()
-    {
+    public byte[] doSlice() {
         var endIndex = Utilities.indexOfByte(_line, '\t', Pos);
-        if (endIndex == -1)
-        {
+        if (endIndex == -1) {
             if (Pos == _line.length)
                 return new byte[0];
             var pos = Pos;
@@ -57,18 +53,15 @@ public class StringScanner
         return str;
     }
 
-    public int doInt()
-    {
+    public int doInt() {
         int result = 0;
         var isNegative = false;
-        if (_line[Pos] == '-')
-        {
+        if (_line[Pos] == '-') {
             isNegative = true;
             Pos++;
         }
 
-        while (true)
-        {
+        while (true) {
             var ch = _line[Pos];
             Pos++;
             if (ch == '\t')

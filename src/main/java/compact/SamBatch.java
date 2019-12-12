@@ -46,7 +46,7 @@ public class SamBatch {
         RNAME.add(new String(sc.doSlice()));
 
         POS.add(sc.doInt());
-        MAPQ.add ((byte) sc.doInt());
+        MAPQ.add((byte) sc.doInt());
         CIGAR.add(new String(sc.doSlice()));
         RNEXT.add(new String(sc.doSlice()));
         PNEXT.add(sc.doInt());
@@ -56,7 +56,7 @@ public class SamBatch {
         TAG.readRow(sc);
     }
 
-    public void shrink(){
+    public void shrink() {
         QNAME.shrink();
         QUAL.shrink();
         SeqPacked.shrink();
@@ -66,7 +66,7 @@ public class SamBatch {
 
     public void writeToWriter(BatchWrapperWriter sc) throws IOException {
         var len = FLAG.size();
-        for(var i = 0; i<len; i++) {
+        for (var i = 0; i < len; i++) {
             QNAME.writeToWriter(sc, i);
             sc.writeByte((byte) '\t');
             sc.printInt(FLAG, i);

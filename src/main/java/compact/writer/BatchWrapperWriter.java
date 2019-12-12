@@ -34,6 +34,21 @@ public class BatchWrapperWriter {
         }
     }
 
+    private static char charLetterDecode(int ch) {
+        switch (ch) {
+            case 1:
+                return 'C';
+            case 2:
+                return 'G';
+            case 3:
+                return 'T';
+            case 4:
+                return 'N';
+            default:
+                return 'A';
+        }
+    }
+
     public void close() throws IOException {
 
         out.write(internalBuffer, 0, pos);
@@ -64,18 +79,6 @@ public class BatchWrapperWriter {
         pos = 0;
     }
 
-    private static char charLetterDecode(int ch)
-    {
-        switch (ch)
-        {
-            case 1: return 'C';
-            case 2: return 'G';
-            case 3: return 'T';
-            case 4: return 'N';
-            default:
-                return 'A';
-        }
-    }
     public void writeSequence(LongArrayList fullSequences, int start, int len) throws IOException {
         if (sequenceBuffer.length < len) {
             sequenceBuffer = new byte[len];
@@ -136,9 +139,11 @@ public class BatchWrapperWriter {
     public void printInt(IntArrayList values, int index) throws IOException {
         printInt(values.getInt(index));
     }
+
     public void printInt(CharArrayList values, int index) throws IOException {
         printInt(values.getChar(index));
     }
+
     public void printInt(ByteArrayList values, int index) throws IOException {
         printInt(values.getByte(index));
     }
@@ -165,7 +170,7 @@ public class BatchWrapperWriter {
     }
 
     public void writeStringByIndex(DeduplicatedDictionary stringDict, int index) throws IOException {
-        var indexInDict =stringDict.Items.getInt(index);
+        var indexInDict = stringDict.Items.getInt(index);
         byte[] getItemByIndex = stringDict.Values.get(indexInDict);
         write(getItemByIndex);
     }

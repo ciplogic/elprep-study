@@ -1,6 +1,6 @@
 package compact.reader;
 
-public class IndexedValue <T> {
+public class IndexedValue<T> {
     public int index;
     public T batch;
 

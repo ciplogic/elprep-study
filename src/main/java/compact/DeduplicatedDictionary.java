@@ -1,31 +1,31 @@
 package compact;
 
 import it.unimi.dsi.fastutil.ints.IntArrayList;
-import it.unimi.dsi.fastutil.objects.Object2IntOpenHashMap;
+import it.unimi.dsi.fastutil.objects.Object2CharOpenHashMap;
 
 import java.util.ArrayList;
 
 public class DeduplicatedDictionary {
 
-    Object2IntOpenHashMap<String> _table ;
     public ArrayList<byte[]> Values;
     public IntArrayList Items;
+    Object2CharOpenHashMap<String> _table;
 
     public DeduplicatedDictionary() {
         int expectedItemsCount = 16;
-        _table = new Object2IntOpenHashMap<>(expectedItemsCount);
+        _table = new Object2CharOpenHashMap<>(expectedItemsCount);
         Values = new ArrayList<>(expectedItemsCount);
         Items = new IntArrayList();
     }
 
     public String add(String value) {
-        int resultValue = _table.getOrDefault(value, -1);
+        var resultValue = _table.getOrDefault(value, (char) 0xffff);
 
-        if (resultValue==-1) {
-            resultValue = Values.size();
+        if (resultValue == (char) 0xffff) {
+            resultValue = (char) Values.size();
             Values.add(value.getBytes());
             _table.put(value, resultValue);
-            Items.add((int)resultValue);
+            Items.add(resultValue);
             return value;
         }
 
