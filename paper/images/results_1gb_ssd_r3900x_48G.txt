@@ -64,37 +64,41 @@ End algorithm: original ...
 =============================
 Algorithm: optimized ...
 optimized ... 		Run: 1 / 10
-Reading SAM into memory and applying filters. ... 		Time: 64.11 sec.
-Write to file. ... 		Time: 31.633 sec.
+Reading SAM into memory and applying filters. ... 		Time: 48.235 sec.
+Write to file. ... 		Time: 34.203 sec.
 Run: 2 / 10
-Reading SAM into memory and applying filters. ... 		Time: 66.511 sec.
-Write to file. ... 		Time: 31.222 sec.
+Reading SAM into memory and applying filters. ... 		Time: 50.657 sec.
+Write to file. ... 		Time: 32.005 sec.
 Run: 3 / 10
-Reading SAM into memory and applying filters. ... 		Time: 65.936 sec.
-Write to file. ... 		Time: 31.456 sec.
+Reading SAM into memory and applying filters. ... 		Time: 53.371 sec.
+Write to file. ... 		Time: 31.891 sec.
 Run: 4 / 10
-Reading SAM into memory and applying filters. ... 		Time: 66.973 sec.
-Write to file. ... 		Time: 31.603 sec.
+Reading SAM into memory and applying filters. ... 		Time: 50.408 sec.
+Write to file. ... 		Time: 31.811 sec.
 Run: 5 / 10
-Reading SAM into memory and applying filters. ... 		Time: 98.179 sec.
-Write to file. ... 		Time: 33.096 sec.
+Reading SAM into memory and applying filters. ... 		Time: 48.033 sec.
+Write to file. ... 		Time: 31.563 sec.
 Run: 6 / 10
-Reading SAM into memory and applying filters. ... 		Time: 65.195 sec.
-Write to file. ... 		Time: 33.022 sec.
+Reading SAM into memory and applying filters. ... 		Time: 48.781 sec.
+Write to file. ... 		Time: 33.517 sec.
 Run: 7 / 10
-Reading SAM into memory and applying filters. ... 		Time: 68.497 sec.
-Write to file. ... 		Time: 32.973 sec.
+Reading SAM into memory and applying filters. ... 		Time: 48.86 sec.
+Write to file. ... 		Time: 31.157 sec.
 Run: 8 / 10
-Reading SAM into memory and applying filters. ... 		Time: 66.477 sec.
-Write to file. ... 		Time: 31.557 sec.
+Reading SAM into memory and applying filters. ... 		Time: 48.955 sec.
+Write to file. ... 		Time: 31.938 sec.
 Run: 9 / 10
-Reading SAM into memory and applying filters. ... 		Time: 67.33 sec.
-Write to file. ... 		Time: 31.427 sec.
+Reading SAM into memory and applying filters. ... 		Time: 49.079 sec.
+Write to file. ... 		Time: 31.985 sec.
 Run: 10 / 10
-Reading SAM into memory and applying filters. ... 		Time: 66.568 sec.
-Write to file. ... 		Time: 31.198 sec.
-Time: 1021.116 sec.
+Reading SAM into memory and applying filters. ... 		Time: 48.937 sec.
+Write to file. ... 		Time: 31.907 sec.
+Time: 822.791 sec.
 End algorithm: optimized ...
+=============================
+
+Process finished with exit code 0
+
 =============================
 Algorithm: compact ...
 compact ... 		Run: 1 / 10
