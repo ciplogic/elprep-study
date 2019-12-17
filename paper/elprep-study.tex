@@ -486,6 +486,11 @@ Even if we are using now a single core for all the writing, the necessary time f
 \includegraphics[scale=0.5]{images/cpu_optimized.png}
 \end{center}
 
+Here is the execution profile when the Original algorithm has plenty of memory and the "Chainsaw" in execution is in fact that we ran for 30 times the algorithm, and every time the CPU jumps from original 12 core usage when reading to back to 1 Core used and back. This happens only when executing on "big machines" (when the RAM available is much more than the live set, like 3-4 times at least the size)
+\begin{center}
+	\includegraphics[scale=0.5]{images/Visual_VM_Small_file_Original_execution_profile.png}
+\end{center}
+
 \textcolor{red}{Putem scapa si mai mult de portiunile albe?}
 
 
