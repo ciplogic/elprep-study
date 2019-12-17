@@ -353,6 +353,23 @@ Running the smaller input file (144 MB), we have estimated that the original ElP
 However, when trying to process the larger input file (1.2 GB), on a 32 GB machine, we have obtained an {\tt OutOfMemoryError}, meaning that the penalty of using too many objects in order to represent the information was preventing us in loading the entire data set into memory.
 \\ \textcolor{red}{JVM using how much memory?}
 
+1 GB input:
+Original algorithm: 32 024 799 640 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk. This is the lowest maximum memory consumption for 1.2 GB BAM file
+Optimized algo: 31 463 351 904
+Compact algo: 4 703 674 464 bytes	
+Live data memory usage: 6.8x less.
+144 MB input:
+Original algorithm: 2 234 575 120 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk. This is the lowest maximum memory consumption for 1.2 GB BAM file
+Optimized algo: 2 273 444 096
+Compact algo: 607 589 728 bytes	
+Live data memory usage: 3.67x less.
+8 GB input: 20 334 009 424 B.
+Obviously we had a too small machine to process a live data set that is using as minimum 3
+12 GB input: 35 401 115 712 B.
+
+Time is 300 seconds (on 8core machine) as the machine touches Swap file, but being able to process 12 GB BAM file on a 48 GB machine is a feature in itself.
+
+
 With memory compaction, the memory needed to represent all the objects was estimated to 17.6 million rows * $39$ bytes per row $=$ $686,400,000$ bytes ($655$ MB), plus the DNA sequences  $17.6$ millions $* 44 = 774 MB$.
 
 \textcolor{red}{
@@ -372,7 +389,8 @@ The memory usage for tags/temps is 5.9 GB.
 
 In order to address {\tt temps} and {\tt TAGS} we have implemented the {\tt TagSequence} class, which is a combination between {\tt StringSequence} and {\tt DeduplicatedDictionary}.
 Since the {\tt tags} are repeating frequently, we save them using one {\tt short} value per tag, but instead of using a list of tags, we define a sequence of indices.
-\textcolor{red}{Aici nu e prea clar.}
+
+TagSequence does memory compaction by using a mix of short per-tag encoding and a full sequence of tags is joined together.
 
 For example, for the input {\tt "tag0 tag1 tag2", "tag1 tag2 tag3"}, the representation would be:
 \begin{verbatim}
@@ -388,7 +406,8 @@ Unique tag values: approx 2400
 Total number of tags: approx 200000 (10 tags per row on average)
 }
 
-
+\textcolor{brown}{ Numbers were correct, it was simply looking into some random batches when debugging.
+}
 
 \section{\uppercase{Optimizing I/O Operations}}
 
