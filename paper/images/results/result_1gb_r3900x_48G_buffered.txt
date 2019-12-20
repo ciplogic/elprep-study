@@ -1,0 +1,42 @@
+D:\apps\jdk-13.0.1\bin\java.exe -Dvisualvm.id=104565046513000 -Xmx31500M "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\lib\idea_rt.jar=54869:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\bin" -Dfile.encoding=UTF-8 -classpath G:\UserFiles\Dropbox\ElPrepStudy\target\classes;C:\Users\cipri\.m2\repository\it\unimi\dsi\fastutil\8.1.0\fastutil-8.1.0.jar StartUp filter c:/paper/1_2GB.sam process.sam --filter-unmapped-reads --replace-reference-sequences ucsc.hg19.dict --replace-read-group "ID:group1 LB:lib1 PL:illumina PU:unit1 SM:sample1" --mark-duplicates --sorting-order coordinate
+Warmup ...
+Run: 1 / 1
+Reading SAM into memory and applying filters. ... 		Time: 23.163 sec.
+Write to file. ... 		Time: 48.611 sec.
+ Finished.
+Algorithm: buffers ...
+buffers ... 		Run: 1 / 10
+Reading SAM into memory and applying filters. ... 		Time: 26.698 sec.
+Write to file. ... 		Time: 48.184 sec.
+Run: 2 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.377 sec.
+Write to file. ... 		Time: 46.196 sec.
+Run: 3 / 10
+Reading SAM into memory and applying filters. ... 		Time: 29.175 sec.
+Write to file. ... 		Time: 46.927 sec.
+Run: 4 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.67 sec.
+Write to file. ... 		Time: 47.585 sec.
+Run: 5 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.696 sec.
+Write to file. ... 		Time: 44.531 sec.
+Run: 6 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.592 sec.
+Write to file. ... 		Time: 46.29 sec.
+Run: 7 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.591 sec.
+Write to file. ... 		Time: 45.363 sec.
+Run: 8 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.533 sec.
+Write to file. ... 		Time: 45.348 sec.
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.599 sec.
+Write to file. ... 		Time: 43.829 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 28.099 sec.
+Write to file. ... 		Time: 46.126 sec.
+Time: 750.067 sec.
+End algorithm: buffers ...
+=============================
+
+Process finished with exit code 0

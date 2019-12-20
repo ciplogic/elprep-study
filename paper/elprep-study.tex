@@ -488,7 +488,7 @@ Even if we are using now a single core for all the writing, the necessary time f
 
 Here is the execution profile when the Original algorithm has plenty of memory and the "Chainsaw" in execution is in fact that we ran for 50 times the algorithm, and every time the CPU jumps from original 12 core usage when reading to back to 1 Core used and back. This happens only when executing on "big machines" (when the RAM available is much more than the live set, like 3-4 times at least the size)
 \begin{center}
-	\includegraphics[scale=0.5]{images/Visual_VM_Small_file_Original_execution_profile.png}
+	\includegraphics[scale=0.065]{images/Visual_VM_Small_file_Original_execution_profile.png}
 \end{center}
 
 \textcolor{red}{Putem scapa si mai mult de portiunile albe?}
@@ -522,16 +522,16 @@ As we didn't have access to such a performing machine, we did most of testing wi
 In terms of running time, the performance gain for reading the input file is negligible.  \textcolor{red}{Sau nu?}
 
 \par
-\textbf{Writing} \\
+\textbf{12 core machine} \\
 \vspace{-0.4cm}
 \begin{center}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|c|c|c|c|}
 \hline
-						& 144 MB BAM  	& 8 GB BAM			\\ \hline
-Original				& .... s		& .... s			\\ \hline
-I/O Buffering       	& .... s		& .... s			\\ \hline
-{\it StreamByteArray}	& .... s		& .... s			\\ \hline
-Overall					& .... s		& .... s			\\ \hline
+						& 144 MB (4c)		& 144 MB(12c)		& 1.2 GB (12c) 			\\ \hline
+Original				& 9.13 s			& 3.938 s			& 123.91 s			\\ \hline
+Presized buf   			& 8.98 s			& 4.19 s			& 75.1 s	\\ \hline
+{\it StreamByteArray}	& 8.09 s			& 3.43 s			& 64.62 s			\\ \hline
+Compact 				& 3.16 s			& 1.686 s			& 14.04 s	\\ \hline
 \end{tabular}
 \end{center}
 

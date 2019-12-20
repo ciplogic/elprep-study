@@ -4,19 +4,18 @@ public class StartUp {
     public static void main(String[] args) {
         var algos = new String[]{
 //                "original",
-//                "optimized",
 //                "buffers",
-
+//                "optimized",
                 "compact",
         };
         System.out.println("Warmup ...");
         for (var algo : algos)
-            runAlgorithmOnTest(args, algo, false, 3);
+            runAlgorithmOnTest(args, algo, false, 1);
         System.out.println(" Finished.");
         for (var algo : algos) {
             System.out.println("Algorithm: " + algo + " ...");
 
-            runAlgorithmOnTest(args, algo, true, 50);
+            runAlgorithmOnTest(args, algo, true, 10);
 
             System.out.println("End algorithm: " + algo + " ...");
             System.out.println("=============================");

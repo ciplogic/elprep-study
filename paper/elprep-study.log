@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.9.25)  17 DEC 2019 22:33
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.9.25)  21 DEC 2019 00:59
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -626,7 +626,20 @@ File: images/cpu_optimized.png Graphic file (type png)
 <use images/cpu_optimized.png>
 Package pdftex.def Info: images/cpu_optimized.png  used on input line 486.
 (pdftex.def)             Requested size: 158.46664pt x 91.46649pt.
-[7 <./images/cpu_original.png> <./images/cpu_optimized.png>]
+<images/Visual_VM_Small_file_Original_execution_profile.png, id=34, 2589.675pt 
+x 1053.9375pt>
+File: images/Visual_VM_Small_file_Original_execution_profile.png Graphic file (
+type png)
+<use images/Visual_VM_Small_file_Original_execution_profile.png>
+Package pdftex.def Info: images/Visual_VM_Small_file_Original_execution_profile
+.png  used on input line 491.
+(pdftex.def)             Requested size: 168.33478pt x 68.50833pt.
+[7 <./images/cpu_original.png> <./images/cpu_optimized.png> <./images/Visual_VM
+_Small_file_Original_execution_profile.png>]
+Overfull \hbox (61.80391pt too wide) in paragraph at lines 528--536
+ [] 
+ []
+
 Excluding 'comment' comment. Excluding 'comment' comment. (elprep-study.bbl
 Underfull \hbox (badness 3078) in paragraph at lines 31--35
 []\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
@@ -644,10 +657,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--35
 
 ) [8] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
- 4725 strings out of 492895
- 66877 string characters out of 3137191
- 145580 words of memory out of 3000000
- 8529 multiletter control sequences out of 15000+200000
+ 4730 strings out of 492895
+ 67179 string characters out of 3137191
+ 144580 words of memory out of 3000000
+ 8533 multiletter control sequences out of 15000+200000
  53981 words of font info for 121 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,631b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -658,9 +671,9 @@ ic/amsfonts/cm/cmsy10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.p
 fb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Paper/MiKTeX 2.9/f
 onts/type1/urw/times/utmr8a.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmr
 i8a.pfb>
-Output written on elprep-study.pdf (8 pages, 163239 bytes).
+Output written on elprep-study.pdf (8 pages, 696324 bytes).
 PDF statistics:
- 65 PDF objects out of 1000 (max. 8388607)
+ 66 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 16 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

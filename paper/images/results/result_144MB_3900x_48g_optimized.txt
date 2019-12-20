@@ -1,0 +1,42 @@
+D:\apps\zulu11.1+23-ea-jdk11-win_x64\bin\java.exe -Dvisualvm.id=106363371210600 "-javaagent:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\lib\idea_rt.jar=55059:C:\Program Files\JetBrains\IntelliJ IDEA Community Edition 2019.1.3\bin" -Dfile.encoding=UTF-8 -classpath G:\UserFiles\Dropbox\ElPrepStudy\target\classes;C:\Users\cipri\.m2\repository\it\unimi\dsi\fastutil\8.1.0\fastutil-8.1.0.jar StartUp filter input_144M.sam process.sam --filter-unmapped-reads --replace-reference-sequences ucsc.hg19.dict --replace-read-group "ID:group1 LB:lib1 PL:illumina PU:unit1 SM:sample1" --mark-duplicates --sorting-order coordinate
+Warmup ...
+Run: 1 / 1
+Reading SAM into memory and applying filters. ... 		Time: 4.97 sec.
+Write to file. ... 		Time: 1.547 sec.
+ Finished.
+Algorithm: optimized ...
+optimized ... 		Run: 1 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.328 sec.
+Write to file. ... 		Time: 1.391 sec.
+Run: 2 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.0 sec.
+Write to file. ... 		Time: 1.594 sec.
+Run: 3 / 10
+Reading SAM into memory and applying filters. ... 		Time: 1.984 sec.
+Write to file. ... 		Time: 1.328 sec.
+Run: 4 / 10
+Reading SAM into memory and applying filters. ... 		Time: 1.859 sec.
+Write to file. ... 		Time: 1.344 sec.
+Run: 5 / 10
+Reading SAM into memory and applying filters. ... 		Time: 2.047 sec.
+Write to file. ... 		Time: 1.532 sec.
+Run: 6 / 10
+Reading SAM into memory and applying filters. ... 		Time: 1.687 sec.
+Write to file. ... 		Time: 1.344 sec.
+Run: 7 / 10
+Reading SAM into memory and applying filters. ... 		Time: 1.86 sec.
+Write to file. ... 		Time: 1.359 sec.
+Run: 8 / 10
+Reading SAM into memory and applying filters. ... 		Time: 1.781 sec.
+Write to file. ... 		Time: 1.344 sec.
+Run: 9 / 10
+Reading SAM into memory and applying filters. ... 		Time: 1.828 sec.
+Write to file. ... 		Time: 1.344 sec.
+Run: 10 / 10
+Reading SAM into memory and applying filters. ... 		Time: 1.797 sec.
+Write to file. ... 		Time: 1.344 sec.
+Time: 34.315 sec.
+End algorithm: optimized ...
+=============================
+
+Process finished with exit code 0
