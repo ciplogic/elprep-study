@@ -1,7 +1,5 @@
 package compact.reader;
 
-import compact.SamBatch;
-
 import java.util.ArrayList;
 import java.util.stream.IntStream;
 
@@ -37,11 +35,11 @@ public class StringBufferBatches {
         if (_current.size() == _batchSize) {
             _size++;
             if (_size == _batchesCount) {
-
                 result = true;
+            }else {
+                _current = _bufferBatches.get(_size);
+                _current.clear();
             }
-            _current = _bufferBatches.get(_size);
-            _current.clear();;
         }
         return result;
     }

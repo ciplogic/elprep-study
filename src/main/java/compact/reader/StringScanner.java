@@ -15,9 +15,13 @@ public class StringScanner {
 
     @Override
     public String toString() {
+        return new String(_line);
+        /*
         if (Pos >= _line.length)
             return Pos + ": empty";
         return Pos + ": '" + new String(_line).substring(Pos) + "'";
+
+         */
     }
 
     public byte[] doSlice() {

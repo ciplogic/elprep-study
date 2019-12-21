@@ -27,7 +27,9 @@ public class BatchWrapperReader {
         IntStream.range(0, _size).forEach(i -> {
             batches.add(null);
         });
-        IntStream.range(0, _size).parallel().mapToObj(i -> {
+        IntStream.range(0, _size)
+                .parallel()
+                .mapToObj(i -> {
             var rows = batchRows.get(i);
             return new IndexedValue<>(i + startIndex, flushBatch(rows));
         }).forEach(
@@ -39,12 +41,16 @@ public class BatchWrapperReader {
     public static SamBatch flushBatch(ArrayList<byte[]> rows) {
         var result = new SamBatch(rows.size());
         StringScanner sc = new StringScanner();
-        for (var row : rows) {
+        for (byte[] row : rows) {
             sc.setText(row);
             result.readRow(sc);
         }
         rows.clear();
         result.shrink();
         return result;
+    }
+
+    public void clear() {
+        stringBufferBatches.clear();;
     }
 }

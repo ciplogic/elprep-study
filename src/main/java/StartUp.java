@@ -6,7 +6,9 @@ public class StartUp {
 //                "original",
 //                "buffers",
 //                "optimized",
-                "compact",
+//                "compact",
+//                "compact_seq",
+                "compact_par",
         };
         System.out.println("Warmup ...");
         for (var algo : algos)
@@ -15,7 +17,7 @@ public class StartUp {
         for (var algo : algos) {
             System.out.println("Algorithm: " + algo + " ...");
 
-            runAlgorithmOnTest(args, algo, true, 10);
+            runAlgorithmOnTest(args, algo, true, 100);
 
             System.out.println("End algorithm: " + algo + " ...");
             System.out.println("=============================");
@@ -35,11 +37,17 @@ public class StartUp {
                     case "buffers":
                         buffers.elprep.main(args);
                         break;
+                    case "optimized":
+                        optimized.elprep.main(args);
+                        break;
                     case "compact":
                         compact.elprep.main(args);
                         break;
-                    case "optimized":
-                        optimized.elprep.main(args);
+                    case "compact_seq":
+                        compact.elprepRowReader.main(args);
+                        break;
+                    case "compact_par":
+                        compact.RowReaderBackground.main(args);
                         break;
                 }
             }
