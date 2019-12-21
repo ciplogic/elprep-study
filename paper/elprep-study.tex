@@ -499,7 +499,7 @@ Here is the execution profile when the Original algorithm has plenty of memory a
 
 \section{\uppercase{Experimental Results}}
 
-The computer we have used in order to perform the experiments is a Ryzen 7-1700, having 8 cores and using 32 GB of RAM.
+The computer we have used in order to perform the experiments is a Ryzen 9-3900X, having 12 cores and using 48 GB of RAM.
 Since we didn't have access to the hardware necessary to run all the tests in memory, as the original paper, we have used the smaller SAM files and ran the same processing repeatedly in order to obtain an accurate result of the running time.
 For example, running $10$ times the algorithm on the smallest input SAM file, which is approximately $700$ MB, will produce a total running time of around $70$ seconds. 
 Running the algorithm repeatedly will trigger the garbage collector and this will be the cause of variations in the collected results, ranging from around $2$ to $3$ seconds, when reading the smallest file, and $3$ to $4$ seconds for writing.
@@ -511,175 +511,98 @@ The original elPrep benchmarks have been performed on a Supermicro SuperServer 1
 Intel Xeon Gold 6126 processors consisting of 12 pro-cessor cores each, clocked at 2.6 GHz, with 384 GB
 RAM \cite{costanza:2019}. The authors claim to do the processing of the 8 GB BAM file in 6 min:54sec to 7 min:31sec and memory usage is $330-340$ GB.
 
-As we didn't have access to such a performing machine, we did most of testing with the smallest file, the $144$ MB BAM file ($673.3$ MB SAM file). For the $8$ GB BAM file ($27.18$ GB SAM) our results will be an extrapolation of the former ones. \textcolor{red}{Sau nu?}
+As we didn't have access to such a performing machine, we did most of testing with the smallest file, the $144$ MB BAM file ($673.3$ MB SAM file). For the $8$ GB BAM file ($27.18$ GB SAM) our results will show only the compact algorithm but we will make some inference over the scaling of the original algorithm across file sizes and scalling over cores.
 
+As of time of writing, the SuperMicro machine configured as minimal configuration but to meet the spec from the paper is around a 9000+ USD machine https://www.aspsys.com/servers/supermicro-superserver-1029u-tr4t-p3324.htm, when our machine is an upgraded desktop machine that would cost under 2000 dollars, and it is not optimal for this type of high volume processing
 %Also, as the algorithm to be implemented using Compact memory model would take too long time to be quite significant to the final results of the conclusions of the paper, we did implement a full reading and writing of the biggest file we could fit into our machine (a 32 GB system), namely an input of 8 GB BAM file (which is 27.18 GB SAM).
 
 \subsection{\uppercase{Runtime performance}}
-
-\textcolor{red} {Aici trebuie sa punem niste teste comparative, care sa surpinda impactul fiecarei optimizari vs. original si la sfarsit castigul total}
-
-In terms of running time, the performance gain for reading the input file is negligible.  \textcolor{red}{Sau nu?}
-
+\begin{small}
 \par
-\textbf{12 core machine} \\
+\textbf{Algorithm times} \\
 \vspace{-0.4cm}
 \begin{center}
 \begin{tabular}{|c|c|c|c|}
 \hline
-						& 144 MB (4c)		& 144 MB(12c)		& 1.2 GB (12c) 			\\ \hline
+						& 0.15 (4c)		    & 0.15 (12c)		& 1.2 (12c) 			\\ \hline
 Original				& 9.13 s			& 3.938 s			& 123.91 s			\\ \hline
 Presized buf   			& 8.98 s			& 4.19 s			& 75.1 s	\\ \hline
 {\it StreamByteArray}	& 8.09 s			& 3.43 s			& 64.62 s			\\ \hline
 Compact 				& 3.16 s			& 1.686 s			& 14.04 s	\\ \hline
 \end{tabular}
 \end{center}
+\end{small}
+
+Analysis of speedup across machines (4 core vs 12 core):
+Original algorithm scales with a factor of 2.3, presized buffers by a factor of 2.14, SBA scales by 2.36
+and compact would scale by: 1.686, so at least for small files it looks that scaling over large machines will be able to offer a better scaling. Also, it is important to notice that the compacting algorithm has an explicit sequential part that reduces scalability, and it may be reduced with proposed ideas 
+of potential improvements.
+
+Scaling across file sizes: the original algorithm uses a lot of memory, and as the VM has to call more often the Garbage Collection, the cost of GC affects visiblyt he scalability of the original algorithms, but even GC happens in the Compacting algorithms, the cost of it doesn't affect runtime and reducing allocations in both of the techniques of "Presized Buf" and "StreamByteArray" do show a much better runtime profile:
+
+So for an increase of input of 8 times, the original algorithm would slow down 31.46 times, the PB will slow down 17.92 times, SBA will slow down 18.83 times, but Compact algorithm will have almost a perfect 8.33 times slow down.
+
+As times will grow for a 8 GB BAM file to around 215 seconds (when setting heap size to be 42G as maximum using -Xmx42G), we can investigate and isolate the sequential I/O cost. So as we are reaching the limits of the machine, for a file that is approximatively 5 times larger, the algorithm slows down by a factor of 12. When moving the input file on an SSD, the times improve to 139.8 seconds for compact algorithm. If moving to a bigger batch size (from 20K to 30K), the algorithm will process the output in 133.15 seconds, but for the sake of comparison, it is possible to conclude that using fast I/O can improve the runtime performance so the slow-down is from 12 times to 10 times (from 14.08sec to <140 sec).
 
 
 \subsection{\uppercase{Memory Usage}}
 \textcolor{red} {Aici trebuie sa punem cifre comparative, care sa surpinda castigul de memorie + pozele scalate }
 
 
+\section{\uppercase{Future work}}
 
-\begin{comment}
-So the results are great considering the following considerations:
-* we did work with a machine that had 12 times less memory
-* our machine had 3 times less cores
-* we have 2.5x timess less frequency
-* our numbers were comparable in performance with our best "optimized" numbers, yet using at least 4 times less data
+\subsection{\uppercase{Scalability of our batch reader}}
 
-In our measurement, isolating reading/writing which takes at least on our machine a significant part of runtime, but pointing to Compact implementation, the numbers are the following:
+Our reader works as described before in two steps:
 
-\begin{small}
-\begin{verbatim}
-Run: 1 / 3
-Read file stream. ... 		Time: 162.544 sec.
-Write file stream. ... 		Time: 83.687 sec.
-Run: 2 / 3
-Read file stream. ... 		Time: 171.593 sec.
-Write file stream. ... 		Time: 41.359 sec.
-\end{verbatim}
-\end{small}
+* it separates initially from the original file the rows for the number of the expected batches on the main thread
 
-As data-set is large and it is on the limit of the actual's machine RAM, swapping and GCs can make the variation to be of 40 seconds, but we could read the entire file in comparable time with original implementation. 
+* it executes in parallel the compaction step over the separated rows over the all cores
 
-Using Oracle JDK (defaults)
-\begin{small}
-	\begin{verbatim}
-(...)
-Run: 9 / 10
-Reading SAM into memory and applying filters. ... 		Time: 2.628 sec.
-Write to file. ... 		Time: 3.13 sec.
-Run: 10 / 10
-Reading SAM into memory and applying filters. ... 		Time: 2.575 sec.
-Write to file. ... 		Time: 3.196 sec.
-Time: 62.408 sec.
-End algorithm: original ...
-=============================
-(...)
-Run: 9 / 10
-Reading SAM into memory and applying filters. ... 		Time: 2.912 sec.
-Write to file. ... 		Time: 1.631 sec.
-Run: 10 / 10
-Reading SAM into memory and applying filters. ... 		Time: 2.88 sec.
-Write to file. ... 		Time: 1.544 sec.
-Time: 48.468 sec.
-End algorithm: optimized ...
-=============================
-(...)
-Run: 9 / 10
-Read file stream. ... 		Time: 2.929 sec.
-Write file stream. ... 		Time: 0.626 sec.
-Run: 10 / 10
-Read file stream. ... 		Time: 3.191 sec.
-Write file stream. ... 		Time: 0.744 sec.
-Time: 37.873 sec.
-End algorithm: compact ...
-=============================
-	\end{verbatim}
-\end{small}
+1. Speeding up the single threaded code by using optimizations
+There are optimizations that can be done to speed up the single threaded part: 
 
-Using OpenJ9
+1.a. Instead of splitting into rows, the pass that reads the end of line, it can just mark the positions of the end of line(s) and when the multi-threaded code is executed, 
+that code would separate in a multi-threaded fashion into rows (or it may even skip allocating these lines all together). 
 
-\begin{small}
-	\begin{verbatim}
-(...)
-Run: 9 / 10
-Reading SAM into memory and applying filters. ... 		Time: 3.5 sec.
-Write to file. ... 		Time: 2.651 sec.
-Run: 10 / 10
-Reading SAM into memory and applying filters. ... 		Time: 3.574 sec.
-Write to file. ... 		Time: 2.427 sec.
-Time: 61.158 sec.
-End algorithm: original ...
-=============================
+As we worked with quite limited hardware, the hard disk was especially the limiting factor, so we could just speculate how much 
+speed up would generate, but using NVME drives, probably this speed up on reading would show up.
 
-Reading SAM into memory and applying filters. ... 		Time: 4.786 sec.
-Write to file. ... 		Time: 1.759 sec.
-Run: 10 / 10
-Reading SAM into memory and applying filters. ... 		Time: 4.726 sec.
-Write to file. ... 		Time: 1.824 sec.
-Time: 64.243 sec.
-End algorithm: optimized ...
-=============================
-Run: 9 / 10
-Read file stream. ... 		Time: 2.676 sec.
-Write file stream. ... 		Time: 1.03 sec.
-Run: 10 / 10
-Read file stream. ... 		Time: 2.568 sec.
-Write file stream. ... 		Time: 1.07 sec.
-Time: 38.452 sec.
-End algorithm: compact ...
-=============================
-\end{verbatim}
-\end{small}
+1.b. Another technique which could be explored, is that as long as the compaction happens, we don't read from disk, 
+but using a consumer-producer could in fact read in the background using one thread as compaction is happening. 
 
-Using JDK/Graal
-\begin{small}
-\begin{verbatim}
-(...)
-Run: 9 / 10
-Reading SAM into memory and applying filters. ... 		Time: 2.935 sec.
-Write to file. ... 		Time: 3.738 sec.
-Run: 10 / 10
-Reading SAM into memory and applying filters. ... 		Time: 2.985 sec.
-Write to file. ... 		Time: 4.063 sec.
-Time: 71.255 sec.
-End algorithm: original ...
-=============================
-(...)
-Run: 9 / 10
-Reading SAM into memory and applying filters. ... 		Time: 4.203 sec.
-Write to file. ... 		Time: 1.704 sec.
-Run: 10 / 10
-Reading SAM into memory and applying filters. ... 		Time: 3.064 sec.
-Write to file. ... 		Time: 1.631 sec.
-Time: 53.692 sec.
-End algorithm: optimized ...
-=============================
-(...)
-Run: 9 / 10
-Read file stream. ... 		Time: 2.544 sec.
-Write file stream. ... 		Time: 0.692 sec.
-Run: 10 / 10
-Read file stream. ... 		Time: 2.508 sec.
-Write file stream. ... 		Time: 0.678 sec.
-Time: 34.239 sec.
-End algorithm: compact ...
-=============================
-\end{verbatim}
-\end{small}
+So in an hypothetical machine where the reading from file takes as much as the compaction, this technique should speed up 
+(though, at the price of some extra memory and code complexity) by a factor of 2.
 
-Our algorithm is requiring more CPU power to compact/expand the data, so, it would be possible that our algorithm of compaction to have some performance hit, but it is still much more efficient when combined with memory usage. 
+Both techniques 1.a and 1.b could be combined reaching a hypothetical speedup on a balanced machine of more than 2x than our implementation.
 
-What is even more important, is that the cost of processing on a machine that uses less memory and it is made from off the shelf components (i.e. a basic desktop computer), it gives the potential to have a comparable (even if it is slower) performance with ElPrep, but the machine to cost 
-up to one order of magnitude less:
+2. Instead of exact batches, the SAM file could be read with some expected size, and batching would happen on the chunk of data.
 
-Configuring a server at minimal configuration based with closest architecture from the original paper, the cost of the machine is around 5000 USD
-https://www.metservers.com/Dell-PowerEdge-R730-8-Bay-SFF-2U-Rackmount-Server compared with an upgraded CPU (so numbers will be better than in this paper) would cost around a third (https://pcpartpicker.com/list/2KRCzN with 1722.23 USD) and it would be 30% faster than the machine we used in our testing. We could recommend a 64 GB machine and a 12 or 16 core desktop machine which would put prices into 2500 USD range, so we can process larger files, but the point remains: compacting memory makes possible either to work with larger files, or to process the same files on much cheaper machines.
-\end{comment}
+So instead of reading 30K rows of 350 bytes per batch x number of cores x 4 ~= 10 MB x 4 x number of cores, instead we can read:
+4 x number of cores buffers of 10 MB (so for a 4 thread machine, it would be like 160 MB) and we will make a batch out of every 10MB buffer in parallel, and will make these batches to be 
+around the expected size, but not precise.
+This code will be absolutely limited on the speed of reading hardware as there is no computation as reading is done, and after that the processing of splitting 
+as in point 1.a can be done in parallel. This approach can be enhanced further that as the parallel batch processing is done, (like described in point 1.b.) 
+the background task could read in advance preparing the next section of processing of batches.
+
+Both techniques should improve performance in very fast IO systems which have many cores to be fed to calculate the compaction.
+
+Code complexity should be taken into account for both of those approaches, but it should speed up the code on various machines.
+
+\subsection{\uppercase{Testing the code using Value Types}}
 
 
+A bit simpler way to estimate the speed is to code the full implementation using .Net and generic dictionaries, but as .Net would have (arguably) a weaker GC and code generator, the final results may need adjustment, still some estimation could be done on the value or if any speedup could be expected in future.
+
+\subsection{\uppercase{Doing the algorithms}}
+
+We implemented only reading/writing and some code could be quite easy to be implemented (like filtering) and these algorithms could have their own tuning. 
+
+It can be that some algorithms should have special handling, or destroying and re-building the full batch, which would duplicate the memory per-batch.
+
+Filtering: in parallel all the batches can be scanned if they contain valid values and reconstruct a batch to replace the old one using filter function. At increased code complexity, it is possible when reading is done that the filter function to be present and will block adding to the current batch.
+
+Marking and removing duplicates: marking can be done in parallel as filtering does, but an extra step can be taken to calculate hashing (that would be custom for DNA sequences), data that could be discarded at the end of algorithm (to keep memory usage low). As marking is setting just a bit inside flags, there should not be a cost of rebuilding the batches, but if removing duplicates is applied, reconstructing of the batches is a desirable solution.
 
 
 
