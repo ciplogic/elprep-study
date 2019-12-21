@@ -1,0 +1,79 @@
+/home/ciprian/apps/zulu13.27.9-ca-jdk13-linux_x64/bin/java -Xmx11000M -javaagent:/home/ciprian/apps/idea-IC-192.6817.14/lib/idea_rt.jar=45901:/home/ciprian/apps/idea-IC-192.6817.14/bin -Dfile.encoding=UTF-8 -classpath /home/ciprian/Dropbox/ElPrepStudy/target/classes:/home/ciprian/.m2/repository/it/unimi/dsi/fastutil/8.1.0/fastutil-8.1.0.jar StartUp filter /home/ciprian/Downloads/1_2GB.sam process.sam --filter-unmapped-reads --replace-reference-sequences ucsc.hg19.dict --replace-read-group "ID:group1 LB:lib1 PL:illumina PU:unit1 SM:sample1" --mark-duplicates --sorting-order coordinate
+Warmup ...
+Run: 1 / 1
+Read file stream. ... 		Time: 26.077 sec.
+Write file stream. ... 		Time: 8.957 sec.
+Run: 1 / 1
+Read file stream. ... 		Time: 24.006 sec.
+Write file stream. ... 		Time: 8.668 sec.
+ Finished.
+Algorithm: compact ...
+compact ... 		Run: 1 / 10
+Read file stream. ... 		Time: 25.57 sec.
+Write file stream. ... 		Time: 7.528 sec.
+Run: 2 / 10
+Read file stream. ... 		Time: 29.499 sec.
+Write file stream. ... 		Time: 9.164 sec.
+Run: 3 / 10
+Read file stream. ... 		Time: 29.253 sec.
+Write file stream. ... 		Time: 8.119 sec.
+Run: 4 / 10
+Read file stream. ... 		Time: 27.4 sec.
+Write file stream. ... 		Time: 7.929 sec.
+Run: 5 / 10
+Read file stream. ... 		Time: 29.645 sec.
+Write file stream. ... 		Time: 8.901 sec.
+Run: 6 / 10
+Read file stream. ... 		Time: 30.363 sec.
+Write file stream. ... 		Time: 8.502 sec.
+Run: 7 / 10
+Read file stream. ... 		Time: 29.713 sec.
+Write file stream. ... 		Time: 9.112 sec.
+Run: 8 / 10
+Read file stream. ... 		Time: 29.786 sec.
+Write file stream. ... 		Time: 7.597 sec.
+Run: 9 / 10
+Read file stream. ... 		Time: 31.076 sec.
+Write file stream. ... 		Time: 6.962 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 28.753 sec.
+Write file stream. ... 		Time: 9.125 sec.
+Time: 374.384 sec.
+End algorithm: compact ...
+=============================
+Algorithm: compact_par ...
+compact_par ... 		Run: 1 / 10
+Read file stream. ... 		Time: 24.43 sec.
+Write file stream. ... 		Time: 7.513 sec.
+Run: 2 / 10
+Read file stream. ... 		Time: 27.074 sec.
+Write file stream. ... 		Time: 6.654 sec.
+Run: 3 / 10
+Read file stream. ... 		Time: 24.997 sec.
+Write file stream. ... 		Time: 8.325 sec.
+Run: 4 / 10
+Read file stream. ... 		Time: 24.576 sec.
+Write file stream. ... 		Time: 7.389 sec.
+Run: 5 / 10
+Read file stream. ... 		Time: 29.716 sec.
+Write file stream. ... 		Time: 7.79 sec.
+Run: 6 / 10
+Read file stream. ... 		Time: 27.35 sec.
+Write file stream. ... 		Time: 7.926 sec.
+Run: 7 / 10
+Read file stream. ... 		Time: 24.368 sec.
+Write file stream. ... 		Time: 8.967 sec.
+Run: 8 / 10
+Read file stream. ... 		Time: 25.84 sec.
+Write file stream. ... 		Time: 8.08 sec.
+Run: 9 / 10
+Read file stream. ... 		Time: 29.009 sec.
+Write file stream. ... 		Time: 7.532 sec.
+Run: 10 / 10
+Read file stream. ... 		Time: 25.703 sec.
+Write file stream. ... 		Time: 7.434 sec.
+Time: 341.062 sec.
+End algorithm: compact_par ...
+=============================
+
+Process finished with exit code 0

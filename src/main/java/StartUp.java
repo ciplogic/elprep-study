@@ -6,7 +6,7 @@ public class StartUp {
 //                "original",
 //                "buffers",
 //                "optimized",
-//                "compact",
+                "compact",
 //                "compact_seq",
                 "compact_par",
         };
@@ -17,7 +17,7 @@ public class StartUp {
         for (var algo : algos) {
             System.out.println("Algorithm: " + algo + " ...");
 
-            runAlgorithmOnTest(args, algo, true, 100);
+            runAlgorithmOnTest(args, algo, true, 10);
 
             System.out.println("End algorithm: " + algo + " ...");
             System.out.println("=============================");
