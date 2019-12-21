@@ -15,8 +15,9 @@ import static commons.Utilities.timedRun;
 public class elprep {
     public static void main(String[] args) {
         var batchSize = 20000;
-        var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 3);
+        var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 2);
         var headers = new ArrayList<String>();
+        ArrayList<SamBatch> batches = new ArrayList<>();
         timedRun(true, "Read file stream.", () -> {
             var inputFileName = args[1];
             try (FileInputStream fileInputStream = new FileInputStream(inputFileName)) {
@@ -30,28 +31,28 @@ public class elprep {
                     var startIndex = Utilities.indexOfByte(b, '\n', 0);
                     var row = startIndex != -1 ? combine(remainder, Arrays.copyOfRange(b, 0, startIndex))
                             : remainder;
-                    addRowToBatchWrapper(batchWrapper, row, headers);
+                    addRowToBatchWrapper(batchWrapper, row, headers, batches);
                     var endIndex = -1;
                     startIndex++;
                     while ((endIndex = Utilities.indexOfByte(b, '\n', startIndex)) > 0) {
                         row = Arrays.copyOfRange(b, startIndex, endIndex);
-                        addRowToBatchWrapper(batchWrapper, row, headers);
+                        addRowToBatchWrapper(batchWrapper, row, headers, batches);
                         startIndex = endIndex + 1;
                     }
                     remainder = Arrays.copyOfRange(b, startIndex, b.length);
                 }
-                addRowToBatchWrapper(batchWrapper, remainder, headers);
+                addRowToBatchWrapper(batchWrapper, remainder, headers, batches);
             }
-            batchWrapper.flushBatched();
+            batchWrapper.flush(batches);
         });
         var outputFile = args[2];
 
         timedRun(true, "Write file stream.", () -> {
-            writeToDisk(outputFile, batchWrapper, headers);
+            writeToDisk(outputFile, batchWrapper, headers, batches);
         });
     }
 
-    private static void writeToDisk(String outputFile, BatchWrapperReader batchWrapper, ArrayList<String> headers) {
+    private static void writeToDisk(String outputFile, BatchWrapperReader batchWrapper, ArrayList<String> headers, ArrayList<SamBatch> batches) {
         OutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(outputFile);
@@ -64,8 +65,7 @@ public class elprep {
                 writer.write(it.getBytes());
             }
 
-            //writeBatches(writer, batchWrapper);
-            writeBatchesParallel(writer, batchWrapper);
+            writeBatchesParallel(writer, batchWrapper, batches);
 
             writer.close();
         } catch (Exception ex) {
@@ -73,18 +73,8 @@ public class elprep {
         }
     }
 
-    private static void writeBatches(BatchWrapperWriter writer, BatchWrapperReader batchWrapper) throws IOException {
-        ArrayList<SamBatch> batches = batchWrapper.batches;
-        for (int i = 0, batchesSize = batches.size(); i < batchesSize; i++) {
-            SamBatch batch = batches.get(i);
-            batch.writeToWriter(writer);
-        }
-    }
-
-    private static void writeBatchesParallel(BatchWrapperWriter writer, BatchWrapperReader batchWrapper) throws IOException {
-        ArrayList<SamBatch> batches = batchWrapper.batches;
-
-        IntStream.range(0, batches.size())
+    private static void writeBatchesParallel(BatchWrapperWriter writer, BatchWrapperReader batchWrapper, ArrayList<SamBatch> batches) throws IOException {
+                IntStream.range(0, batches.size())
                 .parallel()
                 .mapToObj(i -> {
                     try {
@@ -109,12 +99,15 @@ public class elprep {
                 });
     }
 
-    private static void addRowToBatchWrapper(BatchWrapperReader batchWrapper, byte[] row, ArrayList<String> headers) {
+    private static void addRowToBatchWrapper(BatchWrapperReader batchWrapper, byte[] row, ArrayList<String> headers,
+                                             ArrayList<SamBatch> batches) {
         if (0 == row.length || row[0] == '@') {
             if (0 != row.length)
                 headers.add(new String(row));
             return;
         }
-        batchWrapper.processBatched(row);
+        if(batchWrapper.processBatched(row)){
+            batchWrapper.flush(batches);
+        }
     }
 }

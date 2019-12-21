@@ -3,22 +3,48 @@ package compact.reader;
 import compact.SamBatch;
 
 import java.util.ArrayList;
+import java.util.stream.IntStream;
 
 public class BatchWrapperReader {
-
-    public ArrayList<SamBatch> batches = new ArrayList<>();
-
     private StringBufferBatches stringBufferBatches;
 
     public BatchWrapperReader(int batchSize, int bufferBatchesCount) {
-        stringBufferBatches = new StringBufferBatches(batchSize, bufferBatchesCount, this);
+        stringBufferBatches = new StringBufferBatches(batchSize, bufferBatchesCount);
     }
 
-    public void processBatched(byte[] row) {
-        stringBufferBatches.readRow(row);
+    public boolean processBatched(byte[] row) {
+        return stringBufferBatches.readRow(row);
     }
 
-    public void flushBatched() {
-        stringBufferBatches.flushAllToWrapper();
+    public void flush(ArrayList<SamBatch> batches) {
+        BatchWrapperReader.flushAllToWrapper(batches, stringBufferBatches.getLines());
+        stringBufferBatches.clear();
+    }
+
+    public static void flushAllToWrapper(ArrayList<SamBatch> batches, ArrayList<ArrayList<byte[]>> batchRows) {
+        var startIndex = batches.size();
+        int _size = batchRows.size();
+        IntStream.range(0, _size).forEach(i -> {
+            batches.add(null);
+        });
+        IntStream.range(0, _size).parallel().mapToObj(i -> {
+            var rows = batchRows.get(i);
+            return new IndexedValue<>(i + startIndex, flushBatch(rows));
+        }).forEach(
+                indexedValue -> {
+                    batches.set(indexedValue.index, indexedValue.batch);
+                });
+    }
+
+    public static SamBatch flushBatch(ArrayList<byte[]> rows) {
+        var result = new SamBatch(rows.size());
+        StringScanner sc = new StringScanner();
+        for (var row : rows) {
+            sc.setText(row);
+            result.readRow(sc);
+        }
+        rows.clear();
+        result.shrink();
+        return result;
     }
 }
