@@ -16,8 +16,8 @@ class Flusher{
     private volatile boolean midFile;
 
     Flusher(int batchSize){
-        front = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 2);
-        back  = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 2);
+        front = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 4);
+        back  = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 4);
     }
     boolean fillFrontReader(InputStreamRowReader streamRowReader, BatchWrapperReader front) throws IOException {
         front.clear();

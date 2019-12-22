@@ -1,0 +1,7 @@
+Compact:
+Read file stream. ... 		Time: 126.107 sec.
+Write file stream. ... 		Time: 25.2 sec.
+
+CompactPar:
+Read file stream. ... 		Time: 116.257 sec.
+Write file stream. ... 		Time: 22.387 sec.

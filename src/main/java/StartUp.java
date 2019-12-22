@@ -7,7 +7,6 @@ public class StartUp {
 //                "buffers",
 //                "optimized",
                 "compact",
-//                "compact_seq",
                 "compact_par",
         };
         System.out.println("Warmup ...");
@@ -42,9 +41,6 @@ public class StartUp {
                         break;
                     case "compact":
                         compact.elprep.main(args);
-                        break;
-                    case "compact_seq":
-                        compact.elprepRowReader.main(args);
                         break;
                     case "compact_par":
                         compact.RowReaderBackground.main(args);
