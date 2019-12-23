@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.9.25)  22 DEC 2019 01:18
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.9.25)  23 DEC 2019 22:44
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -589,29 +589,45 @@ Underfull \hbox (badness 2080) in paragraph at lines 390--392
  []
 
 
-Underfull \hbox (badness 3895) in paragraph at lines 418--420
+Overfull \hbox (5.88452pt too wide) in paragraph at lines 431--431
+[]\OT1/pcr/m/n/10 var samBatches = new ArrayList<SamBatch>();[] 
+ []
+
+
+Overfull \hbox (92.5841pt too wide) in paragraph at lines 431--431
+[]\OT1/pcr/m/n/10 var rowsRead = readSequentiallyRowsForNextChunkOfProcessing([
+] 
+ []
+
+
+Overfull \hbox (61.98425pt too wide) in paragraph at lines 431--431
+[]\OT1/pcr/m/n/10 transformRowsIntoBatches(samBatches, rowsRead, index);[] 
+ []
+
+
+Underfull \hbox (badness 3895) in paragraph at lines 449--451
 \OT1/ptm/m/n/10 cor-rectly the \OT1/pcr/m/n/10 BufferedReader\OT1/ptm/m/n/10 , 
 re-spec-tively the
  []
 
-
-Overfull \hbox (0.78455pt too wide) in paragraph at lines 439--439
+[6]
+Overfull \hbox (0.78455pt too wide) in paragraph at lines 470--470
 []   \OT1/pcr/m/n/10 try (var swout = new PrintWriter(sw)) {[] 
  []
 
 
-Underfull \hbox (badness 4205) in paragraph at lines 443--447
+Underfull \hbox (badness 4205) in paragraph at lines 474--478
 \OT1/ptm/m/n/10 ob-ject. To quote from its doc-u-men-ta-tion, a
  []
 
-[6]
-Underfull \hbox (badness 1735) in paragraph at lines 458--459
+
+Underfull \hbox (badness 1735) in paragraph at lines 489--490
 []\OT1/ptm/m/n/10 Again, the \OT1/pcr/m/n/10 PrintWriter.println \OT1/ptm/m/n/1
 0 method is
  []
 
 
-Underfull \hbox (badness 3792) in paragraph at lines 458--459
+Underfull \hbox (badness 3792) in paragraph at lines 489--490
 \OT1/ptm/m/n/10 us-ing a \OT1/pcr/m/n/10 synchronized \OT1/ptm/m/n/10 block in 
 or-der to ful-
  []
@@ -619,33 +635,34 @@ or-der to ful-
 <images/cpu_original.png, id=32, 304.13625pt x 184.43906pt>
 File: images/cpu_original.png Graphic file (type png)
 <use images/cpu_original.png>
-Package pdftex.def Info: images/cpu_original.png  used on input line 470.
+Package pdftex.def Info: images/cpu_original.png  used on input line 501.
 (pdftex.def)             Requested size: 152.06775pt x 92.2193pt.
-<images/cpu_optimized.png, id=33, 316.93407pt x 182.93344pt>
+[7 <./images/cpu_original.png>]
+<images/cpu_optimized.png, id=37, 316.93407pt x 182.93344pt>
 File: images/cpu_optimized.png Graphic file (type png)
 <use images/cpu_optimized.png>
-Package pdftex.def Info: images/cpu_optimized.png  used on input line 486.
+Package pdftex.def Info: images/cpu_optimized.png  used on input line 517.
 (pdftex.def)             Requested size: 158.46664pt x 91.46649pt.
-<images/Visual_VM_Small_file_Original_execution_profile.png, id=34, 2589.675pt 
+<images/Visual_VM_Small_file_Original_execution_profile.png, id=38, 2589.675pt 
 x 1053.9375pt>
 File: images/Visual_VM_Small_file_Original_execution_profile.png Graphic file (
 type png)
 <use images/Visual_VM_Small_file_Original_execution_profile.png>
 Package pdftex.def Info: images/Visual_VM_Small_file_Original_execution_profile
-.png  used on input line 491.
+.png  used on input line 522.
 (pdftex.def)             Requested size: 168.33478pt x 68.50833pt.
-[7 <./images/cpu_original.png> <./images/cpu_optimized.png> <./images/Visual_VM
-_Small_file_Original_execution_profile.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 516--518
+
+Underfull \hbox (badness 10000) in paragraph at lines 547--549
 \OT1/ptm/m/n/10 chine https://www.aspsys.com/servers/supermicro-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 516--518
+Underfull \hbox (badness 10000) in paragraph at lines 547--549
 \OT1/ptm/m/n/10 superserver-1029u-tr4t-p3324.htm, when our
  []
 
-[8] Excluding 'comment' comment. (elprep-study.bbl
+[8 <./images/cpu_optimized.png> <./images/Visual_VM_Small_file_Original_executi
+on_profile.png>] [9] Excluding 'comment' comment. (elprep-study.bbl
 Underfull \hbox (badness 3078) in paragraph at lines 31--35
 []\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
  []
@@ -660,7 +677,9 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--35
 \OT1/ptm/m/n/9 https://docs.oracle.com/en/java/javase/11/docs/api.
  []
 
-) [9] (elprep-study.aux) ) 
+) [10
+
+] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
  4731 strings out of 492895
  67185 string characters out of 3137191
@@ -669,16 +688,16 @@ Here is how much of TeX's memory you used:
  55088 words of font info for 122 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,736b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Paper/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/
-Paper/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Paper/MiKTeX 2.9
-/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/publ
-ic/amsfonts/cm/cmsy10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.p
-fb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Paper/MiKTeX 2.9/f
-onts/type1/urw/times/utmr8a.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmr
-i8a.pfb>
-Output written on elprep-study.pdf (9 pages, 702292 bytes).
+{C:/Paper/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Pape
+r/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Paper/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmsy10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><
+C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Paper/MiKTeX 2.9/fonts
+/type1/urw/times/utmr8a.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.
+pfb>
+Output written on elprep-study.pdf (10 pages, 705339 bytes).
 PDF statistics:
- 69 PDF objects out of 1000 (max. 8388607)
+ 72 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -409,6 +409,41 @@ Total number of tags: approx 200000 (10 tags per row on average)
 \textcolor{brown}{ Numbers were correct, it was simply looking into some random batches when debugging.
 }
 
+
+
+\subsection{\uppercase{Chunking-Batching and Extracting Parallelism}}
+In El-Prep original algorithm, to extract parallelism, there was an explicit per-line .parallel() call, a construct that would create a task per row. Tasks, different from threads, is that they are queued and the threads are made transparently by the Java Streams Framework.
+
+Because we rely on compacting data, our algorithm has data dependencies between rows (like as it deduplicates values between rows, it has to know as a dependency the values from the previous rows) so it cannot be fully parallel per-row (excluding we will use a synchronize/OS Mutex or alike/or a synchronized queue). Even more important, if we would rely on mutexes, the code complexity will be very high and especially debugging this code.
+
+So we propose a technique that works in the following pseudo-code:
+
+\begin{verbatim}
+var samBatches = new ArrayList<SamBatch>();
+while (!end_of_file){
+	var rowsRead = readSequentiallyRowsForNextChunkOfProcessing(
+		20000, CpuCoreCount*4);
+	numbersOfCores.parallel().
+		.forEach(index->{
+			transformRowsIntoBatches(samBatches, rowsRead, index);
+		});
+}
+\end{verbatim}
+
+This line basically reads out of the SAM file 20K rows * CpuCoreCount * 4 sequentially. Even we want to extract parallelism, this code will likely be almost limited of the speed of the data device (because drives are very quick in sequential reads, not as quick on random access).
+
+Having the data chunked into 20K rows, we can process in parallel the mapping between the associated text data into a chunk of data structure named SamBatch where it has possibility to deduplicate the data between the rows (as of 20K rows).
+
+Even we execute in parallel all these List<byte[]> -> SamBatch step, there are few advantages:
+
+* the code of transforming, deduplicating and encoding DNA, are all written in a single-threaded manner which is quite easy to debug and understand. 
+
+* as DeduplicatedDictionary can have less than 20K unique strings, the value it encodes the strings could be reduced on 2 bytes instead of 4. Similarly we can reduce the tag size from 4 to 2 bytes. For safety, because technically tags may not always repeat, we used "unsigned short" (meaning "char" type) to better safe around overflowing (which we noticed it happens if user will chose a 30K size SamBatch)
+
+* after the algorithm is fully executed we will have instead of 2.1 million SamAlignment(s), around 105 SamBatch instances, each of them having around themselves around 4 orders of magnitude less objects overall, which translates into 2 orders of magnitude less objects, yet it has the benefit of memory compaction, low cost on GC and so on
+
+* when writing to disk, the SamBatch array could be processed in parallel with no blocking but to write to disk.
+
 \section{\uppercase{Optimizing I/O Operations}}
 
 The first and most simple technique that could improve performance when working with large files
@@ -528,7 +563,7 @@ As of time of writing, the SuperMicro machine configured as minimal configuratio
 Original				& 9.13 s			& 3.938 s			& 123.91 s			\\ \hline
 Presized buf   			& 8.98 s			& 4.19 s			& 75.1 s	\\ \hline
 {\it StreamByteArray}	& 8.09 s			& 3.43 s			& 64.62 s			\\ \hline
-Compact 				& 3.16 s			& 1.686 s			& 14.04 s	\\ \hline
+Compact 				& 3.16 s			& 1.686 s			& 58.04 s	\\ \hline
 \end{tabular}
 \end{center}
 \end{small}

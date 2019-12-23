@@ -3,9 +3,9 @@ import commons.Utilities;
 public class StartUp {
     public static void main(String[] args) {
         var algos = new String[]{
-//                "original",
-//                "buffers",
-//                "optimized",
+                "original",
+                "buffers",
+                "optimized",
                 "compact",
                 "compact_par",
         };

@@ -48,11 +48,11 @@ public class elprep {
         var outputFile = args[2];
 
         timedRun(true, "Write file stream.", () -> {
-            writeToDisk(outputFile, batchWrapper, headers, batches);
+            writeToDisk(outputFile, headers, batches);
         });
     }
 
-    private static void writeToDisk(String outputFile, BatchWrapperReader batchWrapper, ArrayList<String> headers, ArrayList<SamBatch> batches) {
+    public static void writeToDisk(String outputFile, ArrayList<String> headers, ArrayList<SamBatch> batches) throws IOException {
         OutputStream outputStream = null;
         try {
             outputStream = new FileOutputStream(outputFile);
@@ -65,38 +65,41 @@ public class elprep {
                 writer.write(it.getBytes());
             }
 
-            writeBatchesParallel(writer, batchWrapper, batches);
+            writeBatchesParallel(writer, batches);
 
             writer.close();
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        outputStream.close();
     }
 
-    private static void writeBatchesParallel(BatchWrapperWriter writer, BatchWrapperReader batchWrapper, ArrayList<SamBatch> batches) throws IOException {
-                IntStream.range(0, batches.size())
-                .parallel()
-                .mapToObj(i -> {
-                    try {
-                        var batch = batches.get(i);
-                        batches.set(i, null);
-                        var outputStream = new ByteArrayOutputStream(400 * batch.size());
-                        BatchWrapperWriter localWriter = new BatchWrapperWriter(outputStream);
-                        batch.writeToWriter(localWriter);
-                        outputStream.close();
-                        return outputStream.toByteArray();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                        return null;
-                    }
-                })
-                .forEachOrdered(bytes -> {
-                    try {
-                        writer.write(bytes);
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                });
+    private static void writeBatchesParallel(BatchWrapperWriter writer, ArrayList<SamBatch> batches) {
+        IntStream.range(0, batches.size())
+            .parallel()
+            .mapToObj(i -> {
+                try {
+                    var batch = batches.get(i);
+                    batches.set(i, null);
+                    var outputStream = new ByteArrayOutputStream(100 * batch.size());
+                    var localWriter = new BatchWrapperWriter(outputStream);
+                    batch.writeToWriter(localWriter);
+                    localWriter.close();
+                    var result = outputStream.toByteArray();
+                    outputStream.close();
+                    return result;
+                } catch (IOException e) {
+                    e.printStackTrace();
+                    return null;
+                }
+            })
+            .forEachOrdered(bytes -> {
+                try {
+                    writer.write(bytes);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
     }
 
     private static void addRowToBatchWrapper(BatchWrapperReader batchWrapper, byte[] row, ArrayList<String> headers,
