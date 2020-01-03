@@ -26,7 +26,7 @@ public class elprep {
             (InputStream input, OutputStream output, Slice sortingOrder,
              List<Function<SamHeader, Predicate<SamAlignment>>> preFilters,
              List<Function<SamHeader, Predicate<SamAlignment>>> postFilters,
-             boolean timed) {
+             boolean timed) throws IOException {
         var filteredReads = new Sam();
         timedRun(timed, "Reading SAM into memory and applying filters.", () -> {
             try (var in = new BufferedReader(new InputStreamReader(input, StandardCharsets.US_ASCII), 1000_000)) {
@@ -159,7 +159,7 @@ public class elprep {
         });
     }
 
-    public static void elPrepFilterScript(String[] args) {
+    public static void elPrepFilterScript(String[] args) throws IOException {
         Slice sortingOrder = SamHeader.keep;
         boolean timed = true;
         Function<SamHeader, Predicate<SamAlignment>> replaceRefSeqDictFilter = null;
@@ -273,7 +273,7 @@ public class elprep {
     }
 
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         if (args.length < 1) {
             throw new RuntimeException("Incorrect number of parameters.");
         } else {

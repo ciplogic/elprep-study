@@ -27,7 +27,7 @@ public class elprep {
             (InputStream input, OutputStream output, Slice sortingOrder,
              List<Function<SamHeader, Predicate<SamAlignment>>> preFilters,
              List<Function<SamHeader, Predicate<SamAlignment>>> postFilters,
-             boolean timed) {
+             boolean timed) throws IOException {
         var filteredReads = new Sam();
         timedRun(timed, "Reading SAM into memory and applying filters.", () -> {
             try (var in = new BufferedReader(new InputStreamReader(input, StandardCharsets.US_ASCII))) {

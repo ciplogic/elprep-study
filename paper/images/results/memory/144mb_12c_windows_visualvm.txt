@@ -1,0 +1,22 @@
+Methodology: stop after all memory is laoded, perform a GC
+
+Input 144 MB BAM
+
+Original/Buffered: 2 326 MB
+Optimized: 2 275 MB 
+Compact,Compact Par: 606 MB (OpenJDK 13)
+
+Input 1.2 GB BAM
+
+Original/Buffered: 32 025 MB
+Optimized: 31 463 MB 
+Compact/Compact Par: 4 698 MB (GraalVM CE 1.9.3)
+Compact/Compact Par: 4 689 MB (OpenJDK 13)
+
+
+Input 8 GB:
+Compact/Compact Par:  24 283 MB (OpenJDK)
+
+
+Input 12 GB BAM:
+35 265 MB (OpenJDK)

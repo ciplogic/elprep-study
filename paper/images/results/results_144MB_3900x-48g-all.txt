@@ -120,70 +120,70 @@ End algorithm: optimized ...
 =============================
 Algorithm: compact ...
 compact ... 		Run: 1 / 10
-Read file stream. ... 		Time: 1.582 sec.
-Write file stream. ... 		Time: 3.754 sec.
+Read file stream. ... 		Time: 1.532 sec.
+Write to file. ... 		Time: 1.868 sec.
 Run: 2 / 10
-Read file stream. ... 		Time: 1.27 sec.
-Write file stream. ... 		Time: 3.811 sec.
+Read file stream. ... 		Time: 1.21 sec.
+Write to file. ... 		Time: 1.955 sec.
 Run: 3 / 10
-Read file stream. ... 		Time: 1.368 sec.
-Write file stream. ... 		Time: 3.737 sec.
+Read file stream. ... 		Time: 1.369 sec.
+Write to file. ... 		Time: 1.9 sec.
 Run: 4 / 10
-Read file stream. ... 		Time: 1.602 sec.
-Write file stream. ... 		Time: 3.757 sec.
+Read file stream. ... 		Time: 1.307 sec.
+Write to file. ... 		Time: 1.821 sec.
 Run: 5 / 10
-Read file stream. ... 		Time: 1.915 sec.
-Write file stream. ... 		Time: 3.766 sec.
+Read file stream. ... 		Time: 1.138 sec.
+Write to file. ... 		Time: 1.818 sec.
 Run: 6 / 10
-Read file stream. ... 		Time: 1.586 sec.
-Write file stream. ... 		Time: 3.853 sec.
+Read file stream. ... 		Time: 1.638 sec.
+Write to file. ... 		Time: 1.776 sec.
 Run: 7 / 10
-Read file stream. ... 		Time: 2.368 sec.
-Write file stream. ... 		Time: 3.778 sec.
+Read file stream. ... 		Time: 1.612 sec.
+Write to file. ... 		Time: 1.776 sec.
 Run: 8 / 10
-Read file stream. ... 		Time: 1.49 sec.
-Write file stream. ... 		Time: 3.847 sec.
+Read file stream. ... 		Time: 1.672 sec.
+Write to file. ... 		Time: 1.786 sec.
 Run: 9 / 10
-Read file stream. ... 		Time: 1.59 sec.
-Write file stream. ... 		Time: 3.813 sec.
+Read file stream. ... 		Time: 1.809 sec.
+Write to file. ... 		Time: 1.787 sec.
 Run: 10 / 10
-Read file stream. ... 		Time: 1.569 sec.
-Write file stream. ... 		Time: 3.775 sec.
-Time: 54.787 sec.
+Read file stream. ... 		Time: 1.866 sec.
+Write to file. ... 		Time: 1.767 sec.
+Time: 33.977 sec.
 End algorithm: compact ...
 =============================
 Algorithm: compact_par ...
 compact_par ... 		Run: 1 / 10
-Read file stream. ... 		Time: 2.048 sec.
-Write file stream. ... 		Time: 4.682 sec.
+Read file stream. ... 		Time: 1.886 sec.
+Write file stream. ... 		Time: 1.93 sec.
 Run: 2 / 10
-Read file stream. ... 		Time: 2.653 sec.
-Write file stream. ... 		Time: 3.873 sec.
+Read file stream. ... 		Time: 2.71 sec.
+Write file stream. ... 		Time: 2.429 sec.
 Run: 3 / 10
-Read file stream. ... 		Time: 2.118 sec.
-Write file stream. ... 		Time: 4.07 sec.
+Read file stream. ... 		Time: 2.611 sec.
+Write file stream. ... 		Time: 1.955 sec.
 Run: 4 / 10
-Read file stream. ... 		Time: 1.809 sec.
-Write file stream. ... 		Time: 3.958 sec.
+Read file stream. ... 		Time: 2.34 sec.
+Write file stream. ... 		Time: 2.214 sec.
 Run: 5 / 10
-Read file stream. ... 		Time: 2.799 sec.
-Write file stream. ... 		Time: 3.909 sec.
+Read file stream. ... 		Time: 2.591 sec.
+Write file stream. ... 		Time: 2.032 sec.
 Run: 6 / 10
-Read file stream. ... 		Time: 2.15 sec.
-Write file stream. ... 		Time: 3.977 sec.
+Read file stream. ... 		Time: 2.769 sec.
+Write file stream. ... 		Time: 2.573 sec.
 Run: 7 / 10
-Read file stream. ... 		Time: 1.803 sec.
-Write file stream. ... 		Time: 3.951 sec.
+Read file stream. ... 		Time: 2.734 sec.
+Write file stream. ... 		Time: 2.081 sec.
 Run: 8 / 10
-Read file stream. ... 		Time: 2.241 sec.
-Write file stream. ... 		Time: 4.033 sec.
+Read file stream. ... 		Time: 2.691 sec.
+Write file stream. ... 		Time: 2.203 sec.
 Run: 9 / 10
-Read file stream. ... 		Time: 1.811 sec.
-Write file stream. ... 		Time: 3.747 sec.
+Read file stream. ... 		Time: 2.673 sec.
+Write file stream. ... 		Time: 2.473 sec.
 Run: 10 / 10
-Read file stream. ... 		Time: 2.034 sec.
-Write file stream. ... 		Time: 4.074 sec.
-Time: 62.401 sec.
+Read file stream. ... 		Time: 1.438 sec.
+Write file stream. ... 		Time: 2.27 sec.
+Time: 46.792 sec.
 End algorithm: compact_par ...
 =============================
 

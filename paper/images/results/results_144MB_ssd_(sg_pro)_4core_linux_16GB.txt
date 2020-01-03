@@ -618,7 +618,7 @@ Write to file. ... 		Time: 2.286 sec.
 Run: 100 / 100
 Reading SAM into memory and applying filters. ... 		Time: 6.631 sec.
 Write to file. ... 		Time: 1.485 sec.
-Time: 809.04 sec.
+Time: 88.04 sec.
 End algorithm: optimized ...
 =============================
 Algorithm: buffers ...

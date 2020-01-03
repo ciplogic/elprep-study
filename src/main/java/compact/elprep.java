@@ -13,7 +13,7 @@ import static commons.Utilities.combine;
 import static commons.Utilities.timedRun;
 
 public class elprep {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         var batchSize = 20000;
         var batchWrapper = new BatchWrapperReader(batchSize, Runtime.getRuntime().availableProcessors() * 2);
         var headers = new ArrayList<String>();
@@ -47,7 +47,7 @@ public class elprep {
         });
         var outputFile = args[2];
 
-        timedRun(true, "Write file stream.", () -> {
+        timedRun(true, "Write to file.", () -> {
             writeToDisk(outputFile, headers, batches);
         });
     }

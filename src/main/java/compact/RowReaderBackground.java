@@ -55,7 +55,7 @@ class Flusher{
     }
 }
 public class RowReaderBackground{
-        public static void main(String[] args) {
+        public static void main(String[] args) throws IOException {
             var batchSize = 20000;
             var headers = new ArrayList<String>();
             ArrayList<SamBatch> batches = new ArrayList<>();
