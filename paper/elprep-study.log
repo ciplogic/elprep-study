@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.9.25)  3 JAN 2020 23:59
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7140 64-bit) (preloaded format=pdflatex 2019.9.25)  4 JAN 2020 00:28
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -662,12 +662,12 @@ Package pdftex.def Info: images/Visual_VM_Small_file_Original_execution_profile
 .png  used on input line 544.
 (pdftex.def)             Requested size: 168.33478pt x 68.50833pt.
 
-Underfull \hbox (badness 10000) in paragraph at lines 569--571
+Underfull \hbox (badness 10000) in paragraph at lines 564--566
 \OT1/ptm/m/n/10 chine https://www.aspsys.com/servers/supermicro-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 569--571
+Underfull \hbox (badness 10000) in paragraph at lines 564--566
 \OT1/ptm/m/n/10 superserver-1029u-tr4t-p3324.htm, when our
  []
 
@@ -679,10 +679,10 @@ File: images/times_and_memory_chart_small_144mb_ryzen.png Graphic file (type pn
 g)
 <use images/times_and_memory_chart_small_144mb_ryzen.png>
 Package pdftex.def Info: images/times_and_memory_chart_small_144mb_ryzen.png  u
-sed on input line 651.
+sed on input line 647.
 (pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 651--652
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 647--648
  [] 
  []
 
@@ -692,10 +692,10 @@ File: images/times_and_memory_chart_small_144mb_intel.png Graphic file (type pn
 g)
 <use images/times_and_memory_chart_small_144mb_intel.png>
 Package pdftex.def Info: images/times_and_memory_chart_small_144mb_intel.png  u
-sed on input line 658.
+sed on input line 654.
 (pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 658--659
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 654--655
  [] 
  []
 
@@ -706,34 +706,39 @@ Underfull \vbox (badness 10000) has occurred while \output is active []
 File: images/times_and_memory_chart.png Graphic file (type png)
 <use images/times_and_memory_chart.png>
 Package pdftex.def Info: images/times_and_memory_chart.png  used on input line 
-664.
+660.
 (pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 664--665
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 660--661
  [] 
+ []
+
+
+Underfull \hbox (badness 2735) in paragraph at lines 665--666
+\OT1/ptm/m/n/10 180 MB/second (av-er-aged and it in-cludes both
  []
 
 <images/seconds_per_gb_ryzen.png, id=49, 454.69875pt x 255.95625pt>
 File: images/seconds_per_gb_ryzen.png Graphic file (type png)
 <use images/seconds_per_gb_ryzen.png>
-Package pdftex.def Info: images/seconds_per_gb_ryzen.png  used on input line 67
-3.
+Package pdftex.def Info: images/seconds_per_gb_ryzen.png  used on input line 66
+8.
 (pdftex.def)             Requested size: 227.34882pt x 127.9778pt.
 
-Overfull \hbox (13.93439pt too wide) in paragraph at lines 673--674
+Overfull \hbox (13.93439pt too wide) in paragraph at lines 668--669
  [] 
  []
 
 [10 <./images/times_and_memory_chart_small_144mb_ryzen.png> <./images/times_and
 _memory_chart_small_144mb_intel.png> <./images/times_and_memory_chart.png> <./i
 mages/seconds_per_gb_ryzen.png>]
-Underfull \vbox (badness 1755) has occurred while \output is active []
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11]
+Underfull \vbox (badness 2165) has occurred while \output is active []
+
+
 Excluding 'comment' comment. (elprep-study.bbl
-Underfull \vbox (badness 1776) has occurred while \output is active []
-
-
 Underfull \hbox (badness 3078) in paragraph at lines 31--35
 []\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
  []
@@ -748,25 +753,27 @@ Underfull \hbox (badness 10000) in paragraph at lines 31--35
 \OT1/ptm/m/n/9 https://docs.oracle.com/en/java/javase/11/docs/api.
  []
 
-) [12] (elprep-study.aux) ) 
+[12]) [13
+
+] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
  4751 strings out of 492895
  68063 string characters out of 3137191
- 145580 words of memory out of 3000000
+ 146580 words of memory out of 3000000
  8549 multiletter control sequences out of 15000+200000
  55088 words of font info for 122 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,736b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Paper/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:
-/Paper/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Paper/MiKTeX 2.
-9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/pub
-lic/amsfonts/cm/cmsy10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.
-pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Paper/MiKTeX 2.9/
-fonts/type1/urw/times/utmr8a.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utm
-ri8a.pfb>
-Output written on elprep-study.pdf (12 pages, 812295 bytes).
+{C:/Paper/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Pape
+r/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Paper/MiKTeX 2.9/fon
+ts/type1/public/amsfonts/cm/cmr10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/public/a
+msfonts/cm/cmsy10.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><
+C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmb8a.pfb><C:/Paper/MiKTeX 2.9/fonts
+/type1/urw/times/utmr8a.pfb><C:/Paper/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.
+pfb>
+Output written on elprep-study.pdf (13 pages, 834460 bytes).
 PDF statistics:
- 87 PDF objects out of 1000 (max. 8388607)
+ 91 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 

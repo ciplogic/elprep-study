@@ -544,11 +544,6 @@ Here is the execution profile when the Original algorithm has plenty of memory a
 	\includegraphics[scale=0.065]{images/Visual_VM_Small_file_Original_execution_profile.png}
 \end{center}
 
-\textcolor{red}{Putem scapa si mai mult de portiunile albe?}
-
-
-
-
 
 \section{\uppercase{Experimental Results}}
 
@@ -633,17 +628,18 @@ Compact algorithms can process on a 48 GB machine larger files like the 8 GB BAM
 24 283 MB of live data and the 12 GB input is using 25 265 MB of memory.
 
 \subsection{\uppercase{Calculating performance x memory}}
-There are limits on the testing that could be done with the techniques used by this paper given the hardware differences that are between the papers: instead of a 384 GB of memory and dual-CPU server,
+There are limits on the testing that could be done with the techniques used by this paper given the hardware differences that are between the elPrep paper and this one: instead of a 384 GB of memory and dual-CPU server,
 the most powerful machine that was available was a 8 times less RAM, with half of CPU cores, a much
-slower disk drive and so on.
+slower disk drive (the SSD on the Ryzen machine can barely read at a 300 MB/s, vs elPrep paper which had
+very likely an NVMe drive, that is much faster) and so on.
 
 Another limitation is that we ported only the most expensive part of the algorithm (reading/writing and storing all in memory) and we will have a section with possible untested improvements that could be done
-to get (at least it looks reasonable that) better numbers that are obtained than here.
+to get (at least it looks reasonable that) better numbers that are obtained compared with the results that are presented here.
 
 So given that memory remains quite similar between: original algorithm, pre-buffered one and using a
 StreamByteArray custom class, the runtime savings should be observed distinctively by noticing the runtime savings.
 
-On very small files, there is a large variation between runtimes as they run in seconds.
+On very small files, there is a large variation between runtimes as they run just in seconds.
 
 The high core count (12 c) has a small slow-down running for 100 times the parallel algorithm which is reflected on the graph (lower bars are better):
 
@@ -666,14 +662,16 @@ On the medium file (1.2 GB BAM file) the times are very decisive, and they shoul
 
 Probably it is important to see if given a larger file, if the GC becomes a large impediment and up-to the 8 GB file, the algorithm seems to scale nicely and to be limited by other components, like the SATA controller speed and the disk drive itself (or maybe OS components).
 
-Both compact algorithms (Compact and Compact-Parallel) keep a steady pace of around 180 MB/second (averaged and it includes both read/write, higher bars are better):
-
+Both compact algorithms (Compact and Compact-Parallel) keep a steady pace or read/write of around 180 MB/second (averaged and it includes both read/write, higher bars are better):
 
 \begin{center}
 	\includegraphics[scale=0.5]{images/seconds_per_gb_ryzen.png}
 \end{center}
 
-
+If the running machine would include a very fast hard-disk, probably trough profiling some other component could become a slow-down (like the rate of allocation in the JVM), but very likely
+the ratio of described Compact algorithms would remain quite steady up-to the time when the JVM/OS will remain without RAM, but as the algorithms use a typically a 4-6 times memory 
+savings compared with elPrep algorithm, the limits would be reached much later. If limits like the ratio of allocation of JVM becomes the limit, few proposed techniques are described in section
+"Future work" that may address this limitation.
 
 
 \subsection{\uppercase{Overview and analysis of results}}
@@ -757,12 +755,20 @@ Marking and removing duplicates: marking can be done in parallel as filtering do
 
 \subsection{\uppercase{Conclusions}}
 
-Compact algorithms show in particular that a column-based store with heterogeneous algorithms tuned for the data type
-work especially well when processing SAM files and they should work reasonably well for many data sets with CSV like formats.
-Also, these algorithms can be parallelized and this parallelism is comparable (if not outright beating) in performance
-row-based models. What is more important though for Java in particular, is that Column-Based models do remove on every
-row the associated Java Object Headers, which translate even without heterogenous compaction into less work for GC, fewer
-objects to be collected, and so on, which should translate into smaller pauses.
+As the result of the proposed techniques, it can be shown that Java implementation in the original paper
+could be adjusted to improve (at least in our testing) the runtime performance by almost a factor of 2 but keeping the live set memory constant (or even slightly lower). 
+
+Isolating the most expensive part of the original elPrep algorithm (being reading/writing and materializing the objects) and improving the memory data set into a compact form, the memory savings and
+reduced GC show large gains (an order of magnitude of saving if are taken both memory and time into account against an optimized by us elPrep version).
+
+Memory savings were done taking into account dependent data fields which are susceptible to compaction, but it was also extracted parallelism that could be visible across the machines the algorithms were ran,
+regardless of OS and size of machine (albeit the machines would be medium to high end laptop or a medium to high end desktop) and it was still. 
+
+These techniques should work reasonably well for CSV like formats, and using for high volume data 
+should be likely limited by other components as disk drive speed.
+
+Even though the Compact algorithms do implement only reading/writing of the original elPrep, there
+should be possible to implement most of the remaining algorithms on top of this infrastructure and also there are some ideas that could be made to (likely) improve even more the performance of the "Compact" algorithms described here.
 
 
 
