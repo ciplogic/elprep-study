@@ -13,7 +13,8 @@
 \usepackage{apalike}
 \usepackage{xcolor}
 \usepackage{multirow}
-\usepackage{SCITEPRESS} % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
+\usepackage{SCITEPRESS}
+\usepackage{graphicx} % Please add other packages that you may need BEFORE the SCITEPRESS.sty package.
 
 
 \begin{document}
@@ -40,6 +41,8 @@ the authors have re-implemented elPrep in Java, Go and C++ and benchmarked their
 Overall, the Go implementation won by a good margin, considering a metric that involved both the RAM usage and the runtime performance.
 We show that, without changing the semantics of the algorithm, by using appropriate programming techniques we are able to significantly improve
 the behavior of the Java implementation, to a point that may even alter the conclusions of the original study.
+We also show, that with changing the semantics of the algorithm, especially focusing on memory consumption, we are able to improve the original
+scoring (based of a composite of compute time and memory) to around one order of magnitude better on the most expensive component (read/write).
 }
 
 \onecolumn \maketitle \normalsize \setcounter{footnote}{0} \vfill
@@ -51,41 +54,47 @@ In the field of bioinformatics, DNA sequence analysis generally consists of proc
 such as sequence alignment, variant detection, searches against biological databases, etc.
 A large variety of software tools exists for these operations, most of them having specific uses cases but with a common denominator 
 regarding the fact they need to perform processor and memory intensive tasks: 
-I/O operations on large file, compression/decompression, text processing, etc. \cite{?}
+I/O operations on large file, compression/decompression, text processing, etc.~\cite{?}
 
 Choosing a programming platform that offers all the required instruments to handle the specific challenges in bioinformatics is important, 
 as pointed out in a recent study dedicated to migrating an existing Common Lisp application, called elPrep, 
-to another platform with better support for memory management and concurrency \cite{costanza:2019}.
-ElPrep \cite{herzeel:2019} is a a multithreaded tool for preparing sequence alignment/map files (SAM/BAM)
+to another platform with better support for memory management and concurrency~\cite{costanza:2019}.
+ElPrep~\cite{herzeel:2019} is a a multithreaded tool for preparing sequence alignment/map files (SAM/BAM)
 for variant calling in DNA sequencing pipelines. 
 A key feature of elPrep is the ability to avoid the standard practice of creating a pipeline consisting of multiple command line tools invocations, 
 executing a single pass through a SAM/BAM file and keeping data as much as possible in main memory.
 %As the software executes concurrently different steps of the algorithm, it needs to process large amounts of data (hundreds of gigabytes) in an efficient way.
-In \cite{costanza:2019} the authors investigated Go, Java and C++ programming platforms, as an alternative to Common Lisp.
+In~\cite{costanza:2019} the authors investigated Go, Java and C++ programming platforms, as an alternative to Common Lisp.
 %Go and Java using a concurrent, parallel garbage collector on the one hand, and C++17 using reference counting on the other hand for handling
 Te result of their study concluded that the Go implementation performed best, using a metric that involved both the RAM usage and the runtime performance.
 The benchmarks of the study showed that Java had a faster runtime, but a significantly higher memory usage, while Go offered a better balance between the two.
 
-As the Java source code for elPrep is available at {\tt https://github.com/exascience/elprep-bench}, we have analyzed key aspects regarding the memory management and
+As the Java source code for elPrep is available at {\texttt{https://github.com/exascience/elprep-bench} }, we have analyzed key aspects regarding the memory management and
 thread synchronization, and propose a series of improvements that could increase significantly the performance of the Java implementation. 
 %benefit other studies of this kind.
 
 
-\section{\uppercase{Background}}
+\section{\uppercase{Background}}\label{sec:uppercase5}
 
-\subsection{\uppercase{Garbage Collection}}
+\subsection{\uppercase{Garbage Collection}}\label{subsec:uppercase14}
 
 In order to analyze the behavior of memory intensive applications,
 %especially those based on frequent allocation and deallocation, 
-it is important to understand how garbage collection works and especially how Java \cite{java} implements its garbage collectors.
+it is important to understand how garbage collection works and especially how Java~\cite{java} implements its garbage collectors.
 
-The Java Virtual Machine (JVM) \cite{lindholm:2014} offers an automatic storage management system, called {\it garbage collector (GC)} which reclaims heap storage occupied by objects which are no longer used.
-The garbage collection process \cite{gc:oracle} works typically by splitting the heap into two regions: a {\it young generation} region and an {\it old generation}.
-All new objects are allocated in the young region, in a very fast manner, using typically a "bump-pointer" strategy. When this region becomes full  a {\it minor} garbage collection occurs and all dead objects are deleted very quickly. The objects which are still referenced survive and they  are moved to the old generation. This minor collection is always a "stop the world" event, meaning that all of the application threads will be paused until the GC is finished. 
-In the old generation, objects are expected to live longer and they are collected more seldom but with a more expensive algorithm, called {\it major} garbage collection.
+The Java Virtual Machine (JVM)~\cite{lindholm:2014} offers an automatic storage management system, called {\textit{garbage collector}  (GC)} which reclaims heap storage occupied by objects which are no longer used.
+The garbage collection process~\cite{gc:oracle} works typically by splitting the heap into two regions: a {\textit{young generation} } region and an {\textit{old generation} }.
+All new objects are allocated in the young region, in a very fast manner, using typically a "bump-pointer" strategy.
+When this region becomes full  a {\textit{minor} } garbage collection occurs and all dead objects are deleted very quickly.
+The objects which are still referenced survive and they  are moved to the old generation.
+This minor collection is always a "stop the world" event, meaning that all of the application threads will be paused until the GC is finished.
+In the old generation, objects are expected to live longer and they are collected more seldom but with a more expensive algorithm, called {\textit{major} } garbage collection.
 
-The algorithm used by GC has two steps. The first one is to {\it mark} the objects that are still used from the heap. In the second step, it {\it sweeps (deletes)} the objects which have not been marked (dead), leaving only referenced objects and pointers to free space. 
-%To further improve performance, in addition to deleting unreferenced objects, you can also compact the remaining referenced objects. By moving referenced object together, this makes new memory allocation much easier and faster.
+The algorithm used by GC has two steps.
+The first one is to {\textit{mark} } the objects that are still used from the heap.
+In the second step, it {\textit{sweeps}  (deletes)} the objects which have not been marked (dead), leaving only referenced objects and pointers to free space.
+%To further improve performance, in addition to deleting unreferenced objects, you can also compact the remaining referenced objects.
+By moving referenced object together, this makes new memory allocation much easier and faster.
 Therefore, the speed of GC depends on two factors: the number of objects it has to analyze and the complexity of the relationships between them. %collecting graph
 
 Considering the behavior we have described so far, we will analyze the impact of some simple tweaks
@@ -93,16 +102,22 @@ meant to reduce the impact of GC over the application performance, such as:
 reducing the unnecessary small allocations in young region, controlling the scope in which objects are referenced in order to minimize the number of times when expensive collection of old region is triggered, simplifying the object graph and controlling the amount of memory JVM is allowed to use.
 
 
-\subsection{\uppercase{Threads, Locks and the File System}}
+\subsection{\uppercase{Threads, Locks and the File System}}\label{subsec:uppercase13}
 
-Java platform supports concurrent programming by using threads \cite{gosling:2014}.
-Multiple threads can execute at the same time, taking advantage of computing units that have more than one processor and of processors that have more than one core. Threads performing operations that are not atomic will interleave when they access shared data.
-A {\it synchronized} statement acquires a mutual-exclusion lock when entering a critical section, executes the block that references the shared data, then releases the lock.
+Java platform supports concurrent programming by using threads~\cite{gosling:2014}.
+Multiple threads can execute at the same time, taking advantage of computing units that have more than one processor and of processors that have more than one core.
+Threads performing operations that are not atomic will interleave when they access shared data.
+A {\textit{synchronized} } statement acquires a mutual-exclusion lock when entering a critical section, executes the block that references the shared data, then releases the lock.
 While one thread owns the lock for that data, no other thread may access it. 
-The proper use of this mechanism is crucial for the concurrent implementation of an algorithm. If threads are waiting to much on locked resources, the overall performance of the application will suffer.
+The proper use of this mechanism is crucial for the concurrent implementation of an algorithm.
+If threads are waiting to much on locked resources, the overall performance of the application will suffer.
 
 In our case study, multiple threads are performing operations on the file system, reading and writing large amounts of strings from and into text files.
-Regardless of the operating system and programming language, the underlying hardware is optimized to work with streams of bytes. In an atomic operation, data is read into a buffer of bytes, in a contiguous manner. Similarly, data is written into a buffer of bytes that is flushed afterwards to the file. Both these operations are single threaded by design and historical reasons, so Java libraries have locks to make the access to streams single-threaded. A \texttt{write} method usually looks like this:
+Regardless of the operating system and programming language, the underlying hardware is optimized to work with streams of bytes.
+In an atomic operation, data is read into a buffer of bytes, in a contiguous manner.
+Similarly, data is written into a buffer of bytes that is flushed afterwards to the file.
+Both these operations are single threaded by design and historical reasons, so Java libraries have locks to make the access to streams single-threaded.
+A \texttt{write} method usually looks like this:
 \begin{small}
 \begin{verbatim}
 public void write(String s, int off, int len){
@@ -140,29 +155,36 @@ We will show that creating a large number of short lived strings and writing the
 %The main take away is that the updated code can write directly to underlying buffer and it can be made quite fast and it will need basically no allocation, as it will be shown.
 
 
-\subsection{\uppercase{Memory Usage}}
+\subsection{\uppercase{Memory Usage}}\label{subsec:uppercase12}
 
-The Java Virtual Machine allocates memory either on stack or on heap \cite{lindholm:2014}. 
-The {\it heap} is the place where all class instances and arrays are allocated and it is shared among all threads. Each JVM thread has a private {\it stack} which holds local variables and partial results  during successive method invocations and returns. 
+The Java Virtual Machine allocates memory either on stack or on heap~\cite{lindholm:2014}.
+
+The {\textit{heap} } is the place where all class instances and arrays are allocated and it is shared among all threads.
+Each JVM thread has a private {\textit{stack} } which holds local variables and partial results  during successive method invocations and returns.
 %The JVM might do escape analysis and decide to allocate objects directly on the stack, which means cleaning them up when the method ends is free.
-When working with large amounts of objects, it is quite important to assess the memory consumption of a data structure, in similar way as the {\it sizeof} construct in C or C++.
+When working with large amounts of objects, it is quite important to assess the memory consumption of a data structure, in similar way as the {\textit{sizeof} } construct in C or C++.
 %JVMs may move some heap allocations to stack allocations, but this would not matter if we allocate long running objects and as we talked in section about GC, the GC will have also some pre-allocated memory to do future expected allocations.
-An object allocated on the heap has a {\it header} which contains information used for locking, garbage collection or the identity of that object. The size of the header depends on the operating system, and it may be 8 bytes on 32 bit architectures or 16 bytes on 64 bit architectures. 
-Also, for performance reasons and in order to conform with most of the hardware architectures, JVM will {\it align} data.
+An object allocated on the heap has a {\textit{header} } which contains information used for locking, garbage collection or the identity of that object.
+The size of the header depends on the operating system, and it may be 8 bytes on 32 bit architectures or 16 bytes on 64 bit architectures.
+Also, for performance reasons and in order to conform with most of the hardware architectures, JVM will {\textit{align} } data.
 That means that if we have an object that wraps just one byte, it will not use: $8 \text{(object header)} + 1 \text{(content)} = 9 $ bytes of memory on the heap, but it will use $16$ bytes as it needs to be aligned to the next $8$ byte boundary.
 %A technical brief description made by a JVM engineer describes why and how was it done: https://shipilev.net/jvm/anatomy-quarks/24-object-alignment/
 
-In Java, strings are objects and they are allocated on the heap. That fact that string literals are stored in a shared object pool, in order to reduce memory consumption, is of no relevance in our context.
+In Java, strings are objects and they are allocated on the heap.
+That fact that string literals are stored in a shared object pool, in order to reduce memory consumption, is of no relevance in our context.
 Inspecting the source code of the \texttt{String} class, one can observe the following instance fields:
 \begin{small}
 \begin{verbatim}
 private final byte[] value;
 private final byte coder;
-private int hash; // Default to 0
+private int hash;
+// Defaults to 0
 \end{verbatim}
 \end{small}
 
-As expected, a \texttt{String} object keeps a reference to an internal byte array. However, the other two fields will make the size of the object equal to: $8$ (header) $+$ $4$ \texttt{value} reference $+$ $1$  \texttt{coder} value $+$ $4$ \texttt{hash} value $= 17$ bytes. Being aligned to $8$ bytes, it will actually use $24$ bytes.
+As expected, a \texttt{String} object keeps a reference to an internal byte array.
+However, the other two fields will make the size of the object equal to: $8$ (header) $+$ $4$ \texttt{value} reference $+$ $1$  \texttt{coder} value $+$ $4$ \texttt{hash} value $= 17$ bytes.
+Being aligned to $8$ bytes, it will actually use $24$ bytes.
 When creating many \texttt{String} instances (like millions of them, as in our case study), the extra information included in this class will add up, consuming memory and  triggering the garbage collector more often than necessary. 
 
 We will show that replacing the \texttt{String} usage to the underlying \texttt{value} byte array will improve the performance of the application, and this approach should be implemented in every scenario that involves processing large amounts of text data.
@@ -170,31 +192,35 @@ We will show that replacing the \texttt{String} usage to the underlying \texttt{
 
 
 
-\subsection{\uppercase{Memory Compactation}}
-Another important part of working with large data sets that have to be accessible in memory regards the format in which they are represented. Choosing the right format will not only reduce the amount of consumed memory but it will also reduce the GC cost to copy the objects between regions and the cost of visiting and marking them.
+\subsection{\uppercase{Memory Compaction}}\label{subsec:uppercase}
+Another important part of working with large data sets that have to be accessible in memory regards the format in which they are represented.
+Choosing the right format will not only reduce the amount of consumed memory but it will also reduce the GC cost to copy the objects between regions and the cost of visiting and marking them.
 
-The most common approach of representing information is in row based form, where a {\it row} is a record of some kind and a {\it column} is a certain property of that row. This type of representation is used in most relational databases management systems, where sets of rows of the same type form {\it tables}.
+The most common approach of representing information is in row based form, where a {\textit{row} } is a record of some kind and a {\textit{column} } is a certain property of that row.
+This type of representation is used in most relational databases management systems, where sets of rows of the same type form {\textit{tables} }.
 Despite having many advantages, this format is not necessarily optimum when it comes to data representation in memory.
 
-A {\it column store} model \cite{abadi:2013} "reverses" the orientation of the tables. It stores data by columns and uses row identifiers in order to access a specific cell of the table. 
+A {\textit{column store} } model~\cite{abadi:2013} "reverses" the orientation of the tables.
+It stores data by columns and uses row identifiers in order to access a specific cell of the table.
 By storing each column separately, query performance is increased in certain contexts as they are able to read only the required attributes, rather than having to read entire rows from disk and discard unneeded attributes once they are in memory.
-Another benefit is that column stores are very efficient at data compression, since representing information of the same type inside of a column helps the {\it data alignment} process that we have previously mentioned.
+Another benefit is that column stores are very efficient at data compression, since representing information of the same type inside of a column helps the {\textit{data alignment} } process that we have previously mentioned.
 
-Let's consider a simple example, using the class {\tt Point}, defined as a pair of two integer fields {\tt x} and {\tt y}.
-The basic idea is that instead of having a row-based model consisting of an array {\tt Point[]} of instances (each {\tt Point} object is a row and its members {\tt x} and {\tt y} are the columns), to use two arrays of integers {\tt x[]} and {\tt y[]}, representing the two columns. 
+Let's consider a simple example, using the class {\texttt{Point} }, defined as a pair of two integer fields {\texttt{x} } and {\texttt{y} }.
+The basic idea is that instead of having a row-based model consisting of an array {\texttt{Point} []} of instances (each {\texttt{Point} } object is a row and its members {\texttt{x} } and {\texttt{y} } are the columns), to use two arrays of integers {\texttt{x} []} and {\texttt{y} []}, representing the two columns.
 %and one integer index for each {\tt Point}.
-This way we can store the same data, minus the object headers corresponding to all the {\tt Point} instances. Not only the memory consumption will be lower (so the GC will be triggered less often), but the structure will also take shorter time to visit, since there are only two objects now (the two arrays).
+This way we can store the same data, minus the object headers corresponding to all the {\texttt{Point} } instances.
+Not only the memory consumption will be lower (so the GC will be triggered less often), but the structure will also take shorter time to visit, since there are only two objects now (the two arrays).
 
 Though a column store is a very good solution for size reduction, it has the downside of requiring more computational effort in order to work with multiple properties of the same object.
 However, when saving memory is the major concern, and especially when it comes to hundreds of GB per instance, the execution slowdown becomes far less important if we can achieve significant reductions in consumed memory.
 
 
 
-\section{\uppercase{Representing the Data Store}}
+\section{\uppercase{Representing the Data Store}}\label{sec:uppercase4}
 
-\subsection{\uppercase{The Row-Based Model}}
+\subsection{\uppercase{The Row-Based Model}}\label{subsec:uppercase11}
 
-The data structure which is used in original ElPrep algorithm is represented by the class {\tt SamAlignment}, an object of this type storing one row of a SAM file.
+The data structure which is used in original ElPrep algorithm is represented by the class {\texttt{SamAlignment} }, an object of this type storing one row of a SAM file.
 The class contains the following declaration of instance variables:
 
 \begin{small}
@@ -215,29 +241,32 @@ public List<Field> temps = new ArrayList<>(4);
 \end{verbatim}
 \end{small}
 
-For a small BAM file of 144 MB there will be created around $2.1$ million {\tt SamAlignment} instances and for a $1.27$ GB BAM file there will be created around $17.6$ million objects.
+For a small BAM file of 144 MB there will be created around $2.1$ million {\texttt{SamAlignment} } instances and for a $1.27$ GB BAM file there will be created around $17.6$ million objects.
 
-For simplicity, let's disregard {\tt TAGS} and {\tt temps} fields (which can have different lengths) as it makes the calculation simpler and analyze the memory consumption in both cases.
+For simplicity, let's disregard {\texttt{TAGS} } and {\texttt{temps} } fields (which can have different lengths) as it makes the calculation simpler and analyze the memory consumption in both cases.
 We suppose also that the JVM uses 32 bits for representing an object header.
 
-One {\tt SamAlignment} object contains:
-8 bytes object header, 6 instances of {\tt Slice} objects ({\tt QNAME}, {\tt RNAME}, {\tt CIGAR}, {\tt RNEXT}, {\tt SEQ}, {\tt QUAL}) of 4 bytes each, 3 integer fields ({\tt POS}, {\tt PNEXT}, {\tt TLEN}) of 4 bytes each, 1 character ({\tt FLAG}) of 2 bytes, and an additional byte ({\tt MAPQ}).
+One {\texttt{SamAlignment} } object contains:
+8 bytes object header, 6 instances of {\texttt{Slice} } objects ({\texttt{QNAME} }, {\texttt{RNAME} }, {\texttt{CIGAR} }, {\texttt{RNEXT} }, {\texttt{SEQ} }, {\texttt{QUAL} }) of 4 bytes each, 3 integer fields ({\texttt{POS} }, {\texttt{PNEXT} }, {\texttt{TLEN} }) of 4 bytes each, 1 character ({\texttt{FLAG} }) of 2 bytes, and an additional byte ({\texttt{MAPQ} }).
 So, the total size of the object is: $8 + 6 * 4 + 3*4  + 1 * 2+ 1 * 1 = 47$ bytes, and as it is rounded up to a multiple of $8$, the result is $48$ bytes.
 %For a 64 bit JVM without compressed OPS, the comsumption is of only SAMAlignment instances is: 12 + 6*8+3*4+1*2+1*1 = 75 and as it is 8 bytes rounded up, the consumption is 80 bytes
 
-In order to save memory, the string representing a row scanned from the original file is shared between multiple objects. All $6$ {\tt Slice} instances contain a reference to the  underlying string and two integers pointing to the start index and length. So, a {\tt Slice} instance uses: $8$ (object header) $+4$ (reference to the string) $ + 4 + 4 = 20$ bytes, being rounded to $24$.
+In order to save memory, the string representing a row scanned from the original file is shared between multiple objects.
+All $6$ {\texttt{Slice} } instances contain a reference to the  underlying string and two integers pointing to the start index and length.
+So, a {\texttt{Slice} } instance uses: $8$ (object header) $+4$ (reference to the string) $ + 4 + 4 = 20$ bytes, being rounded to $24$.
 
 %For 64 bit references:
 %(12 (object header) + 8 (reference to string) + 4 + 4) = 28 bytes and 32 is the final usage
 
-As {\tt Slice} instances point to a {\tt String} object, the {\tt String} itself adds another $24$ bytes, as we have already seen, and the byte array object referenced from the {\tt String} adds another $24$ bytes (not counting its content size).
+As {\texttt{Slice} } instances point to a {\texttt{String} } object, the {\texttt{String} } itself adds another $24$ bytes, as we have already seen, and the byte array object referenced from the {\texttt{String} } adds another $24$ bytes (not counting its content size).
 
 
-Adding all these numbers up, we conclude that for representing a {\tt SamAlignment} object, the JVM needs: $48$ (the object itself) $+ 6*24$ (Slice) $ + 24 + 24 = 240$ bytes.
+Adding all these numbers up, we conclude that for representing a {\texttt{SamAlignment} } object, the JVM needs: $48$ (the object itself) $+ 6*24$ (Slice) $ + 24 + 24 = 240$ bytes.
 
 For a $144$ MB file there are $2.1$ million entries, so the memory requirement for storing the graph of objects and the integer fields is approximately $504,000,000$ bytes, which equals to more than $480$ MB (not counting the $144$ MB of content in byte array).
 
-For the $1.27$ GB BAM file, the numbers are much larger as there are a $17.6$ million rows. The total is $4,224,000,000$ bytes, representing almost $4$ GB.
+For the $1.27$ GB BAM file, the numbers are much larger as there are a $17.6$ million rows.
+The total is $4,224,000,000$ bytes, representing almost $4$ GB\@.
 
 %On a 64 bit JVM numbers grow as follows:
 %80 + 6*32 + 24 + 24 = 320
@@ -245,10 +274,12 @@ For the $1.27$ GB BAM file, the numbers are much larger as there are a $17.6$ mi
 %And for 17.6 million entries the size is: 5,632,000,000
 
 At the point when GC executes, there are $9$ objects per row 
-({\tt SamAlignment} $+ 6$ {\tt Slice} $+ 1$ {\tt String} $+ 1$ byte array) on heap.
+({\texttt{SamAlignment} } $+ 6$ {\texttt{Slice} } $+ 1$ {\texttt{String} } $+ 1$ byte array) on heap.
 
 \textcolor{red}{
-The ElPrep algorithm will duplicate all the {\tt SamAlignment}s once, as it looks for duplicate objects, so the required memory will double. On top of it, there are the underlying strings which keep the data. For $2.1$ million entries the grand total is around $700,000,000$ bytes, and $6,050,000,000$ bytes for the $1$ GB entry.
+The ElPrep algorithm will duplicate all the {\texttt{SamAlignment} }s once, as it looks for duplicate objects, so the required memory will double.
+On top of it, there are the underlying strings which keep the data.
+For $2.1$ million entries the grand total is around $700,000,000$ bytes, and $6,050,000,000$ bytes for the $1$ GB entry.
 }
 
 
@@ -256,10 +287,10 @@ The ElPrep algorithm will duplicate all the {\tt SamAlignment}s once, as it look
 \subsection{\uppercase{The Column-Based Model}} \label{model:column}
 
 Let us analyze how much memory can be saved by switching to a column-based approach.
-We have defined the following data structures: {\tt StringSequence} for representing in a compact manner a collection of strings, {\tt DeduplicatedDictionary} for eliminating duplicate copies of repeating strings, {\tt DnaEncodingSequence} for storing {\tt A,C,G,T,N} sequences using an encoding of $21$ letters per {\tt long} and {\tt TagSequence} for representing tags encoded in an array of {\tt short} values.
-We have also used the classes {\tt CharArrayList}, {\tt IntArrayList} and {\tt ByteArrayList} from FastUtil library \cite{fastutil}, which offers implementations with a small memory footprint and fast access and insertion.
+We have defined the following data structures: {\texttt{StringSequence} } for representing in a compact manner a collection of strings, {\texttt{DeduplicatedDictionary} } for eliminating duplicate copies of repeating strings, {\texttt{DnaEncodingSequence} } for storing {\texttt{A,C,G,T,N} } sequences using an encoding of $21$ letters per {\texttt{long} } and {\texttt{TagSequence} } for representing tags encoded in an array of {\texttt{short} } values.
+We have also used the classes {\texttt{CharArrayList} }, {\texttt{IntArrayList} } and {\texttt{ByteArrayList} } from FastUtil library~\cite{fastutil}, which offers implementations with a small memory footprint and fast access and insertion.
 
-The new definition of the data store is described by the class {\tt SamBatch}, containing the following members:
+The new definition of the data store is described by the class {\texttt{SamBatch} }, containing the following members:
 \begin{small}
 \begin{verbatim}
 StringSequence QNAME;
@@ -277,95 +308,101 @@ StringSequence QUAL;
 \end{verbatim}
 \end{small}
 
-So, instead of having a large number of {\tt SamAlignment} instances, we will have a single object of type {\tt SamBatch} which contains references to the "columns", i.e. our data structures holding all the information of a specific type.
+So, instead of having a large number of {\texttt{SamAlignment} } instances, we will have a single object of type {\texttt{SamBatch} } which contains references to the "columns", i.e. our data structures holding all the information of a specific type.
 
 
 Regardless of VM bitness, the memory consumption for representing one row of the input file is: 
 \begin{center}
 \begin{tabular}{ l l l }
- {\bf Data Type} 				& {\bf Count} 		& {\bf Bytes} \\ 
- {\tt StringSequence} 			& $2$ 				& $4$ \\ 
- {\tt DeduplicatedDictionary}	& $3$ 				& $4$ \\  
- {\tt IntArraySequence}			& $3$		 		& $4$ \\  
- {\tt CharArraySequence}		& $1$				& $2$ \\  
- {\tt ByteArrayList}			& $1$				& $1$ \\  
- {\tt DnaEncodingSequence}	 	& $1$ 				& $4$ \\
- 								& {\bf Total}		& $\mathbf{39}$
+ {\textbf{Data Type} } 				& {\textbf{Count} } 		& {\textbf{Bytes} } \\
+ {\texttt{StringSequence} } 			& $2$ 				& $4$ \\
+ {\texttt{DeduplicatedDictionary} }	& $3$ 				& $4$ \\
+ {\texttt{IntArraySequence} }			& $3$		 		& $4$ \\
+ {\texttt{CharArraySequence} }		& $1$				& $2$ \\
+ {\texttt{ByteArrayList} }			& $1$				& $1$ \\
+ {\texttt{DnaEncodingSequence} }	 	& $1$ 				& $4$ \\
+ 								& {\textbf{Total} }		& $\mathbf{39}$
 \end{tabular}
 \end{center}
 
 Considering that no rounding up is necessary, for $2.1$ million rows this sums up to $81,900,000$ bytes,
 equivalent to $78$ MB. The header sizes of the column objects ($11*8$ bytes) become negligible in this context.
-\\ \textcolor{red}{{\it of just 60 MB of indices and after that we have the joined data.}}
+\\ \textcolor{red}{{\textit{of just 60 MB of indices and after that we have the joined data.} }}
 
 As this is a major reduction in memory consumption, let us analyze the technique used to achieve this result.
 
-The basic idea is that instead of storing an array of {\tt String} objects, for example:
+The basic idea is that instead of storing an array of {\texttt{String} } objects, for example:
 \begin{verbatim}
 String items[] = { "abc", "def" };
 \end{verbatim}
 each consuming memory due to their headers, we can use 
-a single object of type {\tt String}, storing all the characters, and an additional array for their lengths.
+a single object of type {\texttt{String} }, storing all the characters, and an additional array for their lengths.
 \begin{verbatim}
 String dataPool = "abcdef";
 int[] endLengths = {3, 6};
 \end{verbatim}
 
-For such a small array, the save is minor, but for a large number of items (millions), the memory reduction becomes significant. Even more important, the GC work is also reduced, since no matter how many items are in the {\tt dataPool} and {\tt endLengths} fields, there are only two objects to visit.
-The technique described above was implemented in the class {\tt StringSequence}.
+For such a small array, the save is minor, but for a large number of items (millions), the memory reduction becomes significant.
+Even more important, the GC work is also reduced, since no matter how many items are in the {\texttt{dataPool} } and {\texttt{endLengths} } fields, there are only two objects to visit.
+The technique described above was implemented in the class {\texttt{StringSequence} }.
 
 If the strings that are to be stored are repeated frequently, we can apply another optimization:
 instead of keeping them joined, we will use an indexed collection containing all the distinct strings and an array holding one index for each string.
-For example, {\tt \{"abc", "def", "abc", "xyz", "abc"\} } becomes: 
+For example, {\texttt{\{} "abc", "def", "abc", "xyz", "abc"\} } becomes:
 \begin{verbatim}
 table   : {abc=>0, def=>1, xyz=>2}
 items   : [0, 1, 0, 2, 0]
 \end{verbatim}
-The {\tt table} structure is based on the class {\tt Object2IntOpenHashMap<String>} from FastUtil library, instead of the standard {\tt HashMap<Integer, String>}, since it uses the primitive data type {\tt int} for representing the keys, which also saves some memory.
-This data deduplication technique \cite{he:2010}, \cite{manogar:2014} was implemented in the class {\tt DeduplicatedDictionary}.
+The {\texttt{table} } structure is based on the class {\texttt{Object2IntOpenHashMap<String>} } from FastUtil library, instead of the standard {\texttt{HashMap<Integer, String>} }, since it uses the primitive data type {\texttt{int} } for representing the keys, which also saves some memory.
+This data deduplication technique~\cite{he:2010},~\cite{manogar:2014} was implemented in the class {\texttt{DeduplicatedDictionary} }.
 
-When storing strings containing characters from a restricted alphabet, one optimization that can be performed is using an array of primitive values, for example a {\tt long[]}, and encoding each character into a block of bits. The number of bits required for a character depends on the size of the alphabet.
-DNA sequences use four letters {\tt A,C,G,T}, but it is possible for a machine to read incorrectly a symbol and to return {\tt N}. In order to represent $5$ possible characters we need at least $3$ bits,
-which means that a {\tt long} can store in its $64$ bits $21$ DNA letters. 
-The class {\tt DnaEncodingSequence} which implements this string encoding technique contains the following members:
+When storing strings containing characters from a restricted alphabet, one optimization that can be performed is using an array of primitive values, for example a {\texttt{long} []}, and encoding each character into a block of bits.
+The number of bits required for a character depends on the size of the alphabet.
+DNA sequences use four letters {\texttt{A,C,G,T} }, but it is possible for a machine to read incorrectly a symbol and to return {\texttt{N} }.
+In order to represent $5$ possible characters we need at least $3$ bits,
+which means that a {\texttt{long} } can store in its $64$ bits $21$ DNA letters.
+The class {\texttt{DnaEncodingSequence} } which implements this string encoding technique contains the following members:
 \begin{verbatim}
   LongArrayList content;
   ShortArrayList lengths;      
   IntArrayList positions;     
 \end{verbatim}
 For example, encoding the $21$ letters string "AAAACCCCGGGGTTTTNNNNA" would produce a single long value, containing the bits:\\
-{\tt
-00001001001001000110110110110100
-10010010001001001001000000000000
+{\texttt{00001001001001000110110110110100
+10010010001001001001000000000000}
+
 }
 
 From right to left, $000$ represents A, $001$ represents C, and so on.
 
-In the sample files, one DNA sequence is typically around $100$ letters, so the memory needed in order to represent it would be $1$ {\tt int} (encoding length) and $5$ {\tt long}s (the content), that is $44$ bytes. This reduces the memory consumption by a factor of two.
+In the sample files, one DNA sequence is typically around $100$ letters, so the memory needed in order to represent it would be $1$ {\texttt{int} } (encoding length) and $5$ {\texttt{long} }s (the content), that is $44$ bytes.
+This reduces the memory consumption by a factor of two.
 
-Another advantage of using such an encoding is that when checking if two sequences are exactly the same, we can compare first their lengths and, if they are equal, comparing {\tt long} values means comparing $21$ characters at once.
+Another advantage of using such an encoding is that when checking if two sequences are exactly the same, we can compare first their lengths and, if they are equal, comparing {\texttt{long} } values means comparing $21$ characters at once.
 As before, the GC will also benefit from the reduced number of objects that must be visited.
 
 
 
 
 Running the smaller input file (144 MB), we have estimated that the original ElPrep algorithm would use around three times more memory than the size of the input SAM file.
-However, when trying to process the larger input file (1.2 GB), on a 32 GB machine, we have obtained an {\tt OutOfMemoryError}, meaning that the penalty of using too many objects in order to represent the information was preventing us in loading the entire data set into memory.
+However, when trying to process the larger input file (1.2 GB), on a 32 GB machine, we have obtained an {\texttt{OutOfMemoryError} }, meaning that the penalty of using too many objects in order to represent the information was preventing us in loading the entire data set into memory.
 \\ \textcolor{red}{JVM using how much memory?}
 
 1 GB input:
-Original algorithm: 32 024 799 640 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk. This is the lowest maximum memory consumption for 1.2 GB BAM file
+Original algorithm: 32 024 799 640 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk.
+This is the lowest maximum memory consumption for 1.2 GB BAM file
 Optimized algo: 31 463 351 904
 Compact algo: 4 703 674 464 bytes	
 Live data memory usage: 6.8x less.
 144 MB input:
-Original algorithm: 2 234 575 120 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk. This is the lowest maximum memory consumption for 1.2 GB BAM file
+Original algorithm: 2 234 575 120 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk.
+This is the lowest maximum memory consumption for 1.2 GB BAM file
 Optimized algo: 2 273 444 096
 Compact algo: 607 589 728 bytes	
 Live data memory usage: 3.67x less.
-8 GB input: 20 334 009 424 B.
+8 GB input: 20 334 009 424 B\@.
 Obviously we had a too small machine to process a live data set that is using as minimum 3
-12 GB input: 35 401 115 712 B.
+12 GB input: 35 401 115 712 B\@.
 
 Time is 300 seconds (on 8core machine) as the machine touches Swap file, but being able to process 12 GB BAM file on a 48 GB machine is a feature in itself.
 
@@ -377,22 +414,24 @@ As the string data was estimated to at most $3$ GB, in $4.4$ GB we have stored b
 }
 
 \textcolor{red}{
-Duplicating all this (as elPrep does it) will make the entire live set go to $9$ GB, which is still around half of the original live set (what is the size of the original live set? definition of "the live set".
+Duplicating all this (as elPrep does it) will make the entire live set go to $9$ GB, which is still around half of the original live set (what is the size of the original live set?
+definition of "the live set".
 }
 
 On top of this, there is the cost of tags.
-In the original implementation, every {\tt SamAlignment} object has references to {\tt temps} and {\tt TAGS} arrays. These arrays have an initial size of $16$, respectively $4$, and contain references to {\tt Field} objects, which in turn contain a reference to a {\tt Slice} object.
+In the original implementation, every {\texttt{SamAlignment} } object has references to {\texttt{temps} } and {\texttt{TAGS} } arrays.
+These arrays have an initial size of $16$, respectively $4$, and contain references to {\texttt{Field} } objects, which in turn contain a reference to a {\texttt{Slice} } object.
 Using the row-based model, for every row the memory consumption is:
-\textcolor{red}{20 references * 4 bytes + 2 * 64 (an empty {\tt ArrayList} costs 64 bytes)$= 256 + 80$ bytes.}
-The memory usage for tags/temps is 5.9 GB. 
+\textcolor{red}{20 references * 4 bytes + 2 * 64 (an empty {\texttt{ArrayList} } costs 64 bytes)$= 256 + 80$ bytes.}
+The memory usage for tags/temps is 5.9 GB\@.
 \textcolor{red}{Tags only will be 80\% of usage = 4.2 GB}
 
-In order to address {\tt temps} and {\tt TAGS} we have implemented the {\tt TagSequence} class, which is a combination between {\tt StringSequence} and {\tt DeduplicatedDictionary}.
-Since the {\tt tags} are repeating frequently, we save them using one {\tt short} value per tag, but instead of using a list of tags, we define a sequence of indices.
+In order to address {\texttt{temps} } and {\texttt{TAGS} } we have implemented the {\texttt{TagSequence} } class, which is a combination between {\texttt{StringSequence} } and {\texttt{DeduplicatedDictionary} }.
+Since the {\texttt{tags} } are repeating frequently, we save them using one {\texttt{short} } value per tag, but instead of using a list of tags, we define a sequence of indices.
 
 TagSequence does memory compaction by using a mix of short per-tag encoding and a full sequence of tags is joined together.
 
-For example, for the input {\tt "tag0 tag1 tag2", "tag1 tag2 tag3"}, the representation would be:
+For example, for the input {\texttt{"tag0 tag1 tag2", "tag1 tag2 tag3"} }, the representation would be:
 \begin{verbatim}
 table = {"tag0":0, "tag1":1, 
          "tag2":2, "tag3":3},
@@ -410,27 +449,29 @@ Total number of tags: approx 200000 (10 tags per row on average)
 }
 
 
-
-
-
-\section{\uppercase{Optimizing I/O Operations}}
+\section{\uppercase{Optimizing I/O Operations}}\label{sec:uppercase3}
 
 The first and most simple technique that could improve performance when working with large files
-is I/O {\tt buffering} \cite{oaks:2014}. Invoking a Java {\it read} method, for example, will eventually trigger an invocation of the operating system method responsible with reading data from the disk.
-Although most operating systems use I/O buffering by default, an invocation of a method outside JVM is nevertheless expensive. Another reason to minimize the number of I/O operations is that, for each one of them, temporary objects needed to store the data must be created, meaning that GC will have more work to do when recovering the memory.
+is I/O {\texttt{buffering} }~\cite{oaks:2014}.
+Invoking a Java {\textit{read} } method, for example, will eventually trigger an invocation of the operating system method responsible with reading data from the disk.
+Although most operating systems use I/O buffering by default, an invocation of a method outside JVM is nevertheless expensive.
+Another reason to minimize the number of I/O operations is that, for each one of them, temporary objects needed to store the data must be created, meaning that GC will have more work to do when recovering the memory.
 
-The original code that we are analyzing uses correctly the {\tt BufferedReader}, respectively the {\tt BufferedWriter} classes in order to perform I/O operations on the SAM file.
-Checking the definition of the {\tt BufferedReader} class we notice that the default buffer size is set to $8192$ characters, which is reasonable for most scenarios. The {\it read} operation is implemented in a concurrent fashion, using Java parallel streams:
+The original code that we are analyzing uses correctly the {\texttt{BufferedReader} }, respectively the {\texttt{BufferedWriter} } classes in order to perform I/O operations on the SAM file.
+Checking the definition of the {\texttt{BufferedReader} } class we notice that the default buffer size is set to $8192$ characters, which is reasonable for most scenarios.
+The {\textit{read} } operation is implemented in a concurrent fashion, using Java parallel streams:
 \begin{verbatim}
 var alnStream = inputStream.parallel()
   .map((s) -> new SamAlignment(s));
 \end{verbatim}
-In this context, for larger files (as in our case), and in the presence of multiple cores, increasing the size of the character buffer may offer a better performance, estimated by our experiments at around $5\%$. \textcolor{red}{Este corect? Pe laptop-ul meu nu obtin nicio imbunatatire}
+In this context, for larger files (as in our case), and in the presence of multiple cores, increasing the size of the character buffer may offer a better performance, estimated by our experiments at around $5\%$. \textcolor{red}{Este corect?
+Pe laptop-ul meu nu obtin nicio imbunatatire}
 
-The same simple optimization can be made for writing, by presizing the {\tt BufferedWriter} object to a more suitable value than the default one.
+The same simple optimization can be made for writing, by presizing the {\texttt{BufferedWriter} } object to a more suitable value than the default one.
 
-When it comes to writing, we notice another possible improvements. The following code sequence iterates through the {\tt SamAlignment} objects found in the input stream and, for each one of them, it creates a string representation containing the fields of the  {\tt SamAlignment} class and tabs as separators.
-This is implemented using a {\tt StringWriter}, which is a character stream collecting its output in a memory buffer.
+When it comes to writing, we notice another possible improvements.
+The following code sequence iterates through the {\texttt{SamAlignment} } objects found in the input stream and, for each one of them, it creates a string representation containing the fields of the  {\texttt{SamAlignment} } class and tabs as separators.
+This is implemented using a {\texttt{StringWriter} }, which is a character stream collecting its output in a memory buffer.
 \begin{verbatim}
 var outputStream = 
  alnStream.parallel().map((aln) -> {
@@ -442,14 +483,19 @@ var outputStream =
 });
 \end{verbatim}
 
-The initial size of the {\tt StringWriter} internal buffer is by default $16$ characters. A line in the output file is more than $200$ characters. By presizing the buffer to a value of $256$, we have obtained a speed-up of the writing process estimated by our experiments to more than $10\%$.
+The initial size of the {\texttt{StringWriter} } internal buffer is by default $16$ characters.
+A line in the output file is more than $200$ characters.
+By presizing the buffer to a value of $256$, we have obtained a speed-up of the writing process estimated by our experiments to more than $10\%$.
 
-If we take a closer look at the {\tt StringWriter} class we notice that it uses an internal {\tt StringBuffer} object. To quote from its documentation, a {\tt StringBuffer} is  a thread-safe, mutable sequence of characters. That means that most of its methods are declared as {\it synchronized} in order to control the access to the buffer of characters in a multithreaded environment.
-However, in our case, each writing thread spawned by the parallel stream implementation gets his own copy of a {\tt StringWriter} so there is no resource contention that would require synchronization.
-So, instead of using a {\tt StringWriter}, it would be better to simply use a common buffer, with no synchronization. To maximize the performance gain, the buffer could be implemented as a byte array. 
-Using bytes instead of characters is quite trivial as Java {\tt String} class has the method {\tt getBytes()} and recreating a {\tt String} object can be done by simply using one of its constructors: {\tt new String(bytes)}.
+If we take a closer look at the {\texttt{StringWriter} } class we notice that it uses an internal {\texttt{StringBuffer} } object.
+To quote from its documentation, a {\texttt{StringBuffer} } is  a thread-safe, mutable sequence of characters.
+That means that most of its methods are declared as {\textit{synchronized} } in order to control the access to the buffer of characters in a multithreaded environment.
+However, in our case, each writing thread spawned by the parallel stream implementation gets his own copy of a {\texttt{StringWriter} } so there is no resource contention that would require synchronization.
+So, instead of using a {\texttt{StringWriter} }, it would be better to simply use a common buffer, with no synchronization.
+To maximize the performance gain, the buffer could be implemented as a byte array.
+Using bytes instead of characters is quite trivial as Java {\texttt{String} } class has the method {\texttt{getBytes} ()} and recreating a {\texttt{String} } object can be done by simply using one of its constructors: {\texttt{new String} (bytes)}.
 
-Writing to the file is implemented by simply invoking the {\tt println} method of a {\tt PrintWriter} output stream, decorating a {\tt BufferedWriter}, which in turns decorates a {\tt FileWriter}.
+Writing to the file is implemented by simply invoking the {\texttt{println} } method of a {\texttt{PrintWriter} } output stream, decorating a {\texttt{BufferedWriter} }, which in turns decorates a {\texttt{FileWriter} }.
 \begin{verbatim}
 var out = new PrintWriter(
   new BufferedWriter(
@@ -459,7 +505,7 @@ outputStream.forEachOrdered(
   (s) -> out.println(s));
 \end{verbatim}
 
-Again, the {\tt PrintWriter.println} method is using a {\tt synchronized} block in order to fulfill its task, which is eventually an invocation to {\tt BufferedWriter.write} method.
+Again, the {\texttt{PrintWriter.println} } method is using a {\texttt{synchronized} } block in order to fulfill its task, which is eventually an invocation to {\texttt{BufferedWriter.write} } method.
 \begin{verbatim}
 public void println(String x) {
   synchronized (lock) {
@@ -467,17 +513,22 @@ public void println(String x) {
    }
 }
 \end{verbatim}
-The {\tt BuffereWriter.write} method is also synchronized and so is {\tt FileWriter.write}, which is the last one invoked in this chain.
+The {\texttt{BuffereWriter.write} } method is also synchronized and so is {\texttt{FileWriter.write} }, which is the last one invoked in this chain.
 
 Since more than half of the I/O time is spent writing, we have analyzed the CPU utilization, using the operating system profiler.
 \begin{center}
 \includegraphics[scale=0.5]{images/cpu_original.png}
 \end{center}
-The graph looks like a chainsaw, which is a sign that the code is bottle-necked on a single thread. This is no surprise, since the {\tt outputStream} is written in a sequential fashion.
-On top of that, for every row there has to be a mutex check whenever a synchronized block of code is invoked. Since there is a large number of rows, all these checks will add up and produce a significant slowdown of the overall writing process.
+The graph looks like a chainsaw, which is a sign that the code is bottle-necked on a single thread.
+This is no surprise, since the {\texttt{outputStream} } is written in a sequential fashion.
+On top of that, for every row there has to be a mutex check whenever a synchronized block of code is invoked.
+Since there is a large number of rows, all these checks will add up and produce a significant slowdown of the overall writing process.
 
 The technique that should have been used in this context involves using a single byte array.
-Instead of creating and storing individual string representations of all the {\tt SamAlignment} objects, and writing them one by one to disk, we add progressively information into the buffer. Only when the buffer becomes full, we write its content on disk. Obviously, all these steps will be performed in a single thread, but the bottleneck will be less obvious. The class implementing the byte array is called {\tt StreamByteWriter}.
+Instead of creating and storing individual string representations of all the {\texttt{SamAlignment} } objects, and writing them one by one to disk, we add progressively information into the buffer.
+Only when the buffer becomes full, we write its content on disk.
+Obviously, all these steps will be performed in a single thread, but the bottleneck will be less obvious.
+The class implementing the byte array is called {\texttt{StreamByteWriter} }.
 \begin{verbatim}
 StreamByteWriter streamByteWriter 
   = new StreamByteWriter(output);
@@ -485,12 +536,14 @@ for (SamAlignment aln: alignments) {
   aln.formatBuffer(streamByteWriter);
 }
 \end{verbatim}
-Even if we are using now a single core for all the writing, the necessary time for creating the output file was reduced by half. The following graph shows the CPU utilization for this approach:
+Even if we are using now a single core for all the writing, the necessary time for creating the output file was reduced by half.
+The following graph shows the CPU utilization for this approach:
 \begin{center}
 \includegraphics[scale=0.5]{images/cpu_optimized.png}
 \end{center}
 
-Here is the execution profile when the Original algorithm has plenty of memory and the "Chainsaw" in execution is in fact that we ran for 50 times the algorithm, and every time the CPU jumps from original 12 core usage when reading to back to 1 Core used and back. This happens only when executing on "big machines" (when the RAM available is much more than the live set, like 3-4 times at least the size)
+Here is the execution profile when the Original algorithm has plenty of memory and the "Chainsaw" in execution is in fact that we ran for 50 times the algorithm, and every time the CPU jumps from original 12 core usage when reading to back to 1 Core used and back.
+This happens only when executing on "big machines" (when the RAM available is much more than the live set, like 3-4 times at least the size)
 \begin{center}
 	\includegraphics[scale=0.065]{images/Visual_VM_Small_file_Original_execution_profile.png}
 \end{center}
@@ -499,20 +552,25 @@ Here is the execution profile when the Original algorithm has plenty of memory a
 
 
 
-\subsection{\uppercase{Chunking-Batching and Extracting Parallelism}}
+\subsection{\uppercase{Chunking-Batching and Extracting Parallelism}}\label{subsec:uppercase10}
 %Batch processing is the grouping of similar tasks that require similar resources in order to streamline their completion.
 %Chunking is the grouping together of information into ideally sized pieces so they can be used effectively to produce the outcome you want without stress or shutdown.
-In the elPrep original algorithm, a {\tt SamAlignment} object is created for each row in the input file. 
-In order to extract parallelism, there is an explicit {\tt .parallel()} call, a construct that would create a task for each row that mus be processed. These tasks are queued and executed in a concurrent fashion using threads created transparently by the Java Streams Framework.
+In the elPrep original algorithm, a {\texttt{SamAlignment} } object is created for each row in the input file.
+In order to extract parallelism, there is an explicit {\texttt{.parallel} ()} call, a construct that would create a task for each row that must be processed.
+These tasks are queued and executed in a concurrent fashion using threads created transparently by the Java Streams Framework.
 \begin{verbatim}
 var alnStream = inputStream.parallel()
   .map((s) -> new SamAlignment(s));
 \end{verbatim}
-In the column-based model, described in section \ref{model:column}, there is a single {\tt SamBatch} instance storing all the data. Because we perform data compaction, the {\it read} operation must take into account the dependencies between rows. Just like in the case of removing duplicates, in order to process a new  row we have to inspect the values of the previously read rows.
+In the column-based model, described in section~\ref{model:column}, there is a single {\texttt{SamBatch} } instance storing all the data.
+Because we perform data compaction, the {\textit{read} } operation must take into account the dependencies between rows.
+Just like in the case of removing duplicates, in order to process a new row we have to inspect the values of the previously read rows.
 This means that the reading process cannot be fully parallel per-row.
-%(excluding we will use a synchronize/OS Mutex or alike/or a synchronized queue). Even more important, if we would rely on mutexes, the code complexity will be very high and especially debugging this code.
-In order to obtain a better performance than reading using a single thread, we propose a technique that splits the {\tt SamBatch} structure in several "chunks". Instead of having a single large object, we will represent the data using an array of smaller {\tt SamBatch} objects.
-A sketch of our {\it Compact} algorithm is described by the following pseudo code:
+%(excluding we will use a synchronize/OS Mutex or alike/or a synchronized queue).
+%$Even more important, if we would rely on mutexes, the code complexity will be very high and especially debugging this code.
+In order to obtain a better performance than reading using a single thread, we propose a technique that splits the {\texttt{SamBatch} } structure in several "chunks".
+Instead of having a single large object, we will represent the data using an array of smaller {\texttt{SamBatch} } objects.
+A sketch of our {\textit{Compact} } algorithm is described by the following pseudo code:
 
 \begin{verbatim}
 int chunkSize = 20000;
@@ -526,39 +584,44 @@ while (!endOfFile) {
 }
 \end{verbatim}
 
-The {\tt readRows} method reads $chunkSize * nbOfThreads$ rows out of the SAM file for the next processing step. The actual reading is done using an appropriate number of threads (based on the CPU configuration), each thread reading sequentially a fixed number of rows, calculated taking into account the nature of the information being encoded.
+The {\texttt{readRows} } method reads $chunkSize * nbOfThreads$ rows out of the SAM file for the next processing step.
+The actual reading is done using an appropriate number of threads (based on the CPU configuration), each thread reading sequentially a fixed number of rows, calculated taking into account the nature of the information being encoded.
 %Even as we want to extract parallelism, this code will likely be almost limited of the speed of the data device (because hard disk are very quick in sequential reads, not as quick on random access).
-Having the data split into chunks, we can process in parallel the mapping between the associated text and the {\tt SamBatch} data structure, where we perform data compaction and deduplication.
-The techinque of grouping similar tasks requiring the same resources in order to streamline their completion is called {\it batching}.
+Having the data split into chunks, we can process in parallel the mapping between the associated text and the {\texttt{SamBatch} } data structure, where we perform data compaction and deduplication.
+The techinque of grouping similar tasks requiring the same resources in order to streamline their completion is called {\textit{batching} }.
 
 %Even if we execute in parallel all these steps List<byte[]> -> SamBatch step, there are few advantages:
 In our case, the advantages of the chunking-batching approach are multiple:
 \begin{itemize}
 \item Transforming data, deduplicating and DNA encoding are all executed in a single-threaded manner, which is much easier to debug and understand than a multithreaded equivalent.
 
-\item Since a {\tt DeduplicatedDictionary} will now have less than $20000$ unique strings, the values needed to encode the strings could be represented on $2$ bytes, instead of $4$. Similarly, we can reduce the tag size from $4$ to $2$ bytes. 
+\item Since a {\texttt{DeduplicatedDictionary} } will now have less than $20000$ unique strings, the values needed to encode the strings could be represented on $2$ bytes, instead of $4$.
+Similarly, we can reduce the tag size from $4$ to $2$ bytes.
 %For safety, because technically tags may not always repeat, we used "unsigned short" (meaning "char" type) to better safe around overflowing (which we noticed it happens if user will chose a 30K size SamBatch)
 
-\item After the algorithm is fully executed,  we will have instead of $2.1$ million {\tt SamAlignment} objects, about $105$ {\tt SamBatch} instances, each of them having around $4$ orders of magnitude less objects overall. This translates into $2$ orders of magnitude less objects.
+\item After the algorithm is fully executed,  we will have instead of $2.1$ million {\texttt{SamAlignment} } objects, about $105$ {\texttt{SamBatch} } instances, each of them having around $4$ orders of magnitude less objects overall.
+This translates into $2$ orders of magnitude less objects.
 % yet it has the benefit of memory compaction, low cost on GC and so on
 
-\item When creating the output file, the {\tt SamBatch} array could be processed in parallel, with no blocking except the actual operation of writing to disk.
+\item When creating the output file, the {\texttt{SamBatch} } array could be processed in parallel, with no blocking except the actual operation of writing to disk.
 \end{itemize}
 
 We have seen that the column-based model saves memory at the expense of the running time.
 This optimization, however, reduces the overall execution time of the read operation, which is now on par with the original implementation.
 
-When it comes to writing, compared to our {\tt StreamByteWriter} class, which is anyway much faster than the original implementation, the execution time is drastically reduced from $28$ seconds (for the $12$ GB BAM file) to $12$ seconds.
-Preparing the strings that are to be written in the file can be done in almost perfect parallelism, using the available cores. The only limitation remains the speed of the output device, which can vary depending on its type: "in memory virtual partition", SSD, HD, etc.
+When it comes to writing, compared to our {\texttt{StreamByteWriter} } class, which is anyway much faster than the original implementation, the execution time is drastically reduced from $28$ seconds (for the $12$ GB BAM file) to $12$ seconds.
+Preparing the strings that are to be written in the file can be done in almost perfect parallelism, using the available cores.
+The only limitation remains the speed of the output device, which can vary depending on its type: "in memory virtual partition", SSD, HD, etc.
 %Even formatting of code is written in almost perfect parallelism (so we talk about 2-3 seconds of fully using the all 12 cores to create formatted buffers to be written, at the end, we are waiting for OS to write the data). 
 %To ignore the IO component completely, we used on Windows an "in memory virtual partition".
 %Even this could be a limitation of the hardware/OS, we can estimate that IO will be limited eventually on the speed of device or of the Java API to write to disk. 
 %The compact algorithm ran against the 5.6 GB SAM file, it can format and write it on a RAM disk in speeds of 500 MB/s, when Java does the in-memory formatting of output in 1 fifth of that, so at a rate of 2500 MB/s (using 12 cores/24 threads though, around).
 	
 In order to make sure there are no dead times when using the external device, 
-we have also implemented the {\it async/await} pattern. 
+we have also implemented the {\textit{async/await} } pattern.
 This allows the program to perform in advance reading operations, using a dedicated thread, while waiting for the data processing threads to complete their execution.
-This new algorithm, called {\it Compact/Par} offers a small improvement in the running time, as we will see in the next section. However, the increase in code complexity makes this optimization hardly worthy of taking it into consideration.
+This new algorithm, called {\textit{Compact/Par} } offers a small improvement in the running time, as we will see in the next section.
+However, the increase in code complexity makes this optimization hardly worthy of taking it into consideration.
 %on 12c machine/8 GB BAM/SSD the saving of time is from 140 seconds to 131 seconds. On a spinning disk we have from 215 seconds to 195 seconds. On the 4c laptop when processing 1.2 G BAM file, the times improve from 37.43 seconds to 34.1 seconds.
 
 
@@ -566,26 +629,29 @@ This new algorithm, called {\it Compact/Par} offers a small improvement in the r
 
 
 
-\section{\uppercase{Experimental Results}}
+\section{\uppercase{Experimental Results}}\label{sec:uppercase2}
 
-The computer we have used in order to perform the experiments is a Ryzen 9-3900X, having 12 cores and using 48 GB of RAM.
+The computer we have used in order to perform the experiments is a Ryzen 9-3900X, having 12 cores and using 48 GB of RAM\@.
 Since we didn't have access to the hardware necessary to run all the tests in memory, as the original paper, we have used the smaller SAM files and ran the same processing repeatedly in order to obtain an accurate result of the running time.
 For example, running $10$ times the algorithm on the smallest input SAM file, which is approximately $700$ MB, will produce a total running time of around $70$ seconds. 
 Running the algorithm repeatedly will trigger the garbage collector and this will be the cause of variations in the collected results, ranging from around $2$ to $3$ seconds, when reading the smallest file, and $3$ to $4$ seconds for writing.
 
-Before executing the timed invocations, we have {\it warmed-up} the JVM. 
-This is usually achieved by simply running a couple of times an initial test (not timed) that uses all the classes involved in the algorithm. Such a warm-up is necessary because Java is using a lazy class loading mechanism and just-in-time compilation. After this step, all important classes are stored into the JVM cache (native code), making them available at runtime with no additional penalty.
+Before executing the timed invocations, we have {\textit{warmed-up} } the JVM\@.
+This is usually achieved by simply running a couple of times an initial test (not timed) that uses all the classes involved in the algorithm.
+Such a warm-up is necessary because Java is using a lazy class loading mechanism and just-in-time compilation.
+After this step, all important classes are stored into the JVM cache (native code), making them available at runtime with no additional penalty.
 
 The original elPrep benchmarks have been performed on a Supermicro SuperServer 1029U-TR4T node with two
-Intel Xeon Gold 6126 processors consisting of 12 processor cores each, clocked at 2.6 GHz, with 384 GB
-RAM \cite{costanza:2019}. The authors claim to do the processing of the 8 GB BAM file in 6 min:54sec to 7 min:31sec and memory usage is $330-340$ GB.
+Intel Xeon Gold 6126 processors consisting of 12 processor cores each, clocked at 2.6 GHz, with 384 GB RAM~\cite{costanza:2019}.
+The authors claim to do the processing of the 8 GB BAM file in 6 min:54sec to 7 min:31sec and memory usage is $330-340$ GB\@.
 
-As we didn't have access to such a performing machine, we did most of testing with the smallest file, the $144$ MB BAM file ($673.3$ MB SAM file). For the $8$ GB BAM file ($27.18$ GB SAM) our results will show only the compact algorithm but we will make some inference over the scaling of the original algorithm across file sizes and scalling over cores.
+As we didn't have access to such a performing machine, we did most of testing with the smallest file, the $144$ MB BAM file ($673.3$ MB SAM file).
+For the $8$ GB BAM file ($27.18$ GB SAM) our results will show only the compact algorithm but we will make some inference over the scaling of the original algorithm across file sizes and scalling over cores.
 
 As of time of writing, the SuperMicro machine configured as minimal configuration but to meet the spec from the paper is around a 9000+ USD machine https://www.aspsys.com/servers/supermicro-superserver-1029u-tr4t-p3324.htm, when our machine is an upgraded desktop machine that would cost under 2000 dollars, and it is not optimal for this type of high volume processing
 %Also, as the algorithm to be implemented using Compact memory model would take too long time to be quite significant to the final results of the conclusions of the paper, we did implement a full reading and writing of the biggest file we could fit into our machine (a 32 GB system), namely an input of 8 GB BAM file (which is 27.18 GB SAM).
 
-\subsection{\uppercase{Runtime performance}}
+\subsection{\uppercase{Runtime performance}}\label{subsec:uppercase9}
 \begin{small}
 \par
 \textbf{Algorithm times} \\
@@ -596,7 +662,7 @@ As of time of writing, the SuperMicro machine configured as minimal configuratio
 						& 0.15 (4c)		    & 0.15 (12c)		& 1.2 (12c) 			\\ \hline
 Original				& 9.13 s			& 3.938 s			& 123.91 s			\\ \hline
 Presized buf   			& 8.98 s			& 4.19 s			& 75.1 s	\\ \hline
-{\it StreamByteArray}	& 8.09 s			& 3.43 s			& 64.62 s			\\ \hline
+{\textit{StreamByteArray} }	& 8.09 s			& 3.43 s			& 64.62 s			\\ \hline
 Compact 				& 3.16 s			& 1.686 s			& 34.5 s	\\ \hline
 Compact/Par 			& 			        & 					& 26.7 s	\\ \hline
 \end{tabular}
@@ -605,24 +671,30 @@ Compact/Par 			& 			        & 					& 26.7 s	\\ \hline
 
 Analysis of speedup across machines (4 core vs 12 core):
 Original algorithm scales with a factor of 2.3, presized buffers by a factor of 2.14, SBA scales by 2.36
-and compact would scale by: 1.686, so at least for small files it looks that scaling over large machines will be able to offer a better scaling. Also, it is important to notice that the compacting algorithm has an explicit sequential part that reduces scalability, and it may be reduced with proposed ideas 
+and compact would scale by: 1.686, so at least for small files it looks that scaling over large machines will be able to offer a better scaling.
+Also, it is important to notice that the compacting algorithm has an explicit sequential part that reduces scalability, and it may be reduced with proposed ideas
 of potential improvements.
 
 Scaling across file sizes: the original algorithm uses a lot of memory, and as the VM has to call more often the Garbage Collection, the cost of GC affects visiblyt he scalability of the original algorithms, but even GC happens in the Compacting algorithms, the cost of it doesn't affect runtime and reducing allocations in both of the techniques of "Presized Buf" and "StreamByteArray" do show a much better runtime profile:
 
 So for an increase of input of 8 times, the original algorithm would slow down 31.46 times, the PB will slow down 17.92 times, SBA will slow down 18.83 times, but Compact algorithm will have almost a perfect 8.33 times slow down.
 
-As times will grow for a 8 GB BAM file to around 215 seconds (when setting heap size to be 42G as maximum using -Xmx42G), we can investigate and isolate the sequential I/O cost. So as we are reaching the limits of the machine, for a file that is approximately 5 times larger, the algorithm slows down by a factor of 12. When moving the input file on an SSD, the times improve to 139.8 seconds for compact algorithm. If moving to a bigger batch size (from 20K to 30K), the algorithm will process the output in 133.15 seconds, but for the sake of comparison, it is possible to conclude that using fast I/O can improve the runtime performance so the slow-down is from 12 times to 10 times (from 14.08sec to <140 sec).
+As times will grow for a 8 GB BAM file to around 215 seconds (when setting heap size to be 42G as maximum using -Xmx42G), we can investigate and isolate the sequential I/O cost.
+So as we are reaching the limits of the machine, for a file that is approximately 5 times larger, the algorithm slows down by a factor of 12.
+When moving the input file on an SSD, the times improve to 139.8 seconds for compact algorithm.
+If moving to a bigger batch size (from 20K to 30K), the algorithm will process the output in 133.15 seconds, but for the sake of comparison, it is possible to conclude that using fast I/O can improve the runtime performance so the slow-down is from 12 times to 10 times (from 14.08sec to <140 sec).
 
 %We added a parallel reader, and this parallel reader increases the complexity of the code, it looks that the improvement is note worthy: on 12c machine/8 GB BAM/SSD the saving of time is from 140 seconds to 131 seconds. On a spinning disk we have from 215 seconds to 195 seconds. On the 4c laptop when processing 1.2 G BAM file, the times improve from 37.43 seconds to 34.1 seconds.
 
 
 
-\subsection{\uppercase{Memory Usage}}
-Memory usage of the process cannot give a clear measure of how algorithms scale as in particular the GC algorithm reserves in advance a buffer based on the available memory and it honors commands that can limit memory usage (like -Xmx flag). But even so, what can be done to give a proper estimation of the efficiency of the runtime memory usage is the live data set: meaning how much memory is necessary at a point in time to store all the models.
+\subsection{\uppercase{Memory Usage}}\label{subsec:uppercase8}
+Memory usage of the process cannot give a clear measure of how algorithms scale as in particular the GC algorithm reserves in advance a buffer based on the available memory and it honors commands that can limit memory usage (like -Xmx flag).
+But even so, what can be done to give a proper estimation of the efficiency of the runtime memory usage is the live data set: meaning how much memory is necessary at a point in time to store all the models.
 
 To measure the live data set, we use the already existing instrumentation in the JVM and the visual tool
-VisualVM to capture according to different algorithms the different values of memory consumption and it describes the minimum amount of memory that JVM has to have available theoretically to load specific data set. To get the values from the following paragraphs, it was clicked on the tab "Monitor", look into "Memory" section and we triggered forcefully a GC after we suspended the algorithm when loading all the model (which is the maximum memory used) and it was all used for reading.
+VisualVM to capture according to different algorithms the different values of memory consumption and it describes the minimum amount of memory that JVM has to have available theoretically to load specific data set.
+To get the values from the following paragraphs, it was clicked on the tab "Monitor", look into "Memory" section and we triggered forcefully a GC after we suspended the algorithm when loading all the model (which is the maximum memory used) and it was all used for reading.
 
 So given the memory usage scales depending of the input sizes and as we could not load all the data of
 our largest BAM files using the original paper algorithms, we could estimate how the algorithm would work on the larger machines.
@@ -639,7 +711,7 @@ So even the "Presized Buf" algorithm is tuned to remove allocations and speed up
 			\hline
 			Algos  	    	 	& 144 MB BAM		& 1.2 GB			\\ \hline
 			Original				& 2 326 MB			& 32 025 MB			\\ \hline
-			{\it StreamByteArray}	& 2 275 MB			& 31 463 MB			\\ \hline
+			{\textit{StreamByteArray} }	& 2 275 MB			& 31 463 MB			\\ \hline
 			Compact/Par				& 606 MB			& 4 689 MB			\\ \hline
 		\end{tabular}
 	\end{center}
@@ -648,7 +720,7 @@ So even the "Presized Buf" algorithm is tuned to remove allocations and speed up
 Compact algorithms can process on a 48 GB machine larger files like the 8 GB BAM file and uses:
 24 283 MB of live data and the 12 GB input is using 25 265 MB of memory.
 
-\subsection{\uppercase{Calculating performance x memory}}
+\subsection{\uppercase{Calculating performance x memory}}\label{subsec:uppercase7}
 There are limits on the testing that could be done with the techniques used by this paper given the hardware differences that are between the elPrep paper and this one: instead of a 384 GB of memory and dual-CPU server,
 the most powerful machine that was available was a 8 times less RAM, with half of CPU cores, a much
 slower disk drive (the SSD on the Ryzen machine can barely read at a 300 MB/s, vs elPrep paper which had
@@ -691,11 +763,12 @@ Both compact algorithms (Compact and Compact-Parallel) keep a steady pace or rea
 
 If the running machine would include a very fast hard-disk, probably trough profiling some other component could become a slow-down (like the rate of allocation in the JVM), but very likely
 the ratio of described Compact algorithms would remain quite steady up-to the time when the JVM/OS will remain without RAM, but as the algorithms use a typically a 4-6 times memory 
-savings compared with elPrep algorithm, the limits would be reached much later. If limits like the ratio of allocation of JVM becomes the limit, few proposed techniques are described in section
+savings compared with elPrep algorithm, the limits would be reached much later.
+If limits like the ratio of allocation of JVM becomes the limit, few proposed techniques are described in section
 "Future work" that may address this limitation.
 
 
-\subsection{\uppercase{Overview and analysis of results}}
+\subsection{\uppercase{Overview and analysis of results}}\label{subsec:uppercase6}
 
 We found 5 underlying algorithms that all do some levels of improvements in runtime performance, especially on large files
 as GC becomes the limiting factor:
@@ -706,7 +779,8 @@ as GC becomes the limiting factor:
 many allocations and especially if the machine's heap reaches the limits of the machine can give a huge speedup (75 seconds)
 
 * "optimized" algorithm which doesn't technically speed up the algorithm, but it makes the writing to do almost zero
-allocations and to write directly the bytes into a OutputStream. It was achieved without removing debuggability
+allocations and to write directly the bytes into a OutputStream.
+It was achieved without removing debuggability
 
 * isolating the slow parts of the original algorithm as being memory heavy and IO heavy (Read-write) we can achieve a
 comparable performance on read/write, even there is a computational cost on every element, with an observed 4 times
@@ -717,9 +791,9 @@ and the wins are visible on slow disk, but even using a RAM disk, the algorithm 
 
 3 percent saving of time is not critical win, but it shows that technically there are possibilities of tuning are still dormant.
 
-\section{\uppercase{Future work}}
+\section{\uppercase{Future work}}\label{sec:uppercase}
 
-\subsection{\uppercase{Scalability of batch reader}}
+\subsection{\uppercase{Scalability of batch reader}}\label{subsec:uppercase5}
 
 Our reader works as described before in two steps:
 
@@ -727,12 +801,14 @@ Our reader works as described before in two steps:
 
 * it executes in parallel the compaction step over the separated rows over the all cores
 
-1. Speeding up the single threaded code by using optimizations
+Speeding up the single threaded code by using optimizations
+
 There are optimizations that can be done to speed up the single threaded part.
 As "compact" algorithms were reaching limits of our hardware (basically CPU was waiting for disk), a safe assumption is
 that on "limited" hardware that was accessible, this section can be treated as "speculation" to up-most "educated guess".
 
-1. Instead of splitting into rows, the pass that reads the end of line, it can just mark the positions of the end of line(s
+1.
+Instead of splitting into rows, the pass that reads the end of line, it can just mark the positions of the end of line(s
 ) and when the multi-threaded code is executed, that code would separate in a multi-threaded fashion into rows (or it may even skip allocating these lines all together).
 
 As an example: "here\\nwe\\nhave\\nmultiple\\nlines".
@@ -743,13 +819,15 @@ A simple reader could memory map the file and will save only the "\\n" separator
 This kind of coding would be crucial if we work with data retrieved from another machine that will be able to saturate the CPU:
 NVMe drives or retrieving the data trough a network card with 100Gbit or similar.
 
-2. Instead of exact batches, the SAM file could be read with some expected size, and batching would happen on the chunk of data.
+2.
+Instead of exact batches, the SAM file could be read with some expected size, and batching would happen on the chunk of data.
 
 So instead of reading 30K rows of 350 bytes per batch x number of cores x 4 ~= 10 MB x 4 x number of cores, instead we can read:
 4 x number of cores buffers of 10 MB (so for a 4 thread machine, it would be like 160 MB) and we will make a batch out of every 10MB buffer in parallel, and will make these batches to be 
 around the expected size, but not precise.
 This code will be absolutely limited on the speed of reading hardware as there is no computation as reading is done, and after that the processing of splitting 
-as in point 1.a can be done in parallel. This approach can be enhanced further that as the parallel batch processing is done, (like described in point 1.b.) 
+as in point 1.a can be done in parallel.
+This approach can be enhanced further that as the parallel batch processing is done, (like described in point 1.b.)
 the background task could read in advance preparing the next section of processing of batches.
 
 Both techniques should improve performance in very fast IO systems which have many cores to be fed to calculate the compaction.
@@ -758,26 +836,28 @@ Code complexity should be taken into account for both of those approaches, but i
 create fewer objects than we have now, but there is a possibility that the savings are quite minimal: parallel reader looks like it would be hugely making the code
 faster, but speed ups are into 3 to 10 percents (the smaller numbers are on SSDs, bigger numbers on spinning disk).
 
-\subsection{\uppercase{Testing the code using Value Types}}
+\subsection{\uppercase{Testing the code using Value Types}}\label{subsec:uppercase4}
 
 
 A bit simpler way to estimate the speed is to code the full implementation using .Net and generic dictionaries, but as .Net would have (arguably) a weaker GC and code generator, the final results may need adjustment, still some estimation could be done on the value or if any speedup could be expected in future.
 
-\subsection{\uppercase{Doing the algorithms}}
+\subsection{\uppercase{Doing the algorithms}}\label{subsec:uppercase3}
 
 We implemented only reading/writing and some code could be quite easy to be implemented (like filtering) and these algorithms could have their own tuning. 
 
 It can be that some algorithms should have special handling, or destroying and re-building the full batch, which would duplicate the memory per-batch.
 
-Filtering: in parallel all the batches can be scanned if they contain valid values and reconstruct a batch to replace the old one using filter function. At increased code complexity, it is possible when reading is done that the filter function to be present and will block adding to the current batch.
+Filtering: in parallel all the batches can be scanned if they contain valid values and reconstruct a batch to replace the old one using filter function.
+At increased code complexity, it is possible when reading is done that the filter function to be present and will block adding to the current batch.
 
-Marking and removing duplicates: marking can be done in parallel as filtering does, but an extra step can be taken to calculate hashing (that would be custom for DNA sequences), data that could be discarded at the end of algorithm (to keep memory usage low). As marking is setting just a bit inside flags, there should not be a cost of rebuilding the batches, but if removing duplicates is applied, reconstructing of the batches is a desirable solution.
+Marking and removing duplicates: marking can be done in parallel as filtering does, but an extra step can be taken to calculate hashing (that would be custom for DNA sequences), data that could be discarded at the end of algorithm (to keep memory usage low).
+As marking is setting just a bit inside flags, there should not be a cost of rebuilding the batches, but if removing duplicates is applied, reconstructing of the batches is a desirable solution.
 
 
-\subsection{\uppercase{Conclusions}}
+\subsection{\uppercase{Conclusions}}\label{subsec:uppercase2}
 
 As the result of the proposed techniques, it can be shown that Java implementation in the original paper
-could be adjusted to improve (at least in our testing) the runtime performance by almost a factor of 2 but keeping the live set memory constant (or even slightly lower). 
+could be adjusted to improve (at least in our testing) the runtime performance by almost a factor of 2 but keeping the live set memory constant (or even slightly lower).
 
 Isolating the most expensive part of the original elPrep algorithm (being reading/writing and materializing the objects) and improving the memory data set into a compact form, the memory savings and
 reduced GC show large gains (an order of magnitude of saving if are taken both memory and time into account against an optimized by us elPrep version).
