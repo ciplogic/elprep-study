@@ -512,7 +512,7 @@ In the column-based model, described in section \ref{model:column}, there is a s
 This means that the reading process cannot be fully parallel per-row.
 %(excluding we will use a synchronize/OS Mutex or alike/or a synchronized queue). Even more important, if we would rely on mutexes, the code complexity will be very high and especially debugging this code.
 In order to obtain a better performance than reading using a single thread, we propose a technique that splits the {\tt SamBatch} structure in several "chunks". Instead of having a single large object, we will represent the data using an array of smaller {\tt SamBatch} objects.
-A sketch of our {\it Compact} algorithm, is described by the following pseudo code:
+A sketch of our {\it Compact} algorithm is described by the following pseudo code:
 
 \begin{verbatim}
 int chunkSize = 20000;
@@ -554,7 +554,7 @@ Preparing the strings that are to be written in the file can be done in almost p
 %To ignore the IO component completely, we used on Windows an "in memory virtual partition".
 %Even this could be a limitation of the hardware/OS, we can estimate that IO will be limited eventually on the speed of device or of the Java API to write to disk. 
 %The compact algorithm ran against the 5.6 GB SAM file, it can format and write it on a RAM disk in speeds of 500 MB/s, when Java does the in-memory formatting of output in 1 fifth of that, so at a rate of 2500 MB/s (using 12 cores/24 threads though, around).
-
+	
 In order to make sure there are no dead times when using the external device, 
 we have also implemented the {\it async/await} pattern. 
 This allows the program to perform in advance reading operations, using a dedicated thread, while waiting for the data processing threads to complete their execution.
