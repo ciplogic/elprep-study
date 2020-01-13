@@ -253,7 +253,7 @@ The ElPrep algorithm will duplicate all the {\tt SamAlignment}s once, as it look
 
 
 
-\subsection{\uppercase{The Column-Based Model}}
+\subsection{\uppercase{The Column-Based Model}} \label{model:column}
 
 Let us analyze how much memory can be saved by switching to a column-based approach.
 We have defined the following data structures: {\tt StringSequence} for representing in a compact manner a collection of strings, {\tt DeduplicatedDictionary} for eliminating duplicate copies of repeating strings, {\tt DnaEncodingSequence} for storing {\tt A,C,G,T,N} sequences using an encoding of $21$ letters per {\tt long} and {\tt TagSequence} for representing tags encoded in an array of {\tt short} values.
@@ -411,55 +411,6 @@ Total number of tags: approx 200000 (10 tags per row on average)
 
 
 
-\subsection{\uppercase{Chunking-Batching and Extracting Parallelism}}
-In El-Prep original algorithm, to extract parallelism, there was an explicit per-line .parallel() call, a construct that would create a task per row. Tasks, different from threads,
-is that they are queued and the threads are made transparently by the Java Streams Framework.
-
-Because we rely on compacting data, our algorithm has data dependencies between rows (like as it deduplicates values between rows, it has to know as a dependency the values from the previous rows) so it cannot be fully parallel per-row (excluding we will use a synchronize/OS Mutex or alike/or a synchronized queue). Even more important, if we would rely on mutexes, the code complexity will be very high and especially debugging this code.
-
-So we propose a technique that works in the following pseudo-code:
-
-\begin{verbatim}
-var samBatches = new ArrayList<SamBatch>();
-while (!end_of_file){
-	var rowsRead = readSequentiallyRowsForNextChunkOfProcessing(
-		20000, CpuCoreCount*4);
-	numbersOfCores.parallel().
-		.forEach(index->{
-			transformRowsIntoBatches(samBatches, rowsRead, index);
-		});
-}
-\end{verbatim}
-
-This line basically reads out of the SAM file 20K rows * CpuCoreCount * 4 sequentially.
-
-Even as we want to extract parallelism, this code will likely be almost limited of the speed of the data device (because hard disk are very quick in sequential reads,
-not as quick on random access).
-
-Having the data chunked into 20K rows, we can process in parallel the mapping between the associated text data into a chunk of data structure named SamBatch where it has possibility to deduplicate the data between the rows (as of 20K rows).
-
-Even we execute in parallel all these List<byte[]> -> SamBatch step, there are few advantages:
-
-* the code of transforming, deduplicating and encoding DNA, are all written in a single-threaded manner which is much easier to debug and understand than a multi-threaded equivalent.
-
-* as DeduplicatedDictionary can have less than 20K unique strings, the value it encodes the strings could be reduced on 2 bytes instead of 4. Similarly we can reduce the tag size from 4 to 2 bytes. For safety, because technically tags may not always repeat, we used "unsigned short" (meaning "char" type)
-to better safe around overflowing (which we noticed it happens if user will chose a 30K size SamBatch)
-
-* after the algorithm is fully executed we will have instead of 2.1 million SamAlignment(s), around 105 SamBatch instances, each of them having around themselves around 4 orders of magnitude less objects overall,
-which translates into 2 orders of magnitude less objects, yet it has the benefit of memory compaction, low cost on GC and so on
-
-* when writing to disk, the SamBatch array could be processed in parallel with no blocking but to write to disk.
-
-Compared with our StreamByteWriter class, which is much faster in all cases than original implementation which the
-writing times are around 28 seconds for 12 GB BAM file (5.6 GB on disk), our parallel code will write the same output in 12-13 seconds.
-Even formatting of code is written in almost perfect parallelism (so we talk about 2-3 seconds of fully using the all 12 cores to create
-formatted buffers to be written, at the end, we are waiting for OS to write the data). To ignore the IO component
-completely, we used on Windows an "in memory virtual partition".
-
-Even this could be a limitation of the hardware/OS, we can estimate that IO will be limited eventually on the speed
-of device or of the Java API to write to disk. The compact algorithm ran against the 5.6 GB SAM file, it can format and write it
-on a RAM disk in speeds of 500 MB/s, when Java does the in-memory formatting of output in 1 fifth of that, so at a rate of 2500 MB/s
-(using 12 cores/24 threads though, around).
 
 
 \section{\uppercase{Optimizing I/O Operations}}
@@ -545,6 +496,76 @@ Here is the execution profile when the Original algorithm has plenty of memory a
 \end{center}
 
 
+
+
+
+\subsection{\uppercase{Chunking-Batching and Extracting Parallelism}}
+%Batch processing is the grouping of similar tasks that require similar resources in order to streamline their completion.
+%Chunking is the grouping together of information into ideally sized pieces so they can be used effectively to produce the outcome you want without stress or shutdown.
+In the elPrep original algorithm, a {\tt SamAlignment} object is created for each row in the input file. 
+In order to extract parallelism, there is an explicit {\tt .parallel()} call, a construct that would create a task for each row that mus be processed. These tasks are queued and executed in a concurrent fashion using threads created transparently by the Java Streams Framework.
+\begin{verbatim}
+var alnStream = inputStream.parallel()
+  .map((s) -> new SamAlignment(s));
+\end{verbatim}
+In the column-based model, described in section \ref{model:column}, there is a single {\tt SamBatch} instance storing all the data. Because we perform data compaction, the {\it read} operation must take into account the dependencies between rows. Just like in the case of removing duplicates, in order to process a new  row we have to inspect the values of the previously read rows.
+This means that the reading process cannot be fully parallel per-row.
+%(excluding we will use a synchronize/OS Mutex or alike/or a synchronized queue). Even more important, if we would rely on mutexes, the code complexity will be very high and especially debugging this code.
+In order to obtain a better performance than reading using a single thread, we propose a technique that splits the {\tt SamBatch} structure in several "chunks". Instead of having a single large object, we will represent the data using an array of smaller {\tt SamBatch} objects.
+A sketch of our {\it Compact} algorithm, is described by the following pseudo code:
+
+\begin{verbatim}
+int chunkSize = 20000;
+int nbOfThreads = cpuCoreCount * 4;
+var samBatches = new ArrayList<SamBatch>();
+while (!endOfFile) {
+  var rowsRead = parallelReadRows(
+    batchSize, nbOfThreads);
+  parallelTransformRowsIntoBatches(
+    samBatches, rowsRead);
+}
+\end{verbatim}
+
+The {\tt readRows} method reads $chunkSize * nbOfThreads$ rows out of the SAM file for the next processing step. The actual reading is done using an appropriate number of threads (based on the CPU configuration), each thread reading sequentially a fixed number of rows, calculated taking into account the nature of the information being encoded.
+%Even as we want to extract parallelism, this code will likely be almost limited of the speed of the data device (because hard disk are very quick in sequential reads, not as quick on random access).
+Having the data split into chunks, we can process in parallel the mapping between the associated text and the {\tt SamBatch} data structure, where we perform data compaction and deduplication.
+The techinque of grouping similar tasks requiring the same resources in order to streamline their completion is called {\it batching}.
+
+%Even if we execute in parallel all these steps List<byte[]> -> SamBatch step, there are few advantages:
+In our case, the advantages of the chunking-batching approach are multiple:
+\begin{itemize}
+\item Transforming data, deduplicating and DNA encoding are all executed in a single-threaded manner, which is much easier to debug and understand than a multithreaded equivalent.
+
+\item Since a {\tt DeduplicatedDictionary} will now have less than $20000$ unique strings, the values needed to encode the strings could be represented on $2$ bytes, instead of $4$. Similarly, we can reduce the tag size from $4$ to $2$ bytes. 
+%For safety, because technically tags may not always repeat, we used "unsigned short" (meaning "char" type) to better safe around overflowing (which we noticed it happens if user will chose a 30K size SamBatch)
+
+\item After the algorithm is fully executed,  we will have instead of $2.1$ million {\tt SamAlignment} objects, about $105$ {\tt SamBatch} instances, each of them having around $4$ orders of magnitude less objects overall. This translates into $2$ orders of magnitude less objects.
+% yet it has the benefit of memory compaction, low cost on GC and so on
+
+\item When creating the output file, the {\tt SamBatch} array could be processed in parallel, with no blocking except the actual operation of writing to disk.
+\end{itemize}
+
+We have seen that the column-based model saves memory at the expense of the running time.
+This optimization, however, reduces the overall execution time of the read operation, which is now on par with the original implementation.
+
+When it comes to writing, compared to our {\tt StreamByteWriter} class, which is anyway much faster than the original implementation, the execution time is drastically reduced from $28$ seconds (for the $12$ GB BAM file) to $12$ seconds.
+Preparing the strings that are to be written in the file can be done in almost perfect parallelism, using the available cores. The only limitation remains the speed of the output device, which can vary depending on its type: "in memory virtual partition", SSD, HD, etc.
+%Even formatting of code is written in almost perfect parallelism (so we talk about 2-3 seconds of fully using the all 12 cores to create formatted buffers to be written, at the end, we are waiting for OS to write the data). 
+%To ignore the IO component completely, we used on Windows an "in memory virtual partition".
+%Even this could be a limitation of the hardware/OS, we can estimate that IO will be limited eventually on the speed of device or of the Java API to write to disk. 
+%The compact algorithm ran against the 5.6 GB SAM file, it can format and write it on a RAM disk in speeds of 500 MB/s, when Java does the in-memory formatting of output in 1 fifth of that, so at a rate of 2500 MB/s (using 12 cores/24 threads though, around).
+
+In order to make sure there are no dead times when using the external device, 
+we have also implemented the {\it async/await} pattern. 
+This allows the program to perform in advance reading operations, using a dedicated thread, while waiting for the data processing threads to complete their execution.
+This new algorithm, called {\it Compact/Par} offers a small improvement in the running time, as we will see in the next section. However, the increase in code complexity makes this optimization hardly worthy of taking it into consideration.
+%on 12c machine/8 GB BAM/SSD the saving of time is from 140 seconds to 131 seconds. On a spinning disk we have from 215 seconds to 195 seconds. On the 4c laptop when processing 1.2 G BAM file, the times improve from 37.43 seconds to 34.1 seconds.
+
+
+
+
+
+
 \section{\uppercase{Experimental Results}}
 
 The computer we have used in order to perform the experiments is a Ryzen 9-3900X, having 12 cores and using 48 GB of RAM.
@@ -593,7 +614,7 @@ So for an increase of input of 8 times, the original algorithm would slow down 3
 
 As times will grow for a 8 GB BAM file to around 215 seconds (when setting heap size to be 42G as maximum using -Xmx42G), we can investigate and isolate the sequential I/O cost. So as we are reaching the limits of the machine, for a file that is approximately 5 times larger, the algorithm slows down by a factor of 12. When moving the input file on an SSD, the times improve to 139.8 seconds for compact algorithm. If moving to a bigger batch size (from 20K to 30K), the algorithm will process the output in 133.15 seconds, but for the sake of comparison, it is possible to conclude that using fast I/O can improve the runtime performance so the slow-down is from 12 times to 10 times (from 14.08sec to <140 sec).
 
-We added a parallel reader, and this parallel reader increases the complexity of the code, it looks that the improvement is note worthy: on 12c machine/8 GB BAM/SSD the saving of time is from 140 seconds to 131 seconds. On a spinning disk we have from 215 seconds to 195 seconds. On the 4c laptop when processing 1.2 G BAM file, the times improve from 37.43 seconds to 34.1 seconds.
+%We added a parallel reader, and this parallel reader increases the complexity of the code, it looks that the improvement is note worthy: on 12c machine/8 GB BAM/SSD the saving of time is from 140 seconds to 131 seconds. On a spinning disk we have from 215 seconds to 195 seconds. On the 4c laptop when processing 1.2 G BAM file, the times improve from 37.43 seconds to 34.1 seconds.
 
 
 
