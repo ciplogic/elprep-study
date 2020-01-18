@@ -706,8 +706,8 @@ The following table shows a brief comparison of the running times obtained by ou
 Original				& 9.13 			& 3.938 			& 123.91 		\\ \hline
 PresizedBuffers			& 8.98 			& 4.19 				& 75.1 			\\ \hline
 StreamByteArray			& 8.09 			& 3.43 				& 64.62 		\\ \hline
-Compact 				& 3.16 			& 1.686 			& 34.5			\\ \hline
-Compact/Par 			& 			    & 					& 26.7 			\\ \hline
+Compact 				& 5.64 			& 3.4 	 			& 34.5			\\ \hline
+Compact/Par 			& 5.42		    & 4.68				& 26.7 			\\ \hline
 \end{tabular}
 \end{center}
 \end{small}
@@ -759,7 +759,7 @@ although the number of objects to be removed is the same, the overall time neces
 	\begin{tabular}{|c|c|c|}
 		\hline			  	& 144 MB file		& 1.2 GB file		\\ \hline
 		Original			& 2326 MB			& 32025 MB			\\ \hline
-		PreSizedBuffers		& ? MB				& ? MB				\\ \hline
+		PreSizedBuffers		& 2326 MB			& 32025 MB			\\ \hline
 		StreamByteArray 	& 2275 MB			& 31463 MB			\\ \hline
 		Compact/Par			& 606 MB			& 4689 MB			\\ \hline
 	\end{tabular}
@@ -797,7 +797,7 @@ The results for the $144$ MB file are presented below (lower bars are better):
 	\includegraphics[scale=0.5]{images/times_and_memory_chart_small_144mb_ryzen.png}
 \end{center}
 
-As the used memory is quite similar between the original algorithm, {\it PresizedBbufferes} and {\it StreamByteArray}, their comparative performance is influenced only by the runtime savings. 
+As the used memory is quite similar between the original algorithm, {\it PresizedBuffers} and {\it StreamByteArray}, their comparative performance is influenced only by the runtime savings. 
 The {\it Compact} algorithms are on par from the point of view of the running time, but since they are using far less memory their performance is much better.
 %On very small files, there is a large variation between runtimes as they run just in seconds.
 
@@ -818,8 +818,9 @@ On the medium file ($1.2$ GB BAM) the values are more conclusive from the point 
 	\includegraphics[scale=0.5]{images/times_and_memory_chart.png}
 \end{center}
 
-As for the larger files, since we could only run the {\it Compact} and {\it Compact/Par} algorithms, we can not make a direct comparison between all of them. However, tests performed on the $8$ GB file showed that they scale as expected, GC does not become a large impediment and the overall performance seems limited only by other hardware components, such as the SATA controller speed and the disk drive itself.
-Both algorithms keep a steady pace or read/write at around $180$ MB/second.
+For the larger files, since we could only run the {\it Compact} and {\it Compact/Par} algorithms, and for ElPrep algorithm, we can't make a direct comparison between all algorithms, we can estimate scalability given the files we could run. To not penalize ElPrep, we used StreamByteArray 
+version of the algorithm, which should scale better than the original elPrep.  However, tests performed up-to the $8$ GB file showed that they scale as expected, GC does not become a large impediment for both Compact algorithms and the overall performance seems limited only by other hardware components, such as disk drive read/write speeds.
+Both Compact algorithms keep a steady pace or processing at around $180$ MB/second (or under 6 seconds to process every 1 GB of BAM). ElPrep (StreamByteArray version) has a sharp loss of speed as GC is triggered more often, processing data at the half of speed when increasing the BAM file size from 0.144 GB to 1.2 GB.
 The average values, including both read and write, are presented below:
 
 \begin{center}
@@ -827,17 +828,16 @@ The average values, including both read and write, are presented below:
 \end{center}
 
 
-\textcolor{red}{
-If the running machine would include a very fast hard-disk, probably trough profiling some other component could become a slow-down (like the rate of allocation in the JVM), but very likely
-the ratio of described Compact algorithms would remain quite steady up-to the time when the JVM/OS will remain without RAM, but as the algorithms use a typically a 4-6 times memory 
-savings compared with elPrep algorithm, the limits would be reached much later.
-If limits like the ratio of allocation of JVM becomes the limit, few proposed techniques are described in section "Future work" that may address this limitation.
-}
+As for now, these numbers are becoming disk bound (reading speed of the SSD is the limiting component in the system), and it can be speculated how the system would behave if instead of this disk a faster (i.e. NVMe) disk would be used.
+
+Assuming a new disk is used which would remove the disk as the limitation, other component of the system could become the bottleneck. A potential bottleneck could be the rate of Java allocation (also named as "allocation wall", which means that in current
+implementations Java could allocate but no faster than a number of MB/sec/core). In the section "Future Work" we propose few techniques that may mitigate or even eliminate these issues.
+
 
 
 
 Given the hardware differences between the machine used by the elPrep authors and ours, there are limits on the testing that could be done with the techniques used by this paper.
-Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $32$ GB/s) and so on.
+Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $3200$ MB/s) and so on.
 
 Another limitation is that we have ported only the most expensive parts of the algorithm, which are reading,  writing and storing all data in the memory. 
 %However, the remaining operations presented in the original paper can be ...
@@ -860,7 +860,7 @@ Another limitation is that we have ported only the most expensive parts of the a
 
 Our reader works as described before in two steps:
 
-* it separates initially from the original file the rows for the number of the expected batches on the main thread
+* it separates initially from the original file into a batch of rows that would be expected to be split later into chunks and batches
 
 * it executes in parallel the compaction step over the separated rows over the all cores
 
@@ -868,9 +868,7 @@ Speeding up the single threaded code by not making allocations
 
 For now, before chunking and batching is done, we split the full byte array read from file into discreet List<byte[]> instances,
 but this construct may not be necessary if it is found to be a bottle neck: an alternate approach it would be to store inside the large byte[]
-buffer read the '\\n' character positions, so no splitting is necessary, but it would necessitate that the reading inside the line to be rewritten.
-
-This type of coding that would strongly avoid almost any allocations would be necessary just if the memory allocator is a bottleneck in runtime execution.
+buffer read the end of line character positions, so no splitting is necessary, but it would necessitate some extra code complexity and book keeping.
 
 A similar variation of speeding up the single threaded part is to not do splitting into lines at all, but to read an approximate size in advance that would be around the expected chunk size
 and split it after in lines in a multi-threaded way.
@@ -894,6 +892,7 @@ These algorithms very likely can be very easily made in parallel (as any chunk i
 only on memory usage and very fast reading/writing.
 
 Some notes can be easily expected:
+
 * some tasks can be integrated into reading before inserting data into SamBatch structures, but it will be at a cost of code complexity,
 so a more sensible approach would be to read first, then do algorithms one by one in a parallel fashion
 * filtering and deleting data in general will have to include two steps (or a secondary SamBatch which rebuids from the first only with items that pass the condition)
@@ -903,15 +902,15 @@ then a merge sort could be done across the SamBatch(es)
 
 \subsection{\uppercase{Conclusions}}\label{subsec:uppercase2}
 
-The presented techniques in this paper show that in algorithms that are heavily limited by memory allocation(s), just by reducing creating many strings can improve the runtime performance.
-We measured a speedup factor of 2 in large files just by writing sequentially and not allocating anything as we write the bytes ourselves by tuning ElPrep algorithm.
+The presented techniques in this paper show that in algorithms where the task is heavily limited by memory allocation(s), just by reducing reducing the rate of GC trough removing many small allocations, it can improve significantly the runtime performance.
+We measured a speedup factor of 2 in large files just by writing sequentially and not allocating anything as we write the bytes ourselves by tuning ElPrep algorithm without changing the semantics.
 
-As elPrep stores a large data-set looking like a large CSV file - and for similar algorithms that need to store large data sets in memory - techniques of memory compaction, especially tuned per type of column, can reduce significantly the memory usage without reducing
-the performance of the application, compaction time being typically less than calling underlying garbage collection.
+As elPrep stores a large data-set looking like a large CSV file - and for similar applications that need to store large data sets in memory - techniques of memory compaction, especially tuned per type of column, 
+can reduce significantly the memory usage without reducing the performance of  application, compaction time being typically less than calling underlying garbage collection.
 
 If memory compaction is mixed with chunked data and batching the chunks are taken proportional with numbers of physical cores, the algorithm can extract parallelism making the code to be comparable with implementations that extract good parallelism as is elPrep.
 
-Using parallel fetching as the algorithm of memory compaction is happening (algorithm named by us "Compact Par"), it can improve even more the performance for these algorithm (from 159 secGB to 125 secGB).
+Using parallel fetching as the algorithm of memory compaction is happening (algorithm named by us "Compact Par"), it can improve even more the performance for these algorithm (from 159 sec/GB to 125 se/cGB).
 
 
 \begin{comment}
