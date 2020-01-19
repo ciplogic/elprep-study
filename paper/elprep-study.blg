@@ -1,13 +1,7 @@
 This is BibTeX, Version 0.99dThe top-level auxiliary file: elprep-study.aux
 The style file: apalike.bst
 Database file #1: elprep-study.bib
-I was expecting a `,' or a `}'---line 17 of file elprep-study.bib
- : 
- : @misc{visualvm:oracle,
-(Error may have been on previous line)
-I'm skipping whatever remains of this entry
 Warning--I didn't find a database entry for "?"
-Warning--empty year in gc:oracle
 Warning--empty booktitle in he:2010
 Warning--empty booktitle in manogar:2014
-(There was 1 error message)
+(There were 3 warnings)

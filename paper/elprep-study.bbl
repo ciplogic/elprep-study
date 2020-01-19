@@ -12,12 +12,12 @@ Costanza, P., Herzeel, C., and Verachtert, W. (2019).
   implementing a next-generation sequencing tool.
 \newblock {\em Evolutionary Bioinformatics}, 15:1176934319869015.
 
-\bibitem[GC, ]{gc:oracle}
-GC, O.
-\newblock {Java Garbage Collection Basics}, howpublished =
-  {https://www.oracle.com/webfolder/technetwork/
-  tutorials/obe/java/gc01/index.html}, year = {2019}, note = {Accessed:
-  2019-06-01},.
+\bibitem[GC, 2019]{gc:oracle}
+GC, O. (2019).
+\newblock {Java Garbage Collection Basics}.
+\newblock https://www.oracle.com/webfolder/technetwork/
+  tutorials/obe/java/gc01/index.html.
+\newblock Accessed: 2019-06-01.
 
 \bibitem[Gosling et~al., 2014]{gosling:2014}
 Gosling, J., Joy, B., Steele, G.~L., Bracha, G., and Buckley, A. (2014).
@@ -28,6 +28,12 @@ Gosling, J., Joy, B., Steele, G.~L., Bracha, G., and Buckley, A. (2014).
 He, Q., Li, Z., and Zhang, X. (2010).
 \newblock Data deduplication techniques.
 \newblock volume~21, pages 430 -- 433.
+
+\bibitem[Herzeel et~al., 2015]{herzeel:2015}
+Herzeel, C., Costanza, P., Decap, D., Fostier, J., and Reumers, J. (2015).
+\newblock elprep: High-performance preparation of sequence alignment/map files
+  for variant calling.
+\newblock {\em PloS one}, 10:e0132868.
 
 \bibitem[Herzeel et~al., 2019]{herzeel:2019}
 Herzeel, C., Costanza, P., Decap, D., Fostier, J., and Verachtert, W. (2019).
@@ -55,6 +61,12 @@ Oaks, S. (2014).
 \newblock {\em {Java Performance: The Definitive Guide}}.
 \newblock O'Reilly Media, Inc., 1st edition.
 
+\bibitem[Valhalla, 2019]{jdk:valhalla}
+Valhalla, P. (2019).
+\newblock {OpenJDK Project Valhalla}.
+\newblock https://openjdk.java.net/projects/valhalla/.
+\newblock Accessed: 2019-06-01.
+
 \bibitem[Vigna, 2019]{fastutil}
 Vigna, S. (2019).
 \newblock Fastutil 8.1.0.
@@ -63,9 +75,9 @@ Vigna, S. (2019).
 
 \bibitem[VisualVM, 2019]{visualvm:oracle}
 VisualVM, O. (2019).
-\newblock Java visualvm.
-\newblock
-  https://docs.oracle.com/javase/8/docs/technotes/guides/visualvm/index.html.
+\newblock {Java VisualVM}.
+\newblock https://docs.oracle.com/javase/8/docs/technotes/
+  guides/visualvm/index.html.
 \newblock Accessed: 2019-06-01.
 
 \end{thebibliography}

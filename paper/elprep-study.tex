@@ -555,7 +555,7 @@ This happens only when executing on "big machines" (when the RAM available is mu
 
 
 
-\subsection{\uppercase{Chunking-Batching and Extracting Parallelism}}\label{subsec:uppercase10}
+\subsection{\uppercase{Chunking-Batching and Extracting Parallelism}} \label{sec:batching}
 %Batch processing is the grouping of similar tasks that require similar resources in order to streamline their completion.
 %Chunking is the grouping together of information into ideally sized pieces so they can be used effectively to produce the outcome you want without stress or shutdown.
 In the elPrep original algorithm, a {\texttt{SamAlignment} } object is created for each row in the input file.
@@ -836,10 +836,72 @@ If limits like the ratio of allocation of JVM becomes the limit, few proposed te
 
 
 
+
+
+
+
+
+
+
+
+\section{\uppercase{Future work}}
+%\subsection{\uppercase{Batch reader scalability}}
+\textbf{Batch reader scalability} \\
+As we have described in section \ref{sec:batching}, our {\it batch reader} works in two steps: initially, on the main thread, it extracts from the original file the rows for the number of the expected batches, and then it executes in parallel, using all cores, the data compaction step.
+%Speeding up the single threaded code by not making allocations
+Before chunking and batching is done, we split the full byte array read from file into distinct  \texttt{List<byte[]>} instances. This separation may not be necessary, an alternate approach being to store inside a large \texttt{byte[]} structure all the information and to use an additional array of indices in order to retrieve the actual lines of text. This would reduce the number of allocations and eventually speed up the execution of the main thread.
+%This type of coding that would strongly avoid almost any allocations would be necessary just if the memory allocator is a bottleneck in runtime execution.
+
+A similar variation of speeding up the single threaded part is to not do the line splitting at all, but to read a block of text in advance, that would be around the expected chunk size,
+and then split it in lines in a multithreaded way.
+
+\textbf{Value Types} \\
+When Java specifications were elaborated, more than $25$ years ago, the cost of a retrieving an object from the memory and executing an arithmetic operation was approximately the same. On modern hardware however, the memory fetch operations are up to $1000$ times more expensive than arithmetic ones.
+This is why, the {\it Project Valhalla} \cite{jdk:valhalla}, that is expected to be integrated in modern JDK releases, introduces new data structures and language constructs that improve various aspects regarding data manipulation. For example, {\it Value Types} provide the necessary infrastructure for working with immutable and reference-free objects. In our context, this would allow us to further reduce the memory used by the {\it Compact} algorithm by using an efficient by-value computation with non-primitive types. 
+ %As memory consumption and allocation seem to be large slow-downs inside elPrep and it is having an impact on very large data sets also on the algorithms which we name them Compact,
+%reducing even by a bit the memory usage and memory compaction.
+%.Net's Virtual Machine named CLR has a very compact memory implementation of HashMap (System.Generic.Dictionary class) that could be possibly giving even more memory savings.
+%Similarly, there is an effort named Project Valhalla in JVM that has previews to download that can technically implement a memory compact dictionary that may have the same memory savings.
+%So just porting to .Net the code may bring less memory usage and maybe some speedups.
+
+
+%When implementing the Compact algorithms, it was implemented only the read/write and materialization of the data set stored in SAM/BAM files, as it was a very expensive part of the
+%elPrep implementation.
+%
+%Though the data in-memory has to be reordered, filtered, deleted from invalid data, and so on.
+%These algorithms very likely can be very easily made in parallel (as any chunk is a parallel subset of the entire file), but it isn't both the point of this paper as it focused
+%only on memory usage and very fast reading/writing.
+%
+%Some notes can be easily expected:
+%* some tasks can be integrated into reading before inserting data into SamBatch structures, but it will be at a cost of code complexity,
+%so a more sensible approach would be to read first, then do algorithms one by one in a parallel fashion
+%* filtering and deleting data in general will have to include two steps (or a secondary SamBatch which rebuids from the first only with items that pass the condition)
+%* sorting is possible as the batches are directly indexable, so item with number: 654321 would be on SamBatch index 654 321 / 20 000, and with sub-index inside the batch of 654321 \% 20 000
+%* another way to do the sorting is to sort inside the batch first by sequences (and sequences are easily sortable as the sorting is done 21 DNA letters at once) inside the batch,
+%then a merge sort could be done across the SamBatch(es)
+
+
+
+
+
+\section{\uppercase{Conclusion}}
+This paper addresses the situation when one has to manipulate a large textual data set by reading it from a file, transforming it into objects, processing it and then writing it back to a file, and all these operations must be performed in a single in-memory sessions.
+We have analyzed a modern implementation of an algorithm for processing SAM and BAM files, elPrep \cite{herzeel:2015}, \cite{herzeel:2019}, which must handle input files up to $100$ GB.
+The conclusion of the elPrep authors was that a Java implementation for this specific problem suffers from the memory management offered by JVM \cite{costanza:2019}.
+However, when using an object-oriented programming platform, one has to take into consideration all aspects regarding memory allocation offered by that specific platform and to adapt its model accordingly. 
+
+We have showed that major improvements can be obtained by using techniques that are aimed at reducing the number of created objects. This will not only save memory but it will also improve runtime performance by decreasing the overhead of the Garbage Collector.
+%We measured a speedup factor of $2$ in large files just by writing sequentially and not allocating anything as we write the bytes ourselves by tuning ElPrep algorithm.
+Using a column-based representation we have compacted the data set in a manner that boosted the overall score calculated as the multiplication between used memory and running time. 
+The penalty incurred by the more elaborate data model was compensated by a multithreaded approach, called chunking-batching, that actually allows the algorithm to use all the available machine cores when processing the input file. In order to optimize the usage of the I/O device, we have also implemented the {\it async/await} pattern, which offered a small increases in performance.
+
 Given the hardware differences between the machine used by the elPrep authors and ours, there are limits on the testing that could be done with the techniques used by this paper.
 Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $32$ GB/s) and so on.
+However, using input files ranging in size from $144$ MB to $12$ GB, we have proved that our algorithms are scalable and could perform as expected for files of any size, provided the machine has sufficient memory.
 
-Another limitation is that we have ported only the most expensive parts of the algorithm, which are reading,  writing and storing all data in the memory. 
+1
+
+%Another limitation is that we have ported only the most expensive parts of the algorithm, which are reading,  writing and storing all data in the memory. 
 %However, the remaining operations presented in the original paper can be ...
 %and we will have a section with possible untested improvements that could be done to get (at least it looks reasonable that) better numbers that are obtained compared with the results that are presented here.
 
@@ -847,100 +909,6 @@ Another limitation is that we have ported only the most expensive parts of the a
 
 
 
-
-
-
-
-
-
-
-\section{\uppercase{Future work}}\label{sec:uppercase}
-
-\subsection{\uppercase{Scalability of batch reader}}\label{subsec:uppercase5}
-
-Our reader works as described before in two steps:
-
-* it separates initially from the original file the rows for the number of the expected batches on the main thread
-
-* it executes in parallel the compaction step over the separated rows over the all cores
-
-Speeding up the single threaded code by not making allocations
-
-For now, before chunking and batching is done, we split the full byte array read from file into discreet List<byte[]> instances,
-but this construct may not be necessary if it is found to be a bottle neck: an alternate approach it would be to store inside the large byte[]
-buffer read the '\\n' character positions, so no splitting is necessary, but it would necessitate that the reading inside the line to be rewritten.
-
-This type of coding that would strongly avoid almost any allocations would be necessary just if the memory allocator is a bottleneck in runtime execution.
-
-A similar variation of speeding up the single threaded part is to not do splitting into lines at all, but to read an approximate size in advance that would be around the expected chunk size
-and split it after in lines in a multi-threaded way.
-
-\subsection{\uppercase{Testing the code using Value Types}}\label{subsec:uppercase4}
-
-As memory consumption and allocation seem to be large slow-downs inside elPrep and it is having an impact on very large data sets also on the algorithms which we name them Compact,
-reducing even by a bit the memory usage and memory compaction.
-.Net's Virtual Machine named CLR has a very compact memory implementation of HashMap (System.Generic.Dictionary class) that could be possibly giving even more memory savings.
-Similarly, there is an effort named Project Valhalla in JVM that has previews to download that can technically implement a memory compact dictionary that may have the same memory savings.
-
-So just porting to .Net the code may bring less memory usage and maybe some speedups.
-
-\subsection{\uppercase{Doing the algorithms}}\label{subsec:uppercase3}
-
-When implementing the Compact algorithms, it was implemented only the read/write and materialization of the data set stored in SAM/BAM files, as it was a very expensive part of the
-elPrep implementation.
-
-Though the data in-memory has to be reordered, filtered, deleted from invalid data, and so on.
-These algorithms very likely can be very easily made in parallel (as any chunk is a parallel subset of the entire file), but it isn't both the point of this paper as it focused
-only on memory usage and very fast reading/writing.
-
-Some notes can be easily expected:
-* some tasks can be integrated into reading before inserting data into SamBatch structures, but it will be at a cost of code complexity,
-so a more sensible approach would be to read first, then do algorithms one by one in a parallel fashion
-* filtering and deleting data in general will have to include two steps (or a secondary SamBatch which rebuids from the first only with items that pass the condition)
-* sorting is possible as the batches are directly indexable, so item with number: 654321 would be on SamBatch index 654 321 / 20 000, and with sub-index inside the batch of 654321 \% 20 000
-* another way to do the sorting is to sort inside the batch first by sequences (and sequences are easily sortable as the sorting is done 21 DNA letters at once) inside the batch,
-then a merge sort could be done across the SamBatch(es)
-
-\subsection{\uppercase{Conclusions}}\label{subsec:uppercase2}
-
-The presented techniques in this paper show that in algorithms that are heavily limited by memory allocation(s), just by reducing creating many strings can improve the runtime performance.
-We measured a speedup factor of 2 in large files just by writing sequentially and not allocating anything as we write the bytes ourselves by tuning ElPrep algorithm.
-
-As elPrep stores a large data-set looking like a large CSV file - and for similar algorithms that need to store large data sets in memory - techniques of memory compaction, especially tuned per type of column, can reduce significantly the memory usage without reducing
-the performance of the application, compaction time being typically less than calling underlying garbage collection.
-
-If memory compaction is mixed with chunked data and batching the chunks are taken proportional with numbers of physical cores, the algorithm can extract parallelism making the code to be comparable with implementations that extract good parallelism as is elPrep.
-
-Using parallel fetching as the algorithm of memory compaction is happening (algorithm named by us "Compact Par"), it can improve even more the performance for these algorithm (from 159 secGB to 125 secGB).
-
-
-\begin{comment}
-
-\subsection*{Original}
-As Java GC does use more system memory to speedup allocations, it is important to see how real life memory usage is calculated.
-
-To calculate live memory usage we took VisualVM toolset and we got a memory snapshot just before all writing to disk was done. In this way we know that all data set is processed in memory and no data is discarded.
-
-
-Here is a screenshot of the original algorithm with a heap dump:
-\includegraphics[scale=0.33]{images/VisualVM_Orig_144MB_heap_dump}
-
-The main difference over the "Optimized" algorithm is the 2.5M strings and 78M bytes associated with them
-
-\subsection*{Optimized}
-
-As "Optimized" algorithm is mostly a tuned implementation of Original, but it tries to materialize as little intermediate objects, the heap will look very similar:
-
-\includegraphics[scale=0.33]{images/VisualVM_Optimized_144MB_heap_dump}
-
-\subsection*{Compact}
-
-\includegraphics[scale=0.33]{images/VisualVM_Compact_144MB_heap_dump}
-
-What is critical to be observed is simply that the Compact uses for all types that use up-to 1M instances of live data, the full heap dump was only of: 624.066 M Bytes, 
-when compared with Original or Optimized implementations that they were floating over 4.5 times more live memory usage (or 3 GB).
-
-\end{comment}
 
 
 \bibliographystyle{apalike}

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  18 JAN 2020 17:19
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  19 JAN 2020 10:34
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -710,59 +710,67 @@ Overfull \hbox (13.93439pt too wide) in paragraph at lines 826--827
  [] 
  []
 
-[11 <./images/times_and_memory_chart_small_144mb_intel.png> <./images/times_and
-_memory_chart.png> <./images/seconds_per_gb_ryzen.png>]
-Underfull \hbox (badness 1112) in paragraph at lines 880--884
-\OT1/ptm/m/n/10 As mem-ory con-sump-tion and al-lo-ca-tion seem to
+
+Underfull \vbox (badness 3965) has occurred while \output is active []
+
+ [11 <./images/times_and_memory_chart_small_144mb_intel.png> <./images/times_an
+d_memory_chart.png> <./images/seconds_per_gb_ryzen.png>] (elprep-study.bbl
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+
+Underfull \hbox (badness 4660) in paragraph at lines 16--21
+[]\OT1/ptm/m/n/9 GC, O. (2019).  Java Garbage Col-lec-tion Ba-sics.
  []
 
-Excluding 'comment' comment. (elprep-study.bbl
-Underfull \hbox (badness 3078) in paragraph at lines 38--42
+
+Underfull \hbox (badness 3078) in paragraph at lines 44--48
 []\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 38--42
+Underfull \hbox (badness 10000) in paragraph at lines 44--48
 \OT1/ptm/m/n/9 vel-op-ment Kit Ver-sion 11 API Spec-i-fi-ca-tion.
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 38--42
+Underfull \hbox (badness 10000) in paragraph at lines 44--48
 \OT1/ptm/m/n/9 https://docs.oracle.com/en/java/javase/11/docs/api.
  []
 
-[12]
-Underfull \hbox (badness 10000) in paragraph at lines 65--70
-[]\OT1/ptm/m/n/9 VisualVM, O. (2019).  Java vi-su-alvm.
+
+Underfull \hbox (badness 8189) in paragraph at lines 65--69
+[]\OT1/ptm/m/n/9 Valhalla, P. (2019).  Open-JDK Project Val-halla.
  []
 
 
-Overfull \hbox (82.03575pt too wide) in paragraph at lines 65--70
-\OT1/ptm/m/n/9 https://docs.oracle.com/javase/8/docs/technotes/guides/visualvm/
-index.html.
+Underfull \hbox (badness 10000) in paragraph at lines 77--82
+[]\OT1/ptm/m/n/9 VisualVM, O. (2019).  Java Vi-su-alVM.
  []
 
-) [13
 
-] (elprep-study.aux) ) 
+Underfull \hbox (badness 10000) in paragraph at lines 77--82
+\OT1/ptm/m/n/9 https://docs.oracle.com/javase/8/docs/technotes/
+ []
+
+) [12] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
- 4830 strings out of 493333
- 69741 string characters out of 3139192
- 143348 words of memory out of 3000000
- 8236 multiletter control sequences out of 15000+200000
+ 4826 strings out of 493333
+ 69662 string characters out of 3139192
+ 143339 words of memory out of 3000000
+ 8232 multiletter control sequences out of 15000+200000
  60172 words of font info for 133 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,607b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}
-<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Prog
-ram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files
-/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 
-2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1
-/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a
-.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on elprep-study.pdf (13 pages, 838291 bytes).
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r
+.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:
+/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program 
+Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/Mi
+KTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/
+type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
+tmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on elprep-study.pdf (12 pages, 836832 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
+ 87 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  41 words of extra memory for PDF output out of 10000 (max. 10000000)
 
