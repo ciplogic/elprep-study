@@ -426,6 +426,28 @@ On top of this, there is the cost of tags.
 In the original implementation, every {\texttt{SamAlignment} } object has references to {\texttt{temps} } and {\texttt{TAGS} } arrays.
 These arrays have an initial size of $16$, respectively $4$, and contain references to {\texttt{Field} } objects, which in turn contain a reference to a {\texttt{Slice} } object.
 
+\textcolor{brown}{
+These 20 references and the extra two ArrayList instances mean that there is an extra fixed overhead of: 20 (references) * 8 bytes + 2 (ArrayList) * 64 = 288 bytes which are on-top of original ElPrep's 
+row store memory usage.}
+\textcolor{brown}{
+In our calculation just for bookkeeping the row without tags (189 bytes) and the tags/temp costs (another 288 bytes) it translates in 477 bytes (and some rounding-up done by JVM: so we talk about 480 bytes).
+}
+\textcolor{brown}{
+For smallest file (144 MB BAM file) as it has 2.1 million rows, just for bookkeeping the JVM will use 1 001 700 000 bytes.
+}
+\textcolor{brown}{
+Our Compact algorithm will use much less extra, 4 bytes for length, and the indices into a table, every index which would be 2 bytes long. On average we found around 10 tags per row, and the indices would
+in fact store the equivalent data with the pointer: so book keeping would be on average: (length*1 + index * 10) : 4 + 2*10 = 24 bytes, a 10x saving.
+}
+
+\textcolor{brown}{
+For 2.1 million entries, for tags the usage is just 24 x 2.1 million = 50 400 000 bytes for tags and a combined value for {\texttt{Compact}} representation of: (39+24)x2.1 million = 132 300 000 bytes for book keeping.
+}
+
+\textcolor{brown}{
+	For {\texttt{Compact Chunked}} the saves are noticeable as it would use 6 bytes less per row: (33 + 24) x 2.1 million = 119 700 000, around 10 percent less than {\texttt{Compact}}
+}
+
 In order to address {\texttt{temps} } and {\texttt{TAGS} } we have implemented the {\texttt{TagSequence} } class, which is a combination between {\texttt{StringSequence} } and {\texttt{DeduplicatedDictionary} }.
 Since the {\texttt{tags} } are repeating frequently, we save them using one {\texttt{short} } value per tag, but instead of using a list of tags, we define a sequence of indices.
 
@@ -443,8 +465,6 @@ tagSequence = [0,1,2,1,2,3];
 \textcolor{brown}{
 It may be noticed is that tag sequence is not warrantied to fit it in two bytes, but if using {\texttt{Chunking/Batching}}, the experimental possibility to not fit a tag into 2 bytes unique value is very unlikely:
 for around every 20K rows there are around 2400 unique tags and around 10 tags per row (or 200K tags in total for every 20K lines).
-
-For a set of 20K rows the tags before would be mostly on the size of an Object type that stores some values, which would mean around 16 bytes per instance vs 2 bytes per instance.
 }
 
 
@@ -712,16 +732,17 @@ Compact/Par 			& 5.42		    & 4.68				& 26.7 			\\ \hline
 \end{center}
 \end{small}
 
-Comparing $4$ cores to $12$ cores, we notice that the original algorithm scales with a factor of $2.3$, {\it PresizedBuffers} by a factor of $2.14$, {\it StreamByteArray} scales by $2.36$ and {\it Compact} would scale by $1.69$. So, at least for the small file, it seems that using larger machines will offer a better performance. It is important to notice that, in its current implementation, the {\it Compact} algorithm has an explicit sequential part that reduces its scalability. We address this issue when presenting proposed ideas for potential improvements.
+Comparing $4$ cores to $12$ cores, we notice that the original algorithm scales with a factor of $2.3$, {\it PresizedBuffers} by a factor of $2.14$, {\it StreamByteArray} scales by $2.36$ and {\it Compact} would scale by $1.69$. So, at least for the small file, it seems that using larger machines will offer a better performance. It is important to notice that, in its current implementation, the {\it Compact} algorithm has an explicit sequential part that reduces its scalability. 
+\textcolor{brown}{Some potential fixes are described in section named "Future Work" where are described some techniques to make the sequential part more lightweight.}
 %Analysis of speedup across machines (4 core vs 12 core):
 %Original algorithm scales with a factor of 2.3, presized buffers by a factor of 2.14, StreamByteArray scales by 2.36 and compact would scale by: 1.686, so at least for small files it looks that scaling over large machines will be able to offer a better scaling.
 %Also, it is important to notice that the compacting algorithm has an explicit sequential part that reduces scalability, and it may be reduced with proposed ideas of potential improvements.
 
-Considering the file size, the original algorithm uses a lot of memory and, since the JVM has to call more often the Garbage Collector, the cost of GC visibly affects the executing time, affecting its scalability. Our techniques of reducing object allocations presented in {\it PresizedBuffers} and {\it StreamByteArray} algorithms pay off now, their runtime profiles are much better than the original. Since the {\it Compact} algorithm reduces drastically the memory consumption, it is not affected too much by GC and the overall running time is significantly superior. 
-So, for an increase in file size $8$ times, the original algorithm would slow down $31.46$ times, the {\it PresizedBuffers} will slow down $17.92$ times, {\it StreamByteArray} will slow down $18.83$ times,
-and the {\it Compact} algorithm will have a perfect $8.33$ times slow down.
+Considering the file size, the ElPrep algorithm uses a lot of memory and, since the JVM has to call more often the Garbage Collector, the cost of GC visibly affects the executing time, affecting its scalability. Our techniques of reducing object allocations presented in {\it PresizedBuffers} and {\it StreamByteArray} algorithms pay off now, their runtime profiles are much better than the original. Since the {\it Compact} algorithm reduces drastically the memory consumption, it is not affected too much by GC and the overall running time is significantly superior. 
+For an increase in file size $8$ times, the original algorithm would slow down $31.46$ times, the {\it PresizedBuffers} will slow down $17.92$ times, {\it StreamByteArray} will slow down $18.83$ times,
+and the {\it Compact} algorithm will have an almost perfect $8.33$ times slow down.
 
-For the $8$ GB BAM file, we could only execute the {\it Compact} algorithm, as the others would produce an \texttt{OutOfMemoryError}, even when setting the heap size to $42$ GB.
+For the $8$ GB BAM file, we could only execute the {\it Compact} algorithm, as the others ElPrep derived algorithms would produce an \texttt{OutOfMemoryError}, even when setting the heap size up-to $42$ GB.
 The execution time was around $215$ seconds, so as we are reaching the limits of the machine, for a file that is approximately $5$ times larger, the algorithm slows down by a factor of $12$. When moving the input file to an SSD, which offers a faster I/O, the running time drops to $139.8$ seconds, which means a $10$ times slow down.
 
 %As times will grow for a 8 GB BAM file to around 215 seconds (when setting heap size to be 42G as maximum using -Xmx42G), we can investigate and isolate the sequential I/O cost.
@@ -741,9 +762,9 @@ Java VisualVM \cite{visualvm:oracle}, which provides a visual interface for prof
 %VisualVM to capture according to different algorithms the different values of memory consumption and it describes the minimum amount of memory that JVM has to have available theoretically to load specific data set.
 %To get the values from the following paragraphs, it was clicked on the tab "Monitor", look into "Memory" section and we triggered forcefully a GC after we suspended the algorithm when loading all the model (which is the maximum memory used) and it was all used for reading.
 
-Unlike the original paper, which measures process memory size, we have measured live data size.  This is possible due to VisualVM which offers very precise information regarding the objects consuming the memory.
+Unlike the original paper, which measures process memory size, we have measured live data size.  This is possible due to VisualVM which offers very precise information regarding the objects consuming memory.
 %and many variables are excluded like: the G1GC (the default GC algorithm in Oracle JDK/OpenJDK) uses background threads to free memory which interact with threads of execution, having a quite random values on runtime.
-It is also important to understand that the more live memory is used, the more complex the graph of objects is and the less free memory exists on a particular machine, the GC impact will be higher.
+It is also important to understand that the more live memory is used, and more complex the graph of objects is and the less free memory exists on a particular machine, the GC impact will be higher.
 This is because the GC algorithm is triggered when a critical amount of the heap is occupied.
 Therefore, the more memory JVM has access to, the more seldom GC will execute.
 The default {\it Garbage First Garbage Collector (G1 GC)} is automatically triggered at $45\%$ memory occupancy (this value being configurable using the \texttt{InitiatingHeapOccupancyPercent} parameter). When the heap is arriving at this level, JVM will spawn background threads in order to do the marking phase, and this affects the running time.
