@@ -691,7 +691,7 @@ In order to analyze the performance of read/write operations, we made sure that 
 
 
 
-\subsection{\uppercase{Runtime performance}}\label{subsec:uppercase9}
+\subsection{\uppercase{Runtime performance}}
 
 The following table shows a brief comparison of the running times obtained by our algorithms, in three configurations: $144$ MB file using $4$ cores and $12$ cores, and $1.2$ GB file using $12$ cores. 
 %The time is expressed in seconds.
@@ -706,8 +706,8 @@ The following table shows a brief comparison of the running times obtained by ou
 Original				& 9.13 			& 3.938 			& 123.91 		\\ \hline
 PresizedBuffers			& 8.98 			& 4.19 				& 75.1 			\\ \hline
 StreamByteArray			& 8.09 			& 3.43 				& 64.62 		\\ \hline
-Compact 				& 3.16 			& 1.686 			& 34.5			\\ \hline
-Compact/Par 			& 			    & 					& 26.7 			\\ \hline
+Compact 				& 5.64 			& 3.4 	 			& 34.5			\\ \hline
+Compact/Par 			& 5.42		    & 4.68				& 26.7 			\\ \hline
 \end{tabular}
 \end{center}
 \end{small}
@@ -734,7 +734,7 @@ The execution time was around $215$ seconds, so as we are reaching the limits of
 
 
 
-\subsection{\uppercase{Memory Usage}}\label{subsec:uppercase8}
+\subsection{\uppercase{Memory Usage}}
 To measure the live data set, we have used the standard instrumentation tools of the JVM and
 Java VisualVM \cite{visualvm:oracle}, which provides a visual interface for profiling a running application. Using VisualVM, we have analyzed the memory consumption in each scenario and we have estimated the minimum amount of memory that JVM requires in order to load a specific data set.
 %To measure the live data set, we use the already existing instrumentation in the JVM and the visual tool
@@ -759,7 +759,7 @@ although the number of objects to be removed is the same, the overall time neces
 	\begin{tabular}{|c|c|c|}
 		\hline			  	& 144 MB file		& 1.2 GB file		\\ \hline
 		Original			& 2326 MB			& 32025 MB			\\ \hline
-		PreSizedBuffers		& ? MB				& ? MB				\\ \hline
+		PreSizedBuffers		& 2326 MB			& 32025 MB			\\ \hline
 		StreamByteArray 	& 2275 MB			& 31463 MB			\\ \hline
 		Compact/Par			& 606 MB			& 4689 MB			\\ \hline
 	\end{tabular}
@@ -786,7 +786,7 @@ For example, in case of the original elPrep algorithm, as it creates millions of
 
  
  
-\subsection{\uppercase{Calculating performance $\times$ memory}} \label{subsec:uppercase7}
+\subsection{\uppercase{Calculating performance $\times$ memory}}
 The goal of elPrep was to keep both the running time and the the memory consumption low. The evaluation function was defined as the multiplication of the average elapsed wall-clock time (in hours) with the average maximum memory use (in GB), with lower values (in GBh) being better \cite{costanza:2019}.
 We have used the same approach, changing only the measurement units to MB and seconds.
 
@@ -797,7 +797,7 @@ The results for the $144$ MB file are presented below (lower bars are better):
 	\includegraphics[scale=0.5]{images/times_and_memory_chart_small_144mb_ryzen.png}
 \end{center}
 
-As the used memory is quite similar between the original algorithm, {\it PresizedBbufferes} and {\it StreamByteArray}, their comparative performance is influenced only by the runtime savings. 
+As the used memory is quite similar between the original algorithm, {\it PresizedBuffers} and {\it StreamByteArray}, their comparative performance is influenced only by the runtime savings. 
 The {\it Compact} algorithms are on par from the point of view of the running time, but since they are using far less memory their performance is much better.
 %On very small files, there is a large variation between runtimes as they run just in seconds.
 
@@ -818,23 +818,14 @@ On the medium file ($1.2$ GB BAM) the values are more conclusive from the point 
 	\includegraphics[scale=0.5]{images/times_and_memory_chart.png}
 \end{center}
 
-As for the larger files, since we could only run the {\it Compact} and {\it Compact/Par} algorithms, we can not make a direct comparison between all of them. However, tests performed on the $8$ GB file showed that they scale as expected, GC does not become a large impediment and the overall performance seems limited only by other hardware components, such as the SATA controller speed and the disk drive itself.
-Both algorithms keep a steady pace or read/write at around $180$ MB/second.
+For the larger files, since we could only run the {\it Compact} and {\it Compact/Par} algorithms, and for ElPrep algorithm, we can't make a direct comparison between all algorithms, we can estimate scalability given the files we could run. To not penalize ElPrep, we used StreamByteArray 
+version of the algorithm, which should scale better than the original elPrep.  However, tests performed up-to the $8$ GB file showed that they scale as expected, GC does not become a large impediment for both Compact algorithms and the overall performance seems limited only by other hardware components, such as disk drive read/write speeds.
+Both Compact algorithms keep a steady pace or processing at around $180$ MB/second (or under 6 seconds to process every 1 GB of BAM). ElPrep (StreamByteArray version) has a sharp loss of speed as GC is triggered more often, processing data at the half of speed when increasing the BAM file size from 0.144 GB to 1.2 GB.
 The average values, including both read and write, are presented below:
 
 \begin{center}
 	\includegraphics[scale=0.5]{images/seconds_per_gb_ryzen.png}
 \end{center}
-
-
-\textcolor{red}{
-If the running machine would include a very fast hard-disk, probably trough profiling some other component could become a slow-down (like the rate of allocation in the JVM), but very likely
-the ratio of described Compact algorithms would remain quite steady up-to the time when the JVM/OS will remain without RAM, but as the algorithms use a typically a 4-6 times memory 
-savings compared with elPrep algorithm, the limits would be reached much later.
-If limits like the ratio of allocation of JVM becomes the limit, few proposed techniques are described in section "Future work" that may address this limitation.
-}
-
-
 
 
 
@@ -850,7 +841,6 @@ If limits like the ratio of allocation of JVM becomes the limit, few proposed te
 As we have described in section \ref{sec:batching}, our {\it batch reader} works in two steps: initially, on the main thread, it extracts from the original file the rows for the number of the expected batches, and then it executes in parallel, using all cores, the data compaction step.
 %Speeding up the single threaded code by not making allocations
 Before chunking and batching is done, we split the full byte array read from file into distinct  \texttt{List<byte[]>} instances. This separation may not be necessary, an alternate approach being to store inside a large \texttt{byte[]} structure all the information and to use an additional array of indices in order to retrieve the actual lines of text. This would reduce the number of allocations and eventually speed up the execution of the main thread.
-%This type of coding that would strongly avoid almost any allocations would be necessary just if the memory allocator is a bottleneck in runtime execution.
 
 A similar variation of speeding up the single threaded part is to not do the line splitting at all, but to read a block of text in advance, that would be around the expected chunk size,
 and then split it in lines in a multithreaded way.
@@ -882,8 +872,6 @@ This is why, the {\it Project Valhalla} \cite{jdk:valhalla}, that is expected to
 
 
 
-
-
 \section{\uppercase{Conclusion}}
 This paper addresses the situation when one has to manipulate a large textual data set by reading it from a file, transforming it into objects, processing it and then writing it back to a file, and all these operations must be performed in a single in-memory sessions.
 We have analyzed a modern implementation of an algorithm for processing SAM and BAM files, elPrep \cite{herzeel:2015}, \cite{herzeel:2019}, which must handle input files up to $100$ GB.
@@ -898,16 +886,6 @@ The penalty incurred by the more elaborate data model was compensated by a multi
 Given the hardware differences between the machine used by the elPrep authors and ours, there are limits on the testing that could be done with the techniques used by this paper.
 Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $32$ GB/s) and so on.
 However, using input files ranging in size from $144$ MB to $12$ GB, we have proved that our algorithms are scalable and could perform as expected for files of any size, provided the machine has sufficient memory.
-
-1
-
-%Another limitation is that we have ported only the most expensive parts of the algorithm, which are reading,  writing and storing all data in the memory. 
-%However, the remaining operations presented in the original paper can be ...
-%and we will have a section with possible untested improvements that could be done to get (at least it looks reasonable that) better numbers that are obtained compared with the results that are presented here.
-
-
-
-
 
 
 

@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  19 JAN 2020 10:34
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  19 JAN 2020 10:55
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -698,20 +698,23 @@ Overfull \hbox (14.31079pt too wide) in paragraph at lines 818--819
  [] 
  []
 
-<images/seconds_per_gb_ryzen.png, id=53, 454.69875pt x 255.95625pt>
+<images/seconds_per_gb_ryzen.png, id=53, 455.45157pt x 255.95625pt>
 File: images/seconds_per_gb_ryzen.png Graphic file (type png)
 
 <use images/seconds_per_gb_ryzen.png>
-Package pdftex.def Info: images/seconds_per_gb_ryzen.png used on input line 826
+Package pdftex.def Info: images/seconds_per_gb_ryzen.png used on input line 827
 .
-(pdftex.def)             Requested size: 227.34882pt x 127.9778pt.
+(pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (13.93439pt too wide) in paragraph at lines 826--827
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 827--828
  [] 
  []
 
 
-Underfull \vbox (badness 3965) has occurred while \output is active []
+Underfull \vbox (badness 4229) has occurred while \output is active []
+
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
 
  [11 <./images/times_and_memory_chart_small_144mb_intel.png> <./images/times_an
 d_memory_chart.png> <./images/seconds_per_gb_ryzen.png>] (elprep-study.bbl
@@ -754,10 +757,10 @@ Underfull \hbox (badness 10000) in paragraph at lines 77--82
 
 ) [12] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
- 4826 strings out of 493333
- 69662 string characters out of 3139192
- 143339 words of memory out of 3000000
- 8232 multiletter control sequences out of 15000+200000
+ 4823 strings out of 493333
+ 69605 string characters out of 3139192
+ 143307 words of memory out of 3000000
+ 8229 multiletter control sequences out of 15000+200000
  60172 words of font info for 133 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
  42i,9n,40p,607b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -768,7 +771,7 @@ Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/Mi
 KTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/
 type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
 tmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on elprep-study.pdf (12 pages, 836832 bytes).
+Output written on elprep-study.pdf (12 pages, 818097 bytes).
 PDF statistics:
  87 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
