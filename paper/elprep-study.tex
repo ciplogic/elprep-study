@@ -279,12 +279,6 @@ The total is $4,224,000,000$ bytes, representing almost $4$ GB\@.
 At the point when GC executes, there are $9$ objects per row 
 ({\texttt{SamAlignment} } $+ 6$ {\texttt{Slice} } $+ 1$ {\texttt{String} } $+ 1$ byte array) on heap.
 
-\textcolor{red}{
-The ElPrep algorithm will duplicate all the {\texttt{SamAlignment} }s once, as it looks for duplicate objects, so the required memory will double.
-On top of it, there are the underlying strings which keep the data.
-For $2.1$ million entries the grand total is around $700,000,000$ bytes, and $6,050,000,000$ bytes for the $1$ GB entry.
-}
-
 
 
 \subsection{\uppercase{The Column-Based Model}} \label{model:column}
@@ -318,19 +312,26 @@ Regardless of VM bitness, the memory consumption for representing one row of the
 \begin{center}
 \begin{tabular}{ l l l }
  {\textbf{Data Type} } 				& {\textbf{Count} } 		& {\textbf{Bytes} } \\
- {\texttt{StringSequence} } 			& $2$ 				& $4$ \\
+ {\texttt{StringSequence} } 		& $2$ 				& $4$ \\
  {\texttt{DeduplicatedDictionary} }	& $3$ 				& $4$ \\
- {\texttt{IntArraySequence} }			& $3$		 		& $4$ \\
+ {\texttt{IntArraySequence} }		& $3$		 		& $4$ \\
  {\texttt{CharArraySequence} }		& $1$				& $2$ \\
  {\texttt{ByteArrayList} }			& $1$				& $1$ \\
- {\texttt{DnaEncodingSequence} }	 	& $1$ 				& $4$ \\
- 								& {\textbf{Total} }		& $\mathbf{39}$
+ {\texttt{DnaEncodingSequence} }	& $1$ 				& $4$ \\
+ {\textbf{Total} }					& 					& $\mathbf{39}$
 \end{tabular}
 \end{center}
 
 Considering that no rounding up is necessary, for $2.1$ million rows this sums up to $81,900,000$ bytes,
 equivalent to $78$ MB. The header sizes of the column objects ($11*8$ bytes) become negligible in this context.
-\\ \textcolor{red}{{\textit{of just 60 MB of indices and after that we have the joined data.} }}
+
+\textcolor{brown}{
+We will later explain how few more saves can be achieved in  {\texttt{DeduplicatedDictionary}} to save another 2 bytes per instance in the future "Batching" section, but as a visual description, this is the data between algorithms per row just to do bookkeeping and keeping primitive values:
+}
+
+\begin{center}
+	\includegraphics[scale=0.35]{images/MemoryBookeeping.png}
+\end{center}
 
 As this is a major reduction in memory consumption, let us analyze the technique used to achieve this result.
 
@@ -385,49 +386,45 @@ Another advantage of using such an encoding is that when checking if two sequenc
 As before, the GC will also benefit from the reduced number of objects that must be visited.
 
 
-
-
 Running the smaller input file (144 MB), we have estimated that the original ElPrep algorithm would use around three times more memory than the size of the input SAM file.
 However, when trying to process the larger input file (1.2 GB), on a 32 GB machine, we have obtained an {\texttt{OutOfMemoryError} }, meaning that the penalty of using too many objects in order to represent the information was preventing us in loading the entire data set into memory.
-\\ \textcolor{red}{JVM using how much memory?}
-
-1 GB input:
-Original algorithm: 32 024 799 640 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk.
-This is the lowest maximum memory consumption for 1.2 GB BAM file
-Optimized algo: 31 463 351 904
-Compact algo: 4 703 674 464 bytes	
-Live data memory usage: 6.8x less.
-144 MB input:
-Original algorithm: 2 234 575 120 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk.
-This is the lowest maximum memory consumption for 1.2 GB BAM file
-Optimized algo: 2 273 444 096
-Compact algo: 607 589 728 bytes	
-Live data memory usage: 3.67x less.
-8 GB input: 20 334 009 424 B\@.
-Obviously we had a too small machine to process a live data set that is using as minimum 3
-12 GB input: 35 401 115 712 B\@.
-
-Time is 300 seconds (on 8core machine) as the machine touches Swap file, but being able to process 12 GB BAM file on a 48 GB machine is a feature in itself.
 
 
-With memory compaction, the memory needed to represent all the objects was estimated to 17.6 million rows * $39$ bytes per row $=$ $686,400,000$ bytes ($655$ MB), plus the DNA sequences  $17.6$ millions $* 44 = 774 MB$.
-
-\textcolor{red}{
-As the string data was estimated to at most $3$ GB, in $4.4$ GB we have stored both the entire SAM file and the fields associated with the alignments.
-}
-
-\textcolor{red}{
-Duplicating all this (as elPrep does it) will make the entire live set go to $9$ GB, which is still around half of the original live set (what is the size of the original live set?
-definition of "the live set".
-}
+%\\ \textcolor{red}{JVM using how much memory?}
+%
+%1 GB input:
+%Original algorithm: 32 024 799 640 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk.
+%This is the lowest maximum memory consumption for 1.2 GB BAM file
+%Optimized algo: 31 463 351 904
+%Compact algo: 4 703 674 464 bytes
+%Live data memory usage: 6.8x less.
+%144 MB input:
+%Original algorithm: 2 234 575 120 Bytes measured in VisualVM after GC was called and program suspended right before writing to disk.
+%This is the lowest maximum memory consumption for 1.2 GB BAM file
+%Optimized algo: 2 273 444 096
+%Compact algo: 607 589 728 bytes
+%Live data memory usage: 3.67x less.
+%8 GB input: 20 334 009 424 B\@.
+%Obviously we had a too small machine to process a live data set that is using as minimum 3
+%12 GB input: 35 401 115 712 B\@.
+%
+%Time is 300 seconds (on 8core machine) as the machine touches Swap file, but being able to process 12 GB BAM file on a 48 GB machine is a feature in itself.
+%
+%
+%With memory compaction, the memory needed to represent all the objects was estimated to 17.6 million rows * $39$ bytes per row $=$ $686,400,000$ bytes ($655$ MB), plus the DNA sequences  $17.6$ millions $* 44 = 774 MB$.
+%
+%\textcolor{red}{
+%As the string data was estimated to at most $3$ GB, in $4.4$ GB we have stored both the entire SAM file and the fields associated with the alignments.
+%}
+%
+%\textcolor{red}{
+%Duplicating all this (as elPrep does it) will make the entire live set go to $9$ GB, which is still around half of the original live set (what is the size of the original live set?
+%definition of "the live set".
+%}
 
 On top of this, there is the cost of tags.
 In the original implementation, every {\texttt{SamAlignment} } object has references to {\texttt{temps} } and {\texttt{TAGS} } arrays.
 These arrays have an initial size of $16$, respectively $4$, and contain references to {\texttt{Field} } objects, which in turn contain a reference to a {\texttt{Slice} } object.
-Using the row-based model, for every row the memory consumption is:
-\textcolor{red}{20 references * 4 bytes + 2 * 64 (an empty {\texttt{ArrayList} } costs 64 bytes)$= 256 + 80$ bytes.}
-The memory usage for tags/temps is 5.9 GB\@.
-\textcolor{red}{Tags only will be 80\% of usage = 4.2 GB}
 
 In order to address {\texttt{temps} } and {\texttt{TAGS} } we have implemented the {\texttt{TagSequence} } class, which is a combination between {\texttt{StringSequence} } and {\texttt{DeduplicatedDictionary} }.
 Since the {\texttt{tags} } are repeating frequently, we save them using one {\texttt{short} } value per tag, but instead of using a list of tags, we define a sequence of indices.
@@ -442,53 +439,56 @@ lengths: [0,3],
 tagSequence = [0,1,2,1,2,3]; 
 \end{verbatim}
 
-\textcolor{red}{
-For a 20K rows, we found following numbers:
-Unique tag values: approx 2400
-Total number of tags: approx 200000 (10 tags per row on average)
-}
 
-\textcolor{brown}{ Numbers were correct, it was simply looking into some random batches when debugging.
+\textcolor{brown}{
+It may be noticed is that tag sequence is not warrantied to fit it in two bytes, but if using {\texttt{Chunking/Batching}}, the experimental possibility to not fit a tag into 2 bytes unique value is very unlikely:
+for around every 20K rows there are around 2400 unique tags and around 10 tags per row (or 200K tags in total for every 20K lines).
+
+For a set of 20K rows the tags before would be mostly on the size of an Object type that stores some values, which would mean around 16 bytes per instance vs 2 bytes per instance.
 }
 
 
 \section{\uppercase{Optimizing I/O Operations}}\label{sec:uppercase3}
 
-The first and most simple technique that could improve performance when working with large files
-is I/O {\texttt{buffering} }~\cite{oaks:2014}.
-Invoking a Java {\textit{read} } method, for example, will eventually trigger an invocation of the operating system method responsible with reading data from the disk.
-Although most operating systems use I/O buffering by default, an invocation of a method outside JVM is nevertheless expensive.
-Another reason to minimize the number of I/O operations is that, for each one of them, temporary objects needed to store the data must be created, meaning that GC will have more work to do when recovering the memory.
+When ElPrep algorithm finishes reading and creating a large data set in memory, the algorithm goes to write down the data. 
+ElPrep will create parallel tasks, which in turn will take all SamAlignment instances and serialize them into the string format of SAM files.
 
-The original code that we are analyzing uses correctly the {\texttt{BufferedReader} }, respectively the {\texttt{BufferedWriter} } classes in order to perform I/O operations on the SAM file.
-Checking the definition of the {\texttt{BufferedReader} } class we notice that the default buffer size is set to $8192$ characters, which is reasonable for most scenarios.
-The {\textit{read} } operation is implemented in a concurrent fashion, using Java parallel streams:
+
 \begin{verbatim}
-var alnStream = inputStream.parallel()
-  .map((s) -> new SamAlignment(s));
-\end{verbatim}
-In this context, for larger files (as in our case), and in the presence of multiple cores, increasing the size of the character buffer may offer a better performance, estimated by our experiments at around $5\%$. \textcolor{red}{Este corect?
-Pe laptop-ul meu nu obtin nicio imbunatatire}
-
-The same simple optimization can be made for writing, by presizing the {\texttt{BufferedWriter} } object to a more suitable value than the default one.
-
-When it comes to writing, we notice another possible improvements.
-The following code sequence iterates through the {\texttt{SamAlignment} } objects found in the input stream and, for each one of them, it creates a string representation containing the fields of the  {\texttt{SamAlignment} } class and tabs as separators.
-This is implemented using a {\texttt{StringWriter} }, which is a character stream collecting its output in a memory buffer.
-\begin{verbatim}
-var outputStream = 
- alnStream.parallel().map((aln) -> {
-   var sw = new StringWriter();
-   try (var swout = new PrintWriter(sw)) {
-     aln.format(swout);
-   }
-   return sw.toString();
+var outputStream = alnStream
+	.parallel()
+	.map((aln) -> {
+		var sw = new StringWriter();
+		try (var swout = new PrintWriter(sw)) {
+			aln.format(swout);
+		}
+		return sw.toString();
 });
 \end{verbatim}
 
-The initial size of the {\texttt{StringWriter} } internal buffer is by default $16$ characters.
-A line in the output file is more than $200$ characters.
-By presizing the buffer to a value of $256$, we have obtained a speed-up of the writing process estimated by our experiments to more than $10\%$.
+Especially when the full data set is loaded into memory, these tasks create many small objects and many of them can be removed just by preallocating 
+the internal buffer of StringWriter as follows:
+-+
+\begin{verbatim}
+var outputStream = alnStream
+	.parallel()
+	.map((aln) -> {
+		var sw = new StringWriter(350);
+		try (var swout = new PrintWriter(sw)) {
+			aln.format(swout);
+		}
+		return sw.toString();
+});
+\end{verbatim}
+
+StringWriter delegates writing to an internal StringBuilder, which in turn has an internal buffer that is resized every time when the code reaches the end of this buffer. 
+As the memory algorithm is concerned, the buffer is doubled. 
+Given the default size for StringBuilder is 16 bytes, when wanting to write a text of 400 characters, it would require resizes from 16-512, so 5 resizes. 
+
+350 is around 10\% larger than average line (which is around 325-330 characters per row) which based on the regular statistical distribution, will mean that most lines would have no extra resizes of buffers, which creates no extra garbage which in turn makes calling the GC less often.
+
+Changing just this pre-sized internal buffer would give a note-worthy savings and we will name this technique as the {\texttt{PresizedBuffers} }.
+
 
 If we take a closer look at the {\texttt{StringWriter} } class we notice that it uses an internal {\texttt{StringBuffer} } object.
 To quote from its documentation, a {\texttt{StringBuffer} } is  a thread-safe, mutable sequence of characters.

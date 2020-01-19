@@ -1,57 +1,48 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  19 JAN 2020 10:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (MiKTeX 2.9.7250) (preloaded format=pdflatex 2020.1.13)  19 JAN 2020 17:39
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
-LaTeX2e <2017/01/01> patch level 1
-Babel <3.9r> and hyphenation patterns for 75 language(s) loaded.
+LaTeX2e <2019-10-01> patch level 3
 (article.cls
 Document Class: article 2000/05/19 v1.4b Standard LaTeX document class
-("C:\Program Files\MiKTeX 2.9\tex\latex\base\size10.clo"
-File: size10.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+(/home/ciprian/.miktex/texmfs/install/tex/latex/base/size10.clo
+File: size10.clo 2019/10/25 v1.4k Standard LaTeX file (size option)
 )
-\c@part=\count79
-\c@section=\count80
-\c@subsection=\count81
-\c@subsubsection=\count82
-\c@paragraph=\count83
-\c@subparagraph=\count84
-\c@figure=\count85
-\c@table=\count86
+\c@part=\count80
+\c@section=\count81
+\c@subsection=\count82
+\c@subsubsection=\count83
+\c@paragraph=\count84
+\c@subparagraph=\count85
+\c@figure=\count86
+\c@table=\count87
 \abovecaptionskip=\skip41
 \belowcaptionskip=\skip42
 \bibindent=\dimen102
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\epsfig.sty"
-Package: epsfig 1999/02/16 v1.7a (e)psfig emulation (SPQR)
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics/epsfig.sty
+Package: epsfig 2017/06/25 v1.7b (e)psfig emulation (SPQR)
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphicx.sty"
-Package: graphicx 2014/10/28 v1.0g Enhanced LaTeX Graphics (DPC,SPQR)
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics/graphicx.sty
+Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\keyval.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
 \KV@toks@=\toks14
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\graphics.sty"
-Package: graphics 2016/10/09 v1.0u Standard LaTeX Graphics (DPC,SPQR)
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics/graphics.sty
+Package: graphics 2019/11/01 v1.3d Standard LaTeX Graphics (DPC,SPQR)
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics\trig.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\graphics.cfg"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: pdftex.def on input line 99.
+Package graphics Info: Driver file: pdftex.def on input line 105.
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-def\pdftex.def"
-File: pdftex.def 2017/01/12 v0.06k Graphics/color for pdfTeX
-
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\infwarerr.sty"
-Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-)
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ltxcmds.sty"
-Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-)
-\Gread@gobject=\count87
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 ))
 \Gin@req@height=\dimen103
 \Gin@req@width=\dimen104
@@ -59,15 +50,15 @@ Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
 \epsfxsize=\dimen105
 \epsfysize=\dimen106
 )
-(C:\Users\Cristi\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\subcaption.sty
-Package: subcaption 2016/05/22 v1.1-161 Sub-captions (AR)
+(/home/ciprian/.miktex/texmfs/install/tex/latex/caption/subcaption.sty
+Package: subcaption 2020/01/03 v1.3b Sub-captions (AR)
 
-(C:\Users\Cristi\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption.sty
-Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+(/home/ciprian/.miktex/texmfs/install/tex/latex/caption/caption.sty
+Package: caption 2020/01/03 v3.4h Customizing captions (AR)
 
-(C:\Users\Cristi\AppData\Roaming\MiKTeX\2.9\tex\latex\caption\caption3.sty
-Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
-Package caption3 Info: TeX engine: e-TeX on input line 67.
+(/home/ciprian/.miktex/texmfs/install/tex/latex/caption/caption3.sty
+Package: caption3 2020/01/03 v1.8h caption3 kernel (AR)
+Package caption3 Info: TeX engine: e-TeX on input line 61.
 \captionmargin=\dimen107
 \captionmargin@=\dimen108
 \captionwidth=\dimen109
@@ -75,84 +66,87 @@ Package caption3 Info: TeX engine: e-TeX on input line 67.
 \caption@indent=\dimen111
 \caption@parindent=\dimen112
 \caption@hangindent=\dimen113
+Package caption Info: Standard document class detected.
 )
-\c@ContinuedFloat=\count88
+\c@caption@flags=\count88
+\c@continuedfloat=\count89
 )
-\c@subfigure=\count89
-\c@subtable=\count90
+\c@subfigure=\count90
+\c@subtable=\count91
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\tools\calc.sty"
-Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count91
-\calc@Bcount=\count92
+(/home/ciprian/.miktex/texmfs/install/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count92
+\calc@Bcount=\count93
 \calc@Adimen=\dimen114
 \calc@Bdimen=\dimen115
 \calc@Askip=\skip43
 \calc@Bskip=\skip44
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count93
+\calc@Ccount=\count94
 \calc@Cskip=\skip45
 )
-(C:\Users\Cristi\AppData\Roaming\MiKTeX\2.9\tex\latex\comment\comment.sty
+(/home/ciprian/.miktex/texmfs/install/tex/latex/comment/comment.sty
 \CommentStream=\write3
 
 Excluding comment 'comment')
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amssymb.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsfonts/amssymb.sty
 Package: amssymb 2013/01/14 v3.01 AMS font symbols
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\amsfonts.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsfonts/amsfonts.sty
 Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
 \@emptytoks=\toks15
 \symAMSa=\mathgroup4
 \symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
 LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
 (Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
 ))
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amstext.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsgen.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
 \@emptytoks=\toks16
 \ex@=\dimen116
 ))
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsmath.sty"
-Package: amsmath 2016/11/05 v2.16a AMS math features
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2019/11/16 v2.17d AMS math features
 \@mathmargin=\skip46
 
 For additional information on amsmath, use the `?' option.
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsbsy.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
 \pmbraise@=\dimen117
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsmath\amsopn.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count94
-LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count95
-\leftroot@=\count96
-LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count97
-\DOTSCASE@=\count98
-LaTeX Info: Redefining \ldots on input line 472.
-LaTeX Info: Redefining \dots on input line 475.
-LaTeX Info: Redefining \cdots on input line 596.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
+\inf@bad=\count95
+LaTeX Info: Redefining \frac on input line 227.
+\uproot@=\count96
+\leftroot@=\count97
+LaTeX Info: Redefining \overline on input line 389.
+\classnum@=\count98
+\DOTSCASE@=\count99
+LaTeX Info: Redefining \ldots on input line 486.
+LaTeX Info: Redefining \dots on input line 489.
+LaTeX Info: Redefining \cdots on input line 610.
+\Mathstrutbox@=\box27
+\strutbox@=\box28
 \big@size=\dimen118
-LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count99
-\c@MaxMatrixCols=\count100
+LaTeX Font Info:    Redeclaring font encoding OML on input line 733.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 734.
+\macc@depth=\count100
+\c@MaxMatrixCols=\count101
 \dotsspace@=\muskip10
-\c@parentequation=\count101
-\dspbrk@lvl=\count102
+\c@parentequation=\count102
+\dspbrk@lvl=\count103
 \tag@help=\toks17
-\row@=\count103
-\column@=\count104
-\maxfields@=\count105
+\row@=\count104
+\column@=\count105
+\maxfields@=\count106
 \andhelp@=\toks18
 \eqnshift@=\dimen119
 \alignsep@=\dimen120
@@ -164,11 +158,11 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
 \multlinegap=\skip47
 \multlinetaggap=\skip48
 \mathdisplay@stack=\toks20
-LaTeX Info: Redefining \[ on input line 2817.
-LaTeX Info: Redefining \] on input line 2818.
+LaTeX Info: Redefining \[ on input line 2858.
+LaTeX Info: Redefining \] on input line 2859.
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\amscls\amsthm.sty"
-Package: amsthm 2015/03/04 v2.20.2
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amscls/amsthm.sty
+Package: amsthm 2017/10/31 v2.20.4
 \thm@style=\toks21
 \thm@bodyfont=\toks22
 \thm@headfont=\toks23
@@ -179,30 +173,29 @@ Package: amsthm 2015/03/04 v2.20.2
 \thm@headsep=\skip51
 \dth@everypar=\toks26
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\tools\multicol.sty"
-Package: multicol 2016/04/07 v1.8p multicolumn formatting (FMi)
-\c@tracingmulticols=\count106
-\mult@box=\box28
+(/home/ciprian/.miktex/texmfs/install/tex/latex/tools/multicol.sty
+Package: multicol 2019/03/01 v1.8w multicolumn formatting (FMi)
+\c@tracingmulticols=\count107
+\mult@box=\box29
 \multicol@leftmargin=\dimen125
-\c@unbalance=\count107
-\c@collectmore=\count108
-\doublecol@number=\count109
-\multicoltolerance=\count110
-\multicolpretolerance=\count111
+\c@unbalance=\count108
+\c@collectmore=\count109
+\doublecol@number=\count110
+\multicoltolerance=\count111
+\multicolpretolerance=\count112
 \full@width=\dimen126
 \page@free=\dimen127
 \premulticols=\dimen128
 \postmulticols=\dimen129
 \multicolsep=\skip52
 \multicolbaselineskip=\skip53
-\partial@page=\box29
-\last@line=\box30
+\partial@page=\box30
+\last@line=\box31
 \maxbalancingoverflow=\dimen130
-\mult@rightbox=\box31
-\mult@grightbox=\box32
-\mult@gfirstbox=\box33
-\mult@firstbox=\box34
-\@tempa=\box35
+\mult@rightbox=\box32
+\mult@grightbox=\box33
+\mult@gfirstbox=\box34
+\mult@firstbox=\box35
 \@tempa=\box36
 \@tempa=\box37
 \@tempa=\box38
@@ -219,16 +212,18 @@ Package: multicol 2016/04/07 v1.8p multicolumn formatting (FMi)
 \@tempa=\box49
 \@tempa=\box50
 \@tempa=\box51
-\c@columnbadness=\count112
-\c@finalcolumnbadness=\count113
+\@tempa=\box52
+\c@minrows=\count113
+\c@columnbadness=\count114
+\c@finalcolumnbadness=\count115
 \last@try=\dimen131
 \multicolovershoot=\dimen132
 \multicolundershoot=\dimen133
-\mult@nat@firstbox=\box52
-\colbreak@box=\box53
-\mc@col@check@num=\count114
+\mult@nat@firstbox=\box53
+\colbreak@box=\box54
+\mc@col@check@num=\count116
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\pslatex\pslatex.sty"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/pslatex/pslatex.sty
 Package: pslatex 1996/07/24 v1.2 pslatex emulation (DPC)
 LaTeX Font Info:    Redeclaring symbol font `operators' on input line 65.
 LaTeX Font Info:    Overwriting symbol font `operators' in version `normal'
@@ -262,13 +257,12 @@ LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `normal'
 (Font)                  OT1/cmr/m/it --> OT1/ptm/m/it on input line 75.
 LaTeX Font Info:    Overwriting math alphabet `\mathit' in version `bold'
 (Font)                  OT1/cmr/bx/it --> OT1/ptm/m/it on input line 75.
-) (apalike.sty
-\bibhang=\skip54
 )
-(C:\Users\Cristi\AppData\Roaming\MiKTeX\2.9\tex\latex\xcolor\xcolor.sty
+(apalike.sty
+\bibhang=\skip54
+) (/home/ciprian/.miktex/texmfs/install/tex/latex/xcolor/xcolor.sty
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\graphics-cfg\color.cfg"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package xcolor Info: Driver file: pdftex.def on input line 225.
@@ -282,21 +276,24 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\multirow\multirow.sty"
-Package: multirow 2016/11/25 v2.2 Span multiple rows of a table
+(/home/ciprian/.miktex/texmfs/install/tex/latex/multirow/multirow.sty
+Package: multirow 2019/05/31 v2.5 Span multiple rows of a table
 \multirow@colwidth=\skip55
-\multirow@cntb=\count115
+\multirow@cntb=\count117
 \multirow@dima=\skip56
 \bigstrutjot=\dimen134
 )
-("C:\Program Files\MiKTeX 2.9\tex\latex\tools\array.sty"
-Package: array 2016/10/06 v2.4d Tabular extension package (FMi)
+(/home/ciprian/.miktex/texmfs/install/tex/latex/tools/array.sty
+Package: array 2019/08/31 v2.4l Tabular extension package (FMi)
 \col@sep=\dimen135
+\ar@mcellbox=\box55
 \extrarowheight=\dimen136
 \NC@list=\toks27
 \extratabsurround=\skip57
 \backup@length=\skip58
-) (SCITEPRESS.sty
+\ar@cellbox=\box56
+)
+(SCITEPRESS.sty
 Conference Style for SCITEPRESS for LaTeX 2e -- version of December 2018
 \titlebox=\skip59
 ) (elprep-study.aux)
@@ -309,9 +306,10 @@ LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for OMS/pzccm/m/n on input line 24.
-LaTeX Font Info:    Try loading font information for OMS+pzccm on input line 24
-.
- ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspzccm.fd"
+LaTeX Font Info:    Trying to load font information for OMS+pzccm on input line
+ 24.
+
+(/home/ciprian/.miktex/texmfs/install/tex/latex/psnfss/omspzccm.fd
 File: omspzccm.fd 2000/01/03 Fontinst v1.801 font definitions for OMS/pzccm.
 )
 LaTeX Font Info:    ... okay on input line 24.
@@ -319,95 +317,58 @@ LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
 LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 24.
 LaTeX Font Info:    ... okay on input line 24.
- (C:\Users\Cristi\AppData\Roaming\MiKTeX\2.9\tex\context\base\supp-pdf.mkii
+
+(/home/ciprian/.miktex/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count116
+\scratchcounter=\count118
 \scratchdimen=\dimen137
-\scratchbox=\box54
-\nofMPsegments=\count117
-\nofMParguments=\count118
+\scratchbox=\box57
+\nofMPsegments=\count119
+\nofMParguments=\count120
 \everyMPshowfont=\toks28
-\MPscratchCnt=\count119
+\MPscratchCnt=\count121
 \MPscratchDim=\dimen138
-\MPnumerator=\count120
-\makeMPintoPDFobject=\count121
+\MPnumerator=\count122
+\makeMPintoPDFobject=\count123
 \everyMPtoPDFconversion=\toks29
-) ("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\pdftexcmds.sty"
-Package: pdftexcmds 2016/05/21 v0.22 Utility functions of pdfTeX for LuaTeX (HO
 )
-
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifluatex.sty"
-Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-)
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\ifpdf.sty"
-Package: ifpdf 2016/05/14 v3.1 Provides the ifpdf switch
-)
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: \pdf@primitive is available.
-Package pdftexcmds Info: \pdf@ifprimitive is available.
-Package pdftexcmds Info: \pdfdraftmode found.
-)
-("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\epstopdf-base.sty"
-Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\grfext.sty"
-Package: grfext 2016/05/16 v1.2 Manage graphics extensions (HO)
-
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvdefinekeys.sty"
-Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-))
-("C:\Program Files\MiKTeX 2.9\tex\latex\oberdiek\kvoptions.sty"
-Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
-
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\kvsetkeys.sty"
-Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-
-("C:\Program Files\MiKTeX 2.9\tex\generic\oberdiek\etexcmds.sty"
-Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-)))
+(/home/ciprian/.miktex/texmfs/install/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2019-12-09 v2.10 Base part for package epstopdf
 Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
-38.
-Package grfext Info: Graphics extension search list:
-(grfext)             [.png,.pdf,.jpg,.mps,.jpeg,.jbig2,.jb2,.PNG,.PDF,.JPG,.JPE
-G,.JBIG2,.JB2,.eps]
-(grfext)             \AppendGraphicsExtensions on input line 456.
+85.
 )
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
 LaTeX Font Info:    Calculating math sizes for size <11> on input line 51.
-LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 51
-.
-
-("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptmcm.fd"
+LaTeX Font Info:    Trying to load font information for OT1+ptmcm on input line
+ 51.
+(/home/ciprian/.miktex/texmfs/install/tex/latex/psnfss/ot1ptmcm.fd
 File: ot1ptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 51
-.
+LaTeX Font Info:    Trying to load font information for OML+ptmcm on input line
+ 51.
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omlptmcm.fd"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/psnfss/omlptmcm.fd
 File: omlptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+psycm on input line 51
-.
+LaTeX Font Info:    Trying to load font information for OMX+psycm on input line
+ 51.
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omxpsycm.fd"
+(/home/ciprian/.miktex/texmfs/install/tex/latex/psnfss/omxpsycm.fd
 File: omxpsycm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/psycm.
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 51.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 51.
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
+
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 51.
+LaTeX Font Info:    Trying to load font information for U+msb on input line 51.
 
-("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
+
+(/home/ciprian/.miktex/texmfs/install/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <11> not available
@@ -416,36 +377,47 @@ LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.69997> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5.5> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
+
+! Undefined control sequence.
+\ETE@program@epstopdf ->\epstopdf@sys@cmd 
+                                          
+l.51 \onecolumn \maketitle
+                           \normalsize \setcounter{footnote}{0} \vfill
+? 
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 11910 bytes
-(epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
-orcid.eps>
+(epstopdf)             Command: < --outfile=orcid-eps-converted-to.pdf orcid.ep
+s>
 (epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
-
 <orcid-eps-converted-to.pdf, id=1, 598.235pt x 598.235pt>
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
-
 <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 51.
+Package pdftex.def Info: orcid-eps-converted-to.pdf  used on input line 51.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
+! Undefined control sequence.
+\ETE@program@epstopdf ->\epstopdf@sys@cmd 
+                                          
+l.51 \onecolumn \maketitle
+                           \normalsize \setcounter{footnote}{0} \vfill
+? 
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 11910 bytes
-(epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
-orcid.eps>
+(epstopdf)             Command: < --outfile=orcid-eps-converted-to.pdf orcid.ep
+s>
 (epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
- <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 51.
+<use orcid-eps-converted-to.pdf>
+Package pdftex.def Info: orcid-eps-converted-to.pdf  used on input line 51.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
@@ -458,41 +430,92 @@ Underfull \hbox (badness 10000) in paragraph at lines 51--51
 
  []
 
+! Undefined control sequence.
+\ETE@program@epstopdf ->\epstopdf@sys@cmd 
+                                          
+l.51 \onecolumn \maketitle
+                           \normalsize \setcounter{footnote}{0} \vfill
+? 
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 11910 bytes
-(epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
-orcid.eps>
+(epstopdf)             Command: < --outfile=orcid-eps-converted-to.pdf orcid.ep
+s>
 (epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
 <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 51.
+Package pdftex.def Info: orcid-eps-converted-to.pdf  used on input line 51.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
+! Undefined control sequence.
+\ETE@program@epstopdf ->\epstopdf@sys@cmd 
+                                          
+l.51 \onecolumn \maketitle
+                           \normalsize \setcounter{footnote}{0} \vfill
+? 
 Package epstopdf Info: Source file: <orcid.eps>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 975258 bytes
 (epstopdf)             Output file: <orcid-eps-converted-to.pdf>
-(epstopdf)                    date: 2020-01-14 17:15:58
+(epstopdf)                    date: 2019-10-05 11:16:45
 (epstopdf)                    size: 11910 bytes
-(epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
-orcid.eps>
+(epstopdf)             Command: < --outfile=orcid-eps-converted-to.pdf orcid.ep
+s>
 (epstopdf)             \includegraphics on input line 51.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
- <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 51.
+<use orcid-eps-converted-to.pdf>
+Package pdftex.def Info: orcid-eps-converted-to.pdf  used on input line 51.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <13> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 53.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 60.
 
-
 LaTeX Warning: Citation `?' on page 1 undefined on input line 60.
+
+
+Underfull \hbox (badness 5711) in paragraph at lines 56--61
+\OT1/ptm/m/n/10 analysis generally consists of processing large
+ []
+
+
+Underfull \hbox (badness 1152) in paragraph at lines 62--74
+[]\OT1/ptm/m/n/10 Choosing a programming platform that offers
+ []
+
+
+Underfull \hbox (badness 1253) in paragraph at lines 62--74
+\OT1/ptm/m/n/10 out in a recent study dedicated to migrating an
+ []
+
+
+Underfull \hbox (badness 2538) in paragraph at lines 62--74
+\OT1/ptm/m/n/10 tool for preparing sequence alignment/map files
+ []
+
+
+Underfull \hbox (badness 6675) in paragraph at lines 62--74
+\OT1/ptm/m/n/10 pipelines. A key feature of elPrep is the
+ []
+
+
+Underfull \hbox (badness 2158) in paragraph at lines 62--74
+\OT1/ptm/m/n/10 a pipeline consisting of multiple command line
+ []
+
+
+Underfull \hbox (badness 1237) in paragraph at lines 62--74
+\OT1/ptm/m/n/10 a SAM/BAM file and keeping data as much as
+ []
+
+
+Underfull \hbox (badness 1303) in paragraph at lines 62--74
+\OT1/ptm/m/n/10 possible in main memory. In (Costanza et al.,
+ []
 
 
 Overfull \hbox (0.78455pt too wide) in paragraph at lines 75--78
@@ -500,239 +523,611 @@ Overfull \hbox (0.78455pt too wide) in paragraph at lines 75--78
  []
 
 
-Underfull \hbox (badness 1112) in paragraph at lines 75--78
-\OT1/ptm/m/n/10 pro-pose a se-ries of im-prove-ments that could in-
+Underfull \hbox (badness 3128) in paragraph at lines 75--78
+\OT1/ptm/m/n/10 , we have analyzed key aspects regarding the
  []
 
 
-Underfull \hbox (badness 1748) in paragraph at lines 75--78
-\OT1/ptm/m/n/10 crease sig-nif-i-cantly the per-for-mance of the Java
+Underfull \hbox (badness 1057) in paragraph at lines 75--78
+\OT1/ptm/m/n/10 memory management and thread synchronization,
  []
 
-LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 82.
 
 Underfull \vbox (badness 10000) has occurred while \output is active []
 
- [1{C:/Users/Cristi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+ [1{/home/ciprian/.miktex/texmfs/data/pdftex/config/pdftex.map}
 
 
 
 
  <./orcid-eps-converted-to.pdf>]
+LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 82.
+
+Underfull \hbox (badness 5316) in paragraph at lines 84--87
+\OT1/ptm/m/n/10 In order to analyze the behavior of memory
+ []
+
+
+Underfull \hbox (badness 7379) in paragraph at lines 84--87
+\OT1/ptm/m/n/10 Java (Java Platform, Standard Edition, 2019)
+ []
+
+
+Underfull \hbox (badness 2401) in paragraph at lines 88--95
+[]\OT1/ptm/m/n/10 The Java Virtual Machine (JVM) (Lindholm
+ []
+
+
+Underfull \hbox (badness 7256) in paragraph at lines 88--95
+\OT1/ptm/m/n/10 system, called \OT1/ptm/m/it/10 garbage collector \OT1/ptm/m/n/
+10 (GC) which
+ []
+
+
+Underfull \hbox (badness 1286) in paragraph at lines 110--117
+\OT1/ptm/m/n/10 implementation of an algorithm. If threads are
+ []
+
+
+Underfull \hbox (badness 1057) in paragraph at lines 144--145
+\OT1/ptm/m/n/10 a multithreaded manner will generate a behavior
+ []
+
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 173.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
 (Font)              Font shape `OT1/ptm/b/n' tried instead on input line 173.
- [2] [3]
-Underfull \hbox (badness 3029) in paragraph at lines 286--287
-[][]\OT1/ptm/m/n/10 The El-Prep al-go-rithm will du-pli-cate all the
+[2]
+Underfull \hbox (badness 1371) in paragraph at lines 176--180
+\OT1/ptm/m/n/10 consumption, is of no relevance in our context.
  []
 
 
-Underfull \hbox (badness 1715) in paragraph at lines 292--295
-\OT1/ptm/m/n/10 for rep-re-sent-ing in a com-pact man-ner a col-lec-
+Underfull \hbox (badness 2617) in paragraph at lines 202--205
+[]\OT1/ptm/m/n/10 The most common approach of representing
  []
 
 
-Underfull \hbox (badness 2818) in paragraph at lines 292--295
-\OT1/ptm/m/n/10 tion of strings, \OT1/pcr/m/n/10 DeduplicatedDictionary  \OT1/p
-tm/m/n/10 for
+Underfull \hbox (badness 1077) in paragraph at lines 206--210
+[]\OT1/ptm/m/n/10 A \OT1/ptm/m/it/10 column store  \OT1/ptm/m/n/10 model (Abadi
+ et al., 2013)
  []
 
 
-Underfull \hbox (badness 1484) in paragraph at lines 292--295
-\OT1/ptm/m/n/10 elim-i-nat-ing du-pli-cate copies of re-peat-ing strings,
+Underfull \hbox (badness 1158) in paragraph at lines 217--219
+\OT1/ptm/m/n/10 slowdown becomes far less important if we can
+ []
+
+[3]
+Underfull \hbox (badness 1412) in paragraph at lines 249--251
+\OT1/ptm/m/n/10 the calculation simpler and analyze the memory
  []
 
 
-Underfull \hbox (badness 5681) in paragraph at lines 314--315
-[]\OT1/ptm/m/n/10 So, in-stead of hav-ing a large num-ber of
+Underfull \hbox (badness 10000) in paragraph at lines 286--289
+\OT1/ptm/m/n/10 Let us analyze how much memory can
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 286--289
+\OT1/ptm/m/n/10 be saved by switching to a column-based
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 286--289
+\OT1/ptm/m/n/10 approach. We have defined the following
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 286--289
+\OT1/ptm/m/n/10 data structures: \OT1/pcr/m/n/10 StringSequence  \OT1/ptm/m/n/1
+0 for
+ []
+
+
+Underfull \hbox (badness 3343) in paragraph at lines 286--289
+\OT1/ptm/m/n/10 representing in a compact manner a collection
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 286--289
+\OT1/ptm/m/n/10 of strings, \OT1/pcr/m/n/10 DeduplicatedDictionary  \OT1/ptm/m/
+n/10 for
+ []
+
+
+Underfull \hbox (badness 1484) in paragraph at lines 286--289
+\OT1/ptm/m/n/10 eliminating duplicate copies of repeating strings,
+ []
+
+
+Underfull \hbox (badness 4391) in paragraph at lines 286--289
+\OT1/pcr/m/n/10 DnaEncodingSequence  \OT1/ptm/m/n/10 for storing \OT1/pcr/m/n/1
+0 A,C,G,T,N
+ []
+
+
+Underfull \hbox (badness 5681) in paragraph at lines 308--309
+[]\OT1/ptm/m/n/10 So, instead of having a large number of
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 311--312
+[]\OT1/ptm/m/n/10 Regardless of VM bitness, the memory
+ []
+
+
+Underfull \hbox (badness 6063) in paragraph at lines 311--312
+\OT1/ptm/m/n/10 consumption for representing one row of the
+ []
+
+<images/MemoryBookeeping.png, id=21, 636.87938pt x 358.33875pt>
+File: images/MemoryBookeeping.png Graphic file (type png)
+<use images/MemoryBookeeping.png>
+Package pdftex.def Info: images/MemoryBookeeping.png  used on input line 333.
+(pdftex.def)             Requested size: 222.91112pt x 125.42044pt.
+
+Overfull \hbox (9.49669pt too wide) in paragraph at lines 333--334
+ [] 
  []
 
 [4]
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 354.
+Underfull \hbox (badness 6758) in paragraph at lines 336--337
+[]\OT1/ptm/m/n/10 As this is a major reduction in memory
+ []
 
- ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
+LaTeX Font Info:    Trying to load font information for OMS+pcr on input line 3
+55.
+(/home/ciprian/.miktex/texmfs/install/tex/latex/psnfss/omspcr.fd
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 354.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 355.
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 354.
+(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 355.
 
 
-Underfull \hbox (badness 5726) in paragraph at lines 359--361
-\OT1/ptm/m/n/10 The \OT1/pcr/m/n/10 table  \OT1/ptm/m/n/10 struc-ture is based 
-on the class
+Underfull \hbox (badness 3965) in paragraph at lines 353--356
+\OT1/ptm/m/n/10 frequently, we can apply another optimization:
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 373--376
+Underfull \hbox (badness 1117) in paragraph at lines 353--356
+\OT1/ptm/m/n/10 instead of keeping them joined, we will use an
+ []
+
+
+Underfull \hbox (badness 1092) in paragraph at lines 353--356
+\OT1/ptm/m/n/10 and an array holding one index for each string.
+ []
+
+
+Underfull \hbox (badness 5726) in paragraph at lines 360--362
+\OT1/ptm/m/n/10 The \OT1/pcr/m/n/10 table  \OT1/ptm/m/n/10 structure is based o
+n the class
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 374--377
+\OT1/ptm/m/n/10 For example, encoding the $\OT1/ptmcm/m/n/10 21$ \OT1/ptm/m/n/1
+0 letters string
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 374--377
+\OT1/ptm/m/n/10 "AAAACCCCGGGGTTTTNNNNA" would
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 374--377
 \OT1/pcr/m/n/10 00001001001001000110110110110100
  []
 
-[5]
-Underfull \hbox (badness 2134) in paragraph at lines 432--434
-[]\OT1/ptm/m/n/10 In or-der to ad-dress \OT1/pcr/m/n/10 temps  \OT1/ptm/m/n/10 
-and \OT1/pcr/m/n/10 TAGS  \OT1/ptm/m/n/10 we
+
+Underfull \hbox (badness 4013) in paragraph at lines 380--381
+[]\OT1/ptm/m/n/10 From right to left, $\OT1/ptmcm/m/n/10 000$ \OT1/ptm/m/n/10 r
+epresents A, $\OT1/ptmcm/m/n/10 001$
  []
 
 
-Underfull \hbox (badness 1424) in paragraph at lines 463--466
-\OT1/ptm/m/n/10 cor-rectly the \OT1/pcr/m/n/10 BufferedReader \OT1/ptm/m/n/10 ,
- re-spec-tively the
+Underfull \hbox (badness 2134) in paragraph at lines 435--437
+[]\OT1/ptm/m/n/10 In order to address \OT1/pcr/m/n/10 temps  \OT1/ptm/m/n/10 an
+d \OT1/pcr/m/n/10 TAGS  \OT1/ptm/m/n/10 we
+ []
+
+[5 <./images/MemoryBookeeping.png>]
+Underfull \hbox (badness 2418) in paragraph at lines 460--462
+[]\OT1/ptm/m/n/10 When ElPrep algorithm finishes reading and
  []
 
 
-Overfull \hbox (0.78455pt too wide) in paragraph at lines 487--487
-[]   \OT1/pcr/m/n/10 try (var swout = new PrintWriter(sw)) {[] 
+Underfull \hbox (badness 5878) in paragraph at lines 460--462
+\OT1/ptm/m/n/10 goes to write down the data. ElPrep will
  []
 
 
-Underfull \hbox (badness 4205) in paragraph at lines 493--500
-\OT1/ptm/m/n/10 ob-ject. To quote from its doc-u-men-ta-tion, a
+Underfull \hbox (badness 2680) in paragraph at lines 491--494
+[]\OT1/ptm/m/n/10 StringWriter delegates writing to an internal
+ []
+
+
+Underfull \hbox (badness 4205) in paragraph at lines 500--507
+\OT1/ptm/m/n/10 object. To quote from its documentation, a
+ []
+
+
+Underfull \hbox (badness 4441) in paragraph at lines 500--507
+\OT1/ptm/m/n/10 of characters. That means that most of its
+ []
+
+
+Underfull \hbox (badness 1565) in paragraph at lines 500--507
+\OT1/ptm/m/n/10 methods are declared as \OT1/ptm/m/it/10 synchronized  \OT1/ptm
+/m/n/10 in order
+ []
+
+
+Underfull \hbox (badness 1097) in paragraph at lines 500--507
+\OT1/ptm/m/n/10 to control the access to the buffer of characters
+ []
+
+
+Underfull \hbox (badness 2237) in paragraph at lines 500--507
+\OT1/ptm/m/n/10 stream implementation gets his own copy of a
+ []
+
+
+Underfull \hbox (badness 3815) in paragraph at lines 518--519
+\OT1/ptm/m/n/10 its task, which is eventually an invocation to
  []
 
 [6]
-Underfull \hbox (badness 2035) in paragraph at lines 511--512
-\OT1/ptm/m/n/10 us-ing a \OT1/pcr/m/n/10 synchronized  \OT1/ptm/m/n/10 block in
- or-der to ful-
+Underfull \hbox (badness 10000) in paragraph at lines 526--527
+\OT1/ptm/m/n/10 The \OT1/pcr/m/n/10 BuffereWriter.write  \OT1/ptm/m/n/10 method
+ is also
  []
 
-<images/cpu_original.png, id=32, 304.13625pt x 184.43906pt>
+<images/cpu_original.png, id=35, 304.13625pt x 184.43906pt>
 File: images/cpu_original.png Graphic file (type png)
-
 <use images/cpu_original.png>
-Package pdftex.def Info: images/cpu_original.png used on input line 523.
+Package pdftex.def Info: images/cpu_original.png  used on input line 530.
 (pdftex.def)             Requested size: 152.06775pt x 92.2193pt.
 
-<images/cpu_optimized.png, id=33, 316.93407pt x 182.93344pt>
+Underfull \hbox (badness 2197) in paragraph at lines 537--542
+\OT1/ptm/m/n/10 this context involves using a single byte array.
+ []
+
+
+Underfull \hbox (badness 1817) in paragraph at lines 537--542
+\OT1/ptm/m/n/10 Instead of creating and storing individual string
+ []
+
+
+Underfull \hbox (badness 1694) in paragraph at lines 537--542
+\OT1/ptm/m/n/10 and writing them one by one to disk, we add
+ []
+
+<images/cpu_optimized.png, id=36, 316.93407pt x 182.93344pt>
 File: images/cpu_optimized.png Graphic file (type png)
-
 <use images/cpu_optimized.png>
-Package pdftex.def Info: images/cpu_optimized.png used on input line 545.
+Package pdftex.def Info: images/cpu_optimized.png  used on input line 552.
 (pdftex.def)             Requested size: 158.46664pt x 91.46649pt.
-
-<images/Visual_VM_Small_file_Original_execution_profile.png, id=34, 2589.675pt 
+<images/Visual_VM_Small_file_Original_execution_profile.png, id=37, 2589.675pt 
 x 1053.9375pt>
 File: images/Visual_VM_Small_file_Original_execution_profile.png Graphic file (
 type png)
-
 <use images/Visual_VM_Small_file_Original_execution_profile.png>
 Package pdftex.def Info: images/Visual_VM_Small_file_Original_execution_profile
-.png used on input line 551.
+.png  used on input line 558.
 (pdftex.def)             Requested size: 168.33478pt x 68.50833pt.
- [7 <./images/cpu_original.png> <./images/cpu_optimized.png> <./images/Visual_V
-M_Small_file_Original_execution_profile.png>]
-Overfull \hbox (5.88452pt too wide) in paragraph at lines 588--588
+
+Underfull \hbox (badness 1365) in paragraph at lines 575--584
+\OT1/ptm/m/n/10 technique that splits the \OT1/pcr/m/n/10 SamBatch  \OT1/ptm/m/
+n/10 structure in
+ []
+
+
+Overfull \hbox (5.88452pt too wide) in paragraph at lines 595--595
 []\OT1/pcr/m/n/10 var samBatches = new ArrayList<SamBatch>();[] 
  []
 
 
-Underfull \hbox (badness 6708) in paragraph at lines 590--595
+Underfull \hbox (badness 6708) in paragraph at lines 597--602
 []\OT1/ptm/m/n/10 The \OT1/pcr/m/n/10 readRows  \OT1/ptm/m/n/10 method reads $\
 OML/ptmcm/m/it/10 chunkSize \OMS/pzccm/m/n/10 
  []
 
-
-Underfull \hbox (badness 1527) in paragraph at lines 615--622
-[]\OT1/ptm/m/n/10 When it comes to writ-ing, com-pared to our
+[7 <./images/cpu_original.png> <./images/cpu_optimized.png> <./images/Visual_VM
+_Small_file_Original_execution_profile.png>]
+Underfull \hbox (badness 5607) in paragraph at lines 606--607
+[]\OT1/ptm/m/n/10 Transforming data, deduplicating and DNA
  []
 
 
-Underfull \hbox (badness 1796) in paragraph at lines 647--648
-[]\OT1/ptm/m/it/10 Original\OT1/ptm/m/n/10 , the orig-i-nal al-go-rithm de-scri
-bed in
+Underfull \hbox (badness 1320) in paragraph at lines 606--607
+\OT1/ptm/m/n/10 manner, which is much easier to debug and
  []
 
 
-Underfull \hbox (badness 1442) in paragraph at lines 649--651
-[]\OT1/ptm/m/it/10 PresizedBuffers \OT1/ptm/m/n/10 re-duces the num-ber of mem-
+Underfull \hbox (badness 1527) in paragraph at lines 622--629
+[]\OT1/ptm/m/n/10 When it comes to writing, compared to our
+ []
 
+
+Underfull \hbox (badness 2961) in paragraph at lines 630--637
+\OT1/ptm/m/n/10 when using the external device, we have also
+ []
+
+
+Underfull \hbox (badness 1895) in paragraph at lines 650--653
+\OT1/ptm/m/n/10 which are reading, writing and storing all data
+ []
+
+
+Underfull \hbox (badness 2035) in paragraph at lines 650--653
+\OT1/ptm/m/n/10 which was taken from elPrep public repository,
+ []
+
+
+Underfull \hbox (badness 1112) in paragraph at lines 650--653
+\OT1/ptm/m/n/10 types of optimization that are meant to improve
+ []
+
+
+Underfull \hbox (badness 1796) in paragraph at lines 654--655
+[]\OT1/ptm/m/it/10 Original\OT1/ptm/m/n/10 , the original algorithm described i
+n
+ []
+
+
+Underfull \hbox (badness 1552) in paragraph at lines 656--658
+\OT1/ptm/m/n/10 allocations by carefully constructing the data
+ []
+
+
+Underfull \hbox (badness 2384) in paragraph at lines 659--661
+[]\OT1/ptm/m/it/10 StreamByteArray \OT1/ptm/m/n/10 transforms string into bytes
+
+ []
+
+
+Underfull \hbox (badness 1048) in paragraph at lines 665--666
+[]\OT1/ptm/m/it/10 Compact/Par \OT1/ptm/m/n/10 represents a modified variant of
+
+ []
+
+
+Underfull \hbox (badness 1412) in paragraph at lines 665--666
+\OT1/ptm/m/n/10 the \OT1/ptm/m/it/10 Compact \OT1/ptm/m/n/10 algorithm aimed at
+ reducing to
+ []
+
+
+Underfull \hbox (badness 6316) in paragraph at lines 665--666
+\OT1/ptm/m/n/10 a minimum the dead times regarding I/O
  []
 
 [8]
-Overfull \hbox (6.57971pt too wide) in paragraph at lines 708--708
+Underfull \hbox (badness 5622) in paragraph at lines 680--683
+[]\OT1/ptm/m/n/10 The original elPrep benchmarks have been
+ []
+
+
+Underfull \hbox (badness 1460) in paragraph at lines 680--683
+\OT1/ptm/m/n/10 performed on a Supermicro SuperServer 1029U-
+ []
+
+
+Overfull \hbox (6.57971pt too wide) in paragraph at lines 715--715
  []|\OT1/ptm/m/n/9 StreamByteArray| 
  []
 
+
+Underfull \hbox (badness 1466) in paragraph at lines 727--730
+\OT1/ptm/m/n/10 uses a lot of memory and, since the JVM has
+ []
+
+
+Underfull \hbox (badness 3312) in paragraph at lines 727--730
+\OT1/ptm/m/n/10 to call more often the Garbage Collector, the
+ []
+
+
+Underfull \hbox (badness 3068) in paragraph at lines 727--730
+\OT1/ptm/m/n/10 cost of GC visibly affects the executing time,
+ []
+
+
+Underfull \hbox (badness 3690) in paragraph at lines 727--730
+\OT1/ptm/m/it/10 StreamByteArray \OT1/ptm/m/n/10 algorithms pay off now, their
+ []
+
+
+Underfull \hbox (badness 1163) in paragraph at lines 727--730
+\OT1/ptm/m/n/10 the \OT1/ptm/m/it/10 PresizedBuffers \OT1/ptm/m/n/10 will slow 
+down $\OT1/ptmcm/m/n/10 17\OML/ptmcm/m/it/10 :\OT1/ptmcm/m/n/10 92$ \OT1/ptm/m/
+n/10 times,
+ []
+
+
+Underfull \hbox (badness 2435) in paragraph at lines 745--750
+\OT1/ptm/m/n/10 VisualVM (VisualVM, 2019), which provides a
+ []
+
+
+Underfull \hbox (badness 1789) in paragraph at lines 751--759
+\OT1/ptm/m/n/10 is possible due to VisualVM which offers very
+ []
+
+
+Underfull \hbox (badness 2269) in paragraph at lines 751--759
+\OT1/ptm/m/n/10 exists on a particular machine, the GC impact
+ []
+
+
+Underfull \hbox (badness 1178) in paragraph at lines 751--759
+\OT1/ptm/m/n/10 is triggered when a critical amount of the heap
+ []
+
+
+Underfull \hbox (badness 2165) in paragraph at lines 751--759
+\OT1/ptm/m/it/10 GC) \OT1/ptm/m/n/10 is automatically triggered at $\OT1/ptmcm/
+m/n/10 45%$ \OT1/ptm/m/n/10 memory
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 751--759
+\OT1/pcr/m/n/10 InitiatingHeapOccupancyPercent \OT1/ptm/m/n/10 parameter).
+ []
+
 [9]
-<images/times_and_memory_chart_small_144mb_ryzen.png, id=45, 455.45157pt x 255.
+<images/times_and_memory_chart_small_144mb_ryzen.png, id=48, 455.45157pt x 255.
 95625pt>
 File: images/times_and_memory_chart_small_144mb_ryzen.png Graphic file (type pn
 g)
- <use images/times_and_memory_chart_small_144mb_ryzen.png>
-Package pdftex.def Info: images/times_and_memory_chart_small_144mb_ryzen.png us
-ed on input line 797.
+<use images/times_and_memory_chart_small_144mb_ryzen.png>
+Package pdftex.def Info: images/times_and_memory_chart_small_144mb_ryzen.png  u
+sed on input line 804.
 (pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 797--798
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 804--805
  [] 
  []
 
 
-<images/times_and_memory_chart_small_144mb_intel.png, id=47, 455.45157pt x 255.
+Underfull \hbox (badness 10000) in paragraph at lines 807--810
+\OT1/ptm/m/n/10 the original algorithm, \OT1/ptm/m/it/10 PresizedBuffers \OT1/p
+tm/m/n/10 and
+ []
+
+<images/times_and_memory_chart_small_144mb_intel.png, id=49, 455.45157pt x 255.
 95625pt>
 File: images/times_and_memory_chart_small_144mb_intel.png Graphic file (type pn
 g)
- <use images/times_and_memory_chart_small_144mb_intel.png>
-Package pdftex.def Info: images/times_and_memory_chart_small_144mb_intel.png us
-ed on input line 810.
+<use images/times_and_memory_chart_small_144mb_intel.png>
+Package pdftex.def Info: images/times_and_memory_chart_small_144mb_intel.png  u
+sed on input line 817.
 (pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 810--811
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 817--818
  [] 
  []
 
-[10 <./images/times_and_memory_chart_small_144mb_ryzen.png>]
-<images/times_and_memory_chart.png, id=52, 455.45157pt x 255.95625pt>
+<images/times_and_memory_chart.png, id=50, 455.45157pt x 255.95625pt>
 File: images/times_and_memory_chart.png Graphic file (type png)
-
 <use images/times_and_memory_chart.png>
-Package pdftex.def Info: images/times_and_memory_chart.png used on input line 8
-18.
+Package pdftex.def Info: images/times_and_memory_chart.png  used on input line 
+825.
 (pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 818--819
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 825--826
  [] 
  []
 
-<images/seconds_per_gb_ryzen.png, id=53, 455.45157pt x 255.95625pt>
+[10 <./images/times_and_memory_chart_small_144mb_ryzen.png> <./images/times_and
+_memory_chart_small_144mb_intel.png>]
+<images/seconds_per_gb_ryzen.png, id=56, 455.45157pt x 255.95625pt>
 File: images/seconds_per_gb_ryzen.png Graphic file (type png)
-
 <use images/seconds_per_gb_ryzen.png>
-Package pdftex.def Info: images/seconds_per_gb_ryzen.png used on input line 827
-.
+Package pdftex.def Info: images/seconds_per_gb_ryzen.png  used on input line 83
+4.
 (pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 827--828
+Overfull \hbox (14.31079pt too wide) in paragraph at lines 834--835
  [] 
  []
 
 
-Underfull \vbox (badness 4229) has occurred while \output is active []
+Underfull \hbox (badness 1072) in paragraph at lines 847--851
+\OT1/ptm/m/n/10 in parallel, using all cores, the data compaction
+ []
 
 
-Underfull \vbox (badness 10000) has occurred while \output is active []
+Underfull \hbox (badness 1067) in paragraph at lines 883--887
+\OT1/ptm/m/n/10 et al., 2019). However, when using an object-
+ []
 
- [11 <./images/times_and_memory_chart_small_144mb_intel.png> <./images/times_an
-d_memory_chart.png> <./images/seconds_per_gb_ryzen.png>] (elprep-study.bbl
-Underfull \vbox (badness 10000) has occurred while \output is active []
+
+Underfull \hbox (badness 1448) in paragraph at lines 888--892
+\OT1/ptm/m/n/10 not only save memory but it will also improve
+ []
+
+
+Underfull \hbox (badness 1365) in paragraph at lines 888--892
+\OT1/ptm/m/n/10 runtime performance by decreasing the overhead
+ []
+
+[11 <./images/times_and_memory_chart.png> <./images/seconds_per_gb_ryzen.png>]
+Underfull \hbox (badness 3118) in paragraph at lines 893--896
+[]\OT1/ptm/m/n/10 Given the hardware differences between the
+ []
+
+(elprep-study.bbl
+Underfull \hbox (badness 2245) in paragraph at lines 4--8
+[]\OT1/ptm/m/n/9 Abadi, D., Boncz, P., and Harizopoulos, S. (2013).
+ []
+
+
+Underfull \hbox (badness 1102) in paragraph at lines 10--14
+[]\OT1/ptm/m/n/9 Costanza, P., Herzeel, C., and Verachtert, W. (2019).
+ []
+
+
+Underfull \hbox (badness 3965) in paragraph at lines 10--14
+\OT1/ptm/m/n/9 Comparing ease of programming in C++, Go,
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 10--14
+\OT1/ptm/m/n/9 and Java for implementing a next-generation
+ []
+
+
+Underfull \hbox (badness 5175) in paragraph at lines 10--14
+\OT1/ptm/m/n/9 sequencing tool.  \OT1/ptm/m/it/9 Evolutionary Bioinformatics\OT
+1/ptm/m/n/9 ,
+ []
 
 
 Underfull \hbox (badness 4660) in paragraph at lines 16--21
-[]\OT1/ptm/m/n/9 GC, O. (2019).  Java Garbage Col-lec-tion Ba-sics.
+[]\OT1/ptm/m/n/9 GC, O. (2019).  Java Garbage Collection Basics.
  []
 
 
-Underfull \hbox (badness 3078) in paragraph at lines 44--48
-[]\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
+Underfull \hbox (badness 10000) in paragraph at lines 16--21
+\OT1/ptm/m/n/9 https://www.oracle.com/webfolder/technetwork/
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 16--21
+\OT1/ptm/m/n/9 tutorials/obe/java/gc01/index.html.  Accessed:
+ []
+
+
+Underfull \hbox (badness 1565) in paragraph at lines 33--37
+\OT1/ptm/m/n/9 Reumers, J. (2015).  elprep: High-performance
+ []
+
+
+Underfull \hbox (badness 3088) in paragraph at lines 33--37
+\OT1/ptm/m/n/9 preparation of sequence alignment/map files for
+ []
+
+
+Underfull \hbox (badness 1810) in paragraph at lines 39--42
+\OT1/ptm/m/n/9 framework for sequence analysis.  \OT1/ptm/m/it/9 PLOS ONE\OT1/p
+tm/m/n/9 ,
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 44--48
-\OT1/ptm/m/n/9 vel-op-ment Kit Ver-sion 11 API Spec-i-fi-ca-tion.
+[]\OT1/ptm/m/n/9 Java Platform, Standard Edition (2019).  Java
+ []
+
+
+Underfull \hbox (badness 3590) in paragraph at lines 44--48
+\OT1/ptm/m/n/9 Development Kit Version 11 API Specification.
  []
 
 
@@ -742,12 +1137,12 @@ Underfull \hbox (badness 10000) in paragraph at lines 44--48
 
 
 Underfull \hbox (badness 8189) in paragraph at lines 65--69
-[]\OT1/ptm/m/n/9 Valhalla, P. (2019).  Open-JDK Project Val-halla.
+[]\OT1/ptm/m/n/9 Valhalla, P. (2019).  OpenJDK Project Valhalla.
  []
 
 
 Underfull \hbox (badness 10000) in paragraph at lines 77--82
-[]\OT1/ptm/m/n/9 VisualVM, O. (2019).  Java Vi-su-alVM.
+[]\OT1/ptm/m/n/9 VisualVM, O. (2019).  Java VisualVM.
  []
 
 
@@ -757,23 +1152,24 @@ Underfull \hbox (badness 10000) in paragraph at lines 77--82
 
 ) [12] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
- 4823 strings out of 493333
- 69605 string characters out of 3139192
- 143307 words of memory out of 3000000
- 8229 multiletter control sequences out of 15000+200000
+ 4681 strings out of 494411
+ 66356 string characters out of 3174370
+ 134393 words of memory out of 3000000
+ 8692 multiletter control sequences out of 15000+200000
  60172 words of font info for 133 fonts, out of 3000000 for 9000
- 1141 hyphenation exceptions out of 8191
- 42i,9n,40p,607b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r
-.enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:
-/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program 
-Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/Mi
-KTeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/
-type1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/u
-tmr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on elprep-study.pdf (12 pages, 818097 bytes).
+ 0 hyphenation exceptions out of 8191
+ 48i,9n,46p,607b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
+{/home/ciprian/.miktex/texmfs/install/fonts/enc/dvip
+s/base/8r.enc}</home/ciprian/.miktex/texmfs/install/fonts/type1/public/amsfonts
+/cm/cmmi10.pfb></home/ciprian/.miktex/texmfs/install/fonts/type1/public/amsfont
+s/cm/cmr10.pfb></home/ciprian/.miktex/texmfs/install/fonts/type1/public/amsfont
+s/cm/cmsy10.pfb></home/ciprian/.miktex/texmfs/install/fonts/type1/urw/courier/u
+crr8a.pfb></home/ciprian/.miktex/texmfs/install/fonts/type1/urw/times/utmb8a.pf
+b></home/ciprian/.miktex/texmfs/install/fonts/type1/urw/times/utmr8a.pfb></home
+/ciprian/.miktex/texmfs/install/fonts/type1/urw/times/utmri8a.pfb>
+Output written on elprep-study.pdf (12 pages, 848005 bytes).
 PDF statistics:
- 87 PDF objects out of 1000 (max. 8388607)
+ 89 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 46 words of extra memory for PDF output out of 10000 (max. 10000000)
 
