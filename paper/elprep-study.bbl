@@ -12,13 +12,6 @@ Costanza, P., Herzeel, C., and Verachtert, W. (2019).
   implementing a next-generation sequencing tool.
 \newblock {\em Evolutionary Bioinformatics}, 15:1176934319869015.
 
-\bibitem[GC, 2019]{gc:oracle}
-GC, O. (2019).
-\newblock {Java Garbage Collection Basics}.
-\newblock https://www.oracle.com/webfolder/technetwork/
-  tutorials/obe/java/gc01/index.html.
-\newblock Accessed: 2019-06-01.
-
 \bibitem[Gosling et~al., 2014]{gosling:2014}
 Gosling, J., Joy, B., Steele, G.~L., Bracha, G., and Buckley, A. (2014).
 \newblock {\em {The Java Language Specification, Java SE 8 Edition}}.
@@ -60,6 +53,13 @@ Manogar, E. and Abirami, S. (2014).
 Oaks, S. (2014).
 \newblock {\em {Java Performance: The Definitive Guide}}.
 \newblock O'Reilly Media, Inc., 1st edition.
+
+\bibitem[{Oracle GC}, 2019]{gc:oracle}
+{Oracle GC} (2019).
+\newblock {Java Garbage Collection Basics}.
+\newblock https://www.oracle.com/webfolder/technetwork/
+  tutorials/obe/java/gc01/index.html.
+\newblock Accessed: 2019-06-01.
 
 \bibitem[Valhalla, 2019]{jdk:valhalla}
 Valhalla, P. (2019).

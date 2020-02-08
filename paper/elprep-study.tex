@@ -41,7 +41,7 @@ In this paper we investigate how a state-of-the art implementation, part of a mu
 could benefit from various optimization techniques dedicated to improving the runtime performance of Java applications.
 ElPrep is an established tool for processing SAM and BAM files in sequencing pipelines.
 In order to migrate from its original implementation to a different software platform, more suitable for memory intensive tasks,
-the authors have re-implemented elPrep in Java, Go and C++ and they benchmark their performance.
+the authors have re-implemented elPrep in Java, Go and C++ and benchmarked their performance.
 Overall, the Go implementation won by a good margin, considering a metric that involved both the RAM usage and the runtime performance.
 We show that, without changing the semantics of the algorithm, by using appropriate programming techniques we are able to significantly improve the behavior of the Java implementation to a point that may even alter the conclusions of the original study.
 We also show that, by changing the manner in which data is represented, to better fit the particulars of the Java memory management, we are able to improve the original scoring (based on computing time and memory consumption) to around one order of magnitude better on the most expensive component (read/write).
@@ -67,7 +67,7 @@ ElPrep~\cite{herzeel:2019} is a multithreaded tool for preparing sequence alignm
 for variant calling in DNA sequencing pipelines. 
 A key feature of elPrep is the ability to avoid the standard practice of creating a pipeline consisting of multiple
 command line tools invocations,
-executing a single pass through a SAM/BAM file and keeping data as much as possible in main memory.
+by executing a single pass through a SAM/BAM file and keeping data as much as possible in main memory.
 In~\cite{costanza:2019} the authors investigated Go, Java and C++ programming platforms, as an alternative to Common Lisp.
 The result of their study concluded that the Go implementation performed best, using a metric that involved both the
 RAM usage and the runtime performance.
@@ -93,7 +93,7 @@ called {\textit{garbage collector} (GC)} which reclaims heap storage occupied by
 The garbage collection process~\cite{gc:oracle} works typically by splitting the heap into two regions:
 a {\textit{young generation}} region and an {\textit{old generation}}.
 All new objects are allocated in the young region, in a very fast manner, using typically a "bump-pointer" strategy.
-When this region becomes full  a {\textit{minor}} garbage collection occurs and all dead objects are deleted very quickly.
+When this region becomes full,  a {\textit{minor}} garbage collection occurs and all dead objects are deleted very quickly.
 The objects which are still referenced survive, and then they are moved to the old generation.
 This minor collection is always a "stop the world" event, meaning that all of the application threads will be paused
 until the GC is finished.
@@ -109,7 +109,7 @@ Therefore, the speed of GC depends on two factors: the number of objects it has 
 relationships between them.
 
 Considering the behavior we have described so far, we will analyze the impact of some simple tweaks
-meant to reduce the impact of GC over the application performance, such as:
+meant to reduce the impact of GC over the application performance, such as
 reducing the unnecessary small allocations in young region, controlling the scope in which objects are referenced in
 order to minimize the number of times when expensive collection of old region is triggered,
 simplifying the object graph and controlling the amount of memory JVM is allowed to use.
@@ -163,7 +163,7 @@ When working with large amounts of objects it is quite important to assess the m
 An object allocated on the heap has a {\textit{header}} which contains information used for locking, garbage collection or the identity of that object.
 The size of the header depends on the operating system, and it may be 8 bytes on 32 bit architectures or 16 bytes on 64 bit architectures.
 Also, for performance reasons and in order to conform with most of the hardware architectures, JVM will {\textit{align}} data.
-That means that if we have an object that wraps just one byte, it will not use: $8 \text{(object header)} + 1 \text{(content)} = 9 $ bytes of memory on the heap, but it will use $16$ bytes as it needs to be aligned to the next $8$ byte boundary.
+That means that if we have an object that wraps just one byte, it will not use $8 \text{(object header)} + 1 \text{(content)} = 9 $ bytes of memory on the heap, but it will use $16$ bytes as it needs to be aligned to the next $8$ byte boundary.
 
 In Java, strings are objects and they are allocated on the heap.
 That fact that string literals are stored in a shared object pool, in order to reduce memory consumption, is of no relevance in our context.
@@ -178,7 +178,7 @@ private int hash;
 \end{small}
 
 As expected, a \texttt{String} object keeps a reference to an internal byte array.
-However, the other two fields will make the size of the object equal to: $8$ (header) $+$ $4$ \texttt{value} reference $+$ $1$  \texttt{coder} value $+$ $4$ \texttt{hash} value $= 17$ bytes.
+However, the other two fields will make the size of the object equal to $8$ (header) $+$ $4$ (\texttt{value} reference) $+$ $1$  (\texttt{coder} value) $+$ $4$ (\texttt{hash} value) $= 17$ bytes.
 Being aligned to $8$ bytes, it will actually use $24$ bytes.
 When creating many \texttt{String} instances (like millions of them, as in our case study), the extra information included in this class will add up, consuming memory and  triggering the garbage collector more often than necessary. 
 
@@ -245,20 +245,20 @@ For a small BAM file of 144 MB there will be created around $2.1$ million \textt
 For simplicity, let's disregard \texttt{TAGS} and \texttt{temps} fields (which can have different lengths) as it makes the calculation simpler and analyze the memory consumption in both cases.
 We suppose also that the JVM uses 32 bits for representing an object header.
 
-One {\texttt{SamAlignment}} object contains:
-8 bytes object header, 6 instances of \texttt{Slice} objects (\texttt{QNAME}, \texttt{RNAME}, \texttt{CIGAR}, \texttt{RNEXT}, \texttt{SEQ}, \texttt{QUAL}) of 4 bytes each, 3 integer fields ({\texttt{POS}}, {\texttt{PNEXT}}, {\texttt{TLEN}}) of 4 bytes each, 1 character ({\texttt{FLAG}}) of 2 bytes, and an additional byte ({\texttt{MAPQ}}).
-So, the total size of the object is: $8 + 6 * 4 + 3*4  + 1 * 2+ 1 * 1 = 47$ bytes, and as it is rounded up to a multiple of $8$, the result is $48$ bytes.
+One {\texttt{SamAlignment}} object contains
+8 bytes (object header), 6 instances of \texttt{Slice} objects (\texttt{QNAME}, \texttt{RNAME}, \texttt{CIGAR}, \texttt{RNEXT}, \texttt{SEQ}, \texttt{QUAL}) of 4 bytes each, 3 integer fields ({\texttt{POS}}, {\texttt{PNEXT}}, {\texttt{TLEN}}) of 4 bytes each, 1 character ({\texttt{FLAG}}) of 2 bytes, and an additional byte ({\texttt{MAPQ}}).
+So, the total size of the object is $8 + 6 * 4 + 3*4  + 1 * 2+ 1 * 1 = 47$ bytes, and as it is rounded up to a multiple of $8$, the result is $48$ bytes.
 
 In order to save memory, the string representing a row scanned from the original file is shared between multiple objects.
 All $6$ {\texttt{Slice}} instances contain a reference to the  underlying string and two integers pointing to the start index and length.
-So, a {\texttt{Slice}} instance uses: $8$ (object header) $+4$ (reference to the string) $ + 4 + 4 = 20$ bytes, being rounded to $24$.
+So, a {\texttt{Slice}} instance uses $8$ (object header) $+4$ (reference to the string) $ + 4 + 4 = 20$ bytes, being rounded to $24$.
 
 As {\texttt{Slice}} instances point to a {\texttt{String}} object, the {\texttt{String}} itself adds another $24$ bytes, as we have already seen, and the byte array object referenced from the {\texttt{String}} adds another $24$ bytes (not counting its content size).
 
 
-Adding all these numbers up, we conclude that for representing a {\texttt{SamAlignment}} object the JVM needs: $48$ (the object itself) $ + 6*24$ (\texttt{Slice}) $ + 24 + 24 = 240$ bytes.
+Adding all these numbers up, we conclude that for representing a {\texttt{SamAlignment}} object the JVM needs $48$ (the object itself) $ + 6*24$ (\texttt{Slice}) $ + 24 + 24 = 240$ bytes.
 
-For a $144$ MB file there are $2.1$ million entries, so the memory requirement for storing the graph of objects and the integer fields is approximately $504,000,000$ bytes, which equals to more than $480$ MB (not counting the $144$ MB of content in byte array).
+For a $144$ MB file there are $2.1$ million entries, so the memory requirement for storing the graph of objects and the integer fields is approximately $504,000,000$ bytes, which equals to more than $480$ MB (not counting the $144$ MB actual content of byte array).
 
 For the $1.27$ GB BAM file, the numbers are much larger as there are a $17.6$ million rows.
 The total is $4,224,000,000$ bytes, representing almost $4$ GB\@.
@@ -292,7 +292,7 @@ StringSequence QUAL;
 \end{verbatim}
 \end{small}
 
-So, instead of having a large number of {\texttt{SamAlignment}} instances, we will have a single object of type {\texttt{SamBatch}} which contains references to the "columns", ie our data structures holding all the information of a specific type.
+So, instead of having a large number of {\texttt{SamAlignment}} instances, we will have a single object of type {\texttt{SamBatch}} which contains references to the "columns", i.e. our data structures holding all the information of a specific type.
 
 
 Regardless of VM bitness, the memory consumption for representing one row of the input file is: 
@@ -312,13 +312,13 @@ Regardless of VM bitness, the memory consumption for representing one row of the
 Considering that no rounding up is necessary, for $2.1$ million rows this sums up to $81,900,000$ bytes,
 equivalent to $78$ MB. The header sizes of the column objects ($11*8$ bytes) become negligible in this context.
 
-We will explain later, in section \ref{subsec:batching}, how additional memory savings ($2$ bytes per instance) can be achieved using {\textit{chunking} } and {\textit{batching} }, but for now, in order to have a visual description of the data representation, the following graph shows a comparison between the row-based and the column-based models (only for object bookkeeping and primitive values):
+We will explain later, in section \ref{subsec:batching}, how additional memory savings ($2$ bytes per instance) can be achieved using \textit{chunking} and {\textit{batching}, but for now, in order to have a visual description of the data representation, the following graph shows a comparison between the row-based and the column-based models (only for object bookkeeping and primitive values):
 
 \begin{center}
 	\includegraphics[scale=0.35]{images/MemoryBookeeping.png}
 \end{center}
 
-As this is a major reduction in memory consumption, let us analyze the technique used to achieve this result.
+As this is a major reduction in memory consumption, let us analyze the techniques used to achieve this result.
 
 The basic idea is that instead of storing an array of {\texttt{String}} objects, for example:
 \begin{verbatim}
@@ -385,8 +385,7 @@ That means that for the smallest file (144 MB), containing $2.1$ million rows, t
 
 In order to address {\texttt{temps}} and {\texttt{TAGS}} we have implemented the {\texttt{TagSequence}} class, which is a combination between {\texttt{StringSequence}} and {\texttt{DeduplicatedDictionary}}.
 Since the {\texttt{tags}} are repeating frequently, we save them using one {\texttt{short}} value per tag, but instead of using a list of tags, we define a sequence of indices.
-
-TagSequence does memory compaction by using a mix of short per-tag encoding and a full sequence of tags is joined together.
+\texttt{TagSequence} does memory compaction by using a mix of \texttt{short} per-tag encoding and a joining the full sequence of tags.
 
 For example, for the input {\texttt{"tag0 tag1 tag2", "tag1 tag2 tag3"}}, the representation would be:
 \begin{verbatim}
@@ -396,7 +395,7 @@ lengths: [0,3],
 tagSequence = [0,1,2,1,2,3]; 
 \end{verbatim}
 
-Our model will use much less additional memory: $4$ bytes for \texttt{lengths}, and each index pointing to the \texttt{table} would require $2$ bytes. On average, there are $10$ tags per row , so object bookkeeping would cost an extra $4 + 2*10 = 24$ bytes per row, a $10\times$ saving.
+Our model will use much less additional memory: $4$ bytes for \texttt{lengths}, and each index pointing to the \texttt{table} would require $2$ bytes. On average, there are $10$ tags per row, so object bookkeeping would cost an extra $4 + 2*10 = 24$ bytes per row, a $10\times$ saving.
 
 For $2.1$ million entries, the tags memory consumption is now $50,400,000$ bytes and the combined value for the whole model is $132,300,000$ bytes (about $126$ MB).
 The version using chunking and batching offers some extra savings, as it uses $6$ bytes less per row.
@@ -410,12 +409,12 @@ The used memory is $(33 + 24) * 2.1$ million $= 119,700,000$ bytes, about $10\%$
 \label{subsec:buffering}
 
 The most important technique that could improve performance when working with large files is I/O {\texttt{buffering} } \cite{oaks:2014}.
-Invoking Java {\textit{read} } method, for example, will eventually trigger an invocation of the operating system method responsible with reading data from the disk.
+Invoking a Java {\textit{read} } method, for example, will eventually trigger an invocation to the operating system method responsible with reading data from the disk.
 Although most operating systems use I/O buffering by default, an invocation of a method outside JVM is nevertheless expensive. Another reason to minimize the number of I/O operations is that, for each one of them, temporary objects needed to store the data must be created, meaning that GC will have more work to do when recovering the memory. 
 
 
-The elPrep algorithm starts by reading the input file.
-Based on the information it reads, it creates a large data set in memory and, in the end, it writes the processed data into another file.
+The elPrep algorithm starts by reading the input file. 
+Based on the read information, it creates a large data set in memory and, in the end, it writes the processed data into another file.
 In the writing step, the algorithm creates parallel tasks, which in turn take all \texttt{SamAlignment} instances and serialize them into the string format of SAM files.
 Especially when the full data set is loaded into memory, these tasks create many small objects that have a negative impact in terms of memory management. Using a simple technique of {\textit{pre-allocating} } the buffer sizes based on the specific context of the problem, we can prevent the creation of many of these intermediate objects.
 
@@ -452,8 +451,8 @@ In the following sections, we will denote the algorithm that employs this techni
 We will further analyze the usage of the \texttt{StringWriter} and its \texttt{StringBuffer} helper.
 To quote from its documentation, a {\texttt{StringBuffer}} is  a thread-safe, mutable sequence of characters.
 That means that most of its methods are declared as {\textit{synchronized}} in order to control the access to the buffer of characters in a multithreaded environment.
-However, in our case, each writing thread spawned by the parallel stream implementation gets his own copy of a {\texttt{StringWriter}} so there is no resource contention that would require synchronization.
-So, instead of using a {\texttt{StringWriter}}, it would be better to simply use a common buffer, with no synchronization.
+However, in our case, each writing thread spawned by the parallel stream implementation gets its own copy of a {\texttt{StringWriter}} so there is no resource contention that would require synchronization.
+Instead of using a {\texttt{StringWriter}}, it would be better to simply use a common buffer, with no synchronization.
 To maximize the performance gain, the buffer could be implemented as a byte array.
 Using bytes instead of characters is quite trivial as Java {\texttt{String}} class has the method {\texttt{getBytes}()} and recreating a {\texttt{String}} object can be done by simply using one of its constructors: {\texttt{new String(bytes)}}.
 
@@ -632,9 +631,9 @@ Compact/Par 			& 5.42		    & 4.68				& 26.7 			\\ \hline
 \end{small}
 
 Comparing $4$ cores to $12$ cores, we notice that the {\textit{Original} } algorithm scales with a factor of $2.3$, {\textit{PresizedBuffers} } by a factor of $2.14$, {\textit{StreamByteArray} } scales by $2.36$ and {\textit{Compact} } would scale by $1.69$. So, at least for the small file, it seems that using larger machines will offer a better performance. It is important to notice that, in its current implementation, the {\textit{Compact} } algorithm has an explicit sequential part that reduces its scalability.
-Some potential fixes are described in section \ref{sec:future}, where we describe some techniques aimed at improving the single threaded part.
+Some potential fixes are described in section \ref{sec:future}, where we present some techniques aimed at improving the single-threaded part.
 
-Considering the file size, the elPrep algorithm uses a lot of memory and, since the JVM has to call more often the Garbage Collector, the cost of GC visibly affects the executing time, affecting its scalability. Our techniques of reducing object allocations presented in {\textit{PresizedBuffers} } and {\textit{StreamByteArray} } algorithms pay off now, their runtime profiles being much better than the original. Since the {\textit{Compact} } algorithm reduces drastically the memory consumption, it is not affected too much by GC and the overall running time is significantly superior.
+Considering the file size, the elPrep algorithm uses a lot of memory and, since the JVM has to call more often the Garbage Collector, the cost of GC visibly influences the executing time, affecting its scalability. Our techniques of reducing object allocations presented in {\textit{PresizedBuffers} } and {\textit{StreamByteArray} } algorithms pay off now, their runtime profiles being much better than the original. Since the {\textit{Compact} } algorithm reduces drastically the memory consumption, it is not affected too much by GC and the overall running time is significantly superior.
 For an increase in file size $8$ times, the {\textit{Original} } algorithm would slow down $31.46$ times, the {\textit{PresizedBuffers} } will slow down $17.92$ times, {\textit{StreamByteArray} } will slow down $18.83$ times,
 and the {\textit{Compact} } algorithm will have an almost perfect $8.33$ times slow down.
 
@@ -651,7 +650,7 @@ It is also important to understand that the more live memory is used, and more c
 This is because the GC algorithm is triggered when a critical amount of the heap is occupied.
 Therefore, the more memory JVM has access to, the more seldom GC will execute.
 The default {\textit{Garbage First Garbage Collector}  (G1 GC)} is automatically triggered at $45\%$ memory occupancy (this value being configurable using the \texttt{InitiatingHeapOccupancyPercent} parameter). When the heap is reaching this level, JVM will spawn background threads in order to do the marking phase, and this affects the running time.
-Having a larger machine with double memory will trigger the GC at least $2$ times more seldom and
+Having a larger machine with double memory will trigger the GC at least two times more seldom and
 although the number of objects to be removed is the same, the overall time necessary for this operation is improved.
 
 \begin{small}
@@ -689,10 +688,10 @@ The results for the $144$ MB file are presented below (lower bars are better):
 	\includegraphics[scale=0.5]{images/times_and_memory_chart_small_144mb_ryzen.png}
 \end{center}
 
-As the memory usage is quite similar between the {\textit{Original} }, {\textit{PresizedBuffers} } and {\textit{StreamByteArray} } algorithms, their comparative performance is influenced only by the runtime savings.
-Both {\textit{Compact} } algorithms are on par from the point of view of the running time, but since they are using far less memory their performance is much better.
+As the memory usage is quite similar between the \textit{Original}, \textit{PresizedBuffers} and \textit{StreamByteArray} algorithms, their comparative performance is influenced only by the runtime savings.
+Both \textit{Compact} algorithms are on par from the point of view of the running time, but since they are using far less memory their performance is much better.
 
-We observe that the combination of small size of the file (meaning the algorithm will run just in seconds) and the high core count (12 cores) has a negative impact on the more elaborate algorithm {\textit{Compact/Par} } which has a small slow-down compared to the more simple {\textit{Compact} } implementation.
+We observe that the combination of small size of the file (meaning the algorithm will run just in seconds) and the high core count (12 cores) has a negative impact on the more elaborate algorithm \textit{Compact/Par} which has a small slow-down compared to the more simple \textit{Compact} implementation.
 
 On the laptop (which has a better SSD), the {\textit{Compact} } algorithm performs even better, since it could not fully exploit the high number of cores in the first test:
 
@@ -707,8 +706,8 @@ On the medium file ($1.2$ GB BAM) the values are more conclusive from the point 
 	\includegraphics[scale=0.5]{images/times_and_memory_chart.png}
 \end{center}
 
-For the larger files, since we could only run the {\textit{Compact} } and {\textit{Compact/Par} } algorithms, we can't make a direct comparison between all algorithms. To overcome this impediment, we have calculated estimated values based on the scaling factors obtained from the files we could run.
-We compared the {\textit{StreamByteArray} } algorithm, which should scale better than the {\textit{Original} }, to the {\textit{Compact} } versions, calculating the number of GBs processed per second.
+For the larger files, since we could only run the \textit{Compact} and \textit{Compact/Par} algorithms, we can't make a direct comparison between all algorithms. To overcome this impediment, we have calculated estimated values based on the scaling factors obtained from the files we could run.
+We compared the \textit{StreamByteArray} algorithm, which should scale better than the \textit{Original}, to the \textit{Compact} versions, calculating the number of GBs processed per second.
 
 The average values, including both read and write operations, are presented below:
 
@@ -716,8 +715,8 @@ The average values, including both read and write operations, are presented belo
 	\includegraphics[scale=0.5]{images/seconds_per_gb_ryzen.png}
 \end{center}
 
-Tests performed up-to the $8$ GB file showed that algorithms scale as expected, GC does not become a large impediment for the {\textit{Compact} } implementations and the overall performance seems limited only by other hardware components, such as disk drive read/write speeds.
-Both {\textit{Compact} } algorithms keep a steady pace of processing at around $180$ MB/second (under $6$ seconds to process every $1$ GB of BAM). {\textit{StreamByteArray} } has a sharp loss of speed as GC is triggered more often, processing data at half speed when increasing the BAM file size from $0.144$ GB to $1.2$ GB.
+Tests performed up-to the $8$ GB file showed that algorithms scale as expected, GC does not become a large impediment for the \textit{Compact} implementations and the overall performance seems limited only by other hardware components, such as disk drive read/write speeds.
+Both \textit{Compact} algorithms keep a steady pace of processing at around $180$ MB/second (under $6$ seconds to process every $1$ GB of BAM). \textit{StreamByteArray} has a sharp loss of speed as GC is triggered more often, processing data at half speed when increasing the BAM file size from $0.144$ GB to $1.2$ GB.
 
 
 
@@ -759,7 +758,7 @@ We have showed that major improvements can be obtained by using techniques that 
 This will not only save memory but it will also improve runtime performance by decreasing the overhead of the Garbage Collector.
 Using a column-based representation we have compacted the data set in a manner that boosted the overall score calculated as the multiplication between used memory and running time.
 The penalty incurred by the more elaborate data model was compensated by a multithreaded approach, called chunking-batching, that actually allows the algorithm to use all available machine cores when processing the input file.
-In order to optimize the usage of the I/O device, we have also implemented the {\textit{async/await} } pattern, which also offered a small increase in performance.
+In order to optimize the usage of the I/O device, we have implemented the {\textit{async/await} } pattern, which also offered a small increase in performance.
 
 Given the hardware differences between the machine used by the elPrep authors and ours, there are limits on the testing that could be done with the techniques used by this paper.
 Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $32$ GB/s) and so on.
