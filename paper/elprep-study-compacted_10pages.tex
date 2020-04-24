@@ -51,9 +51,7 @@
 In today's era of multi-core machines with high RAM capacity it is harder to use these machines efficiently.
 As a secondary requirement developers want to use commonly known languages that are easy to use and to make minimum compromises.
 
-In fields like finance, bioinformatics, search engines, they require using a large in-memory data sets and perform various operations on it.
-
-In our bioinformatics, there are common operations as sequence alignment, variant detection, search against biological databases, etc.
+In fields like finance, bioinformatics, search engines, they require using a large in-memory data sets and perform various operations on it. In bioinformatics, there are common operations as sequence alignment, variant detection, search against biological databases, etc.
 
 Many tools exist to perform these operations, most of them handling specific use cases and they have in common processor and memory intensive tasks: I/O operations on large file,
 compression/decompression, text processing, etc.
@@ -157,26 +155,32 @@ When creating many \texttt{String} instances (like millions of them, as in our c
 
 We will show that replacing the \texttt{String} usage to the underlying \texttt{value} byte array will improve the performance of the application, and this approach should be implemented in every scenario that involves processing large amounts of text data.
 
+
+
+
 \section{\uppercase{Representing the Data Store}}
 \label{sec:model}
 
 \subsection{\uppercase{The Row-Based Model vs Column-Based Model}}
-\label{subsec:column}
+\label{subsec:row}
 
 The benefit of using Java is simplicity of programming and Java is defined around object creation and it comes bundled with collections like arrays as built-in the language, but also APIs to do common operations with them like filtering, mapping them and so on, which makes developers to use these APIs out of convenience.
-But, when the data set is into hundreds of thousands of items (or in case of sequencing algorithms like ElPrep it can go well beyond 10 millions), the memory consumption can go fast quickly.
+But, when the data set is into hundreds of thousands of items (or in case of sequencing algorithms like ElPrep it can go well beyong 10 millions), the memory consumption can go fast quickly.
 
-For the IP database that gives the geometric location, something like this can be defined as a good representation that a developer could choose and put them into an ArrayList of LocationRow:
+For the IP database that gives the geometric location, something like this can be defined as a good representation that a developer could choose and put them into an ArrayList<LocationRow>
 
 \begin{small}
 \begin{verbatim}
 public class LocationRow {
-    long ipLow;
-    long ipHigh;
-    String countryCode;
-(...)
-    double latitude;
-    String zipCode;
+	long ipLow;
+	long ipHigh;
+	String countryCode;
+	String country;
+	String region;
+	String city;
+	double latitude;
+	double longitude;
+	String zipCode;
 }
 \end{verbatim}
 \end{small}
@@ -186,25 +190,31 @@ When storing these locations parsed out of a 2020 database of these fields and s
 So let's see one instance's size of LocationRow: ipLow, ipHigh, latitude, longitude have $8$ bytes primitive types. $4$ strings of $24$ bytes each (not counting data) and $4$ (on 32 bit machines) bytes references and these String instances would have themselves a byte array, which itself starts from $16$ byte starting size and it will increase in increments of 8 every time a string exceeds 8 bytes long. But not considering the byte content we have the following overheads. And on top of this we have to add $12$ bytes object headers for the LocationRow itself
 $ 4 * 8 + 4 * (24 + 4 + 16) + 12 = 220$
 
-If multiplied by 2.8 million rows, the storing envelope (which contains some useful data, like the long/double instances) is around 600 MB. If stored in an ArrayList, the collection has to store these $2.8$ million references of $4$ bytes which themselves add to another 11 MB.
+If multiplied by 2.8 million rows, the storing envelope (which contains some useful data, like the long/double instances) is around 600 MB. If stored in an ArrayList, the ArrayList itself has to store these $2.8$ million references of $4$ bytes which themselves add to another 11 MB.
 
-Now let's flip the order of storing, and instead of keeping an {\texttt{ArrayList<LocationRow}} we will have a repository class that will store the columns individually as follows:
+Now let's flip the order of storing, and instead of keeping an ArrayList<LocationRow> we will have a repository class that will store the columns individually as follows:
 
 \begin{small}
 	\begin{verbatim}
 public class LocationRowRepository {
     LongArrayList ipLow;
-    LongArrayList ipHigh;
-    DeduplicatedDictionary countryCode;
-(...)
-    DoubleArrayList longitude;
-    StringSequence zipCode;
+	LongArrayList ipHigh;
+	DeduplicatedDictionary countryCode;
+	DeduplicatedDictionary country;
+	DeduplicatedDictionary region;
+	StringSequence city;
+	DoubleArrayList latitude;
+	DoubleArrayList longitude;
+	StringSequence zipCode;
 }
 \end{verbatim}
 \end{small}
 
 So we will store the all locations data in long sequences but the overhead is fixed per entire data set: every new row doesn't add many objects, so per every instance there are the following costs:
-4 instances of 8 bytes (ipLow, ipHigh, latitude and longitude), 3 classes that use 2 bytes per string to identify commonly repeating names and city which uses extra 4 bytes to store the length of StringSequence (these collections would be detailed in the next section how they work), so memory consumption per every row would be: $4 * 8 + 3 * 2 + 4 = 42$
+4 instances of 8 bytes (ipLow, ipHigh, latitude and longitude), 3 classes that use 2 bytes per string to identify commonly repeating names and city which uses extra 4 bytes to store the length of StringSequence (these collections would be detailed in the next section how they work)
+
+So memory consumption per every row would be:
+$4 * 8 +  + 3 * 2 + 4 = 42$
 
 And combined envelope would be a fixed: 2.8 million * 42 bytes around 120 MB and added on top, some data would be deduplicated.
 
@@ -281,7 +291,7 @@ For example, encoding the $21$ letters string "AAAACCCCGGGGTTTTNNNNA" would prod
 		10010010001001001001000000000000}
 }
 
-From right to left, $000$ = A, $001$ = C, and so on.
+From right to left, $000$ represents A, $001$ represents C, and so on.
 
 In the sample files, one DNA sequence is typically around $100$ letters, so the memory needed in order to represent it would be $1$ {\texttt{int}} (encoding length) and $5$ {\texttt{long}}s (the content), that is $44$ bytes.
 This reduces the memory consumption by a factor of two.
@@ -303,42 +313,79 @@ tagSequence = [0,1,2,1,2,3];
 
 The memory usage would be significantly improved (as expected), but the benefit is two fold: it makes GC pass to be called less often, because there is less memory allocated; and when the GC step happens, the number of objects is drastically smaller, so the runtime of GC would happen much faster.
 
-
+Though a column store is a very good solution for size reduction, it has the downside of requiring more computational effort in order to work with multiple properties of the same object and deduplicate them.
 However, when saving memory is the major concern, and especially when it comes to hundreds of GB per instance, the execution slowdown becomes far less important if we can achieve significant reductions in consumed memory.
 
 
 \section{\uppercase{Optimizing JVM Operation on ElPrep}}
 \label{sec:io}
 
-\subsection{\uppercase{Buffering and Synchronization}}
+\subsection{\uppercase{Buffering}}
 \label{subsec:buffering}
 
-When profiling ElPrep algorithm in Java, there were two sets of improvements that were noticed: per every line of the output SAM file, at writing stage, this code was allocating many small objects which
-would trigger full GCs:
+Even the key step of improvement for ElPrep is memory compaction, given that the original algorithm
+was stressing the GC (and this is shown in the ElPrep paper), it was spent time to find some bottlenecks
+of the original elPrep Java implementation, and it was used to be a baseline.
 
+When profiling ElPrep algorithm in Java, after the whole ElPrep algorithm is executed, in the writing writing step, the algorithm creates parallel tasks, which in turn take all \texttt{SamAlignment} instances and serialize them into the string format of SAM files.
+Especially when the full data set is loaded into memory, these tasks create many small objects that have a negative impact in terms of memory management. Using a simple technique of {\textit{pre-allocating} } the buffer sizes based on the specific context of the problem, we can prevent the creation of many of these intermediate objects.
+
+The code sequence that captures the writing process is presented below:
 \begin{verbatim}
+var outputStream = alnStream
+  .parallel()
+  .map((aln) -> {
     var sw = new StringWriter();
     try (var swout = new PrintWriter(sw)) {
       aln.format(swout);
     }
     return sw.toString();
+});
 \end{verbatim}
 
-If we take a closer look at the {\texttt{StringWriter}} class we notice that it uses an internal {\texttt{StringBuffer}} object for storing its data, which in turn has an internal primitve buffer  ({\texttt{buffering} } \cite{oaks:2014}) which has $16$ characters as default.
-We changed the default to be $350$, given that the average line is around 330 characters and how
-the distribution of rows happened, and we name this technique as {\textit{PresizedBuffers} }.
-So previous line would look like this:
+If we take a closer look at the {\texttt{StringWriter}} class we notice that it uses an internal {\texttt{StringBuffer}} object for storing its data, which in turn has an internal primitve buffer  ({\texttt{buffering} } \cite{oaks:2014}).
+This buffer has an initial capacity and it is resized whenever the text that must be represented no longer fits into it. When the buffer is full, its capacity is doubled. 
+The default size of a \texttt{StringBuffer} is $16$ characters, so creating a text of length $400$ would require $5$ resize operations, from $16$ to $512$. 
+
+The average length of a row in the input file is $325 - 330$ characters.
+As $350$ is about $10\%$ larger than the average line, based on the regular statistical distribution, this means that most lines would require no extra resizes of their corresponding buffers. This prevents the creation of extra garbage, which in turn reduces the number of times when GC is executed.
+
 \begin{verbatim}
-var sw = new StringWriter(350);
+    var sw = new StringWriter(350);
+\end{verbatim}
+In the following sections, we will denote the algorithm that employs this technique as {\textit{PresizedBuffers} }.
+
+
+\subsection{\uppercase{Synchronization}}
+\label{subsec:sync}
+
+Another bottleneck in the original ElPrep algorithm that is a more laborious to fix, is noticing
+that the class that is used to write the ouput (PrintWriter) is internally synchronized, which makes that
+even though elPrep is itself formatting in a multi-threaded fashion the formatted strings (from previous subsection).
+
+Writing to the file is implemented by simply invoking the {\texttt{println}} method of a {\texttt{PrintWriter}} output stream, decorating a {\texttt{BufferedWriter}}, which in turns decorates a {\texttt{FileWriter}}.
+\begin{verbatim}
+var out = new PrintWriter(
+  new BufferedWriter(
+    new OutputStreamWriter(output)));
+...    
+outputStream.forEachOrdered(
+  (s) -> out.println(s));
 \end{verbatim}
 
-In similar fashion, even the code of writing and formatting every row is using parallel tasks,
-because it uses the {\texttt{PrintWriter}} class, this class is internally synchronized, making the writing to be effecively single threaded. So instead of using PrintWriter, we restructure the data
-to be writable sequentially ourselves and we optimized the writing of these bytes, making almost allocation free, and removing marginally the memory usage, which in turn translated in even better runtime.
+Again, the {\texttt{PrintWriter.println}} method is using a {\texttt{synchronized}} block in order to fulfill its task, which is eventually an invocation to {\texttt{BufferedWriter.write}} method.
+\begin{verbatim}
+public void println(String x) {
+  synchronized (lock) {
+    print(x); println();
+   }
+}
+\end{verbatim}
+The {\texttt{BuffereWriter.write}} method is also synchronized and so is {\texttt{FileWriter.write}}, which is the last one invoked in this chain.
 
-The main logic for writing is in class {\texttt{StreamByteArray}} and also we will name the technique with the same name in future.
+We did replace the writer code to a single-threaded version of the code that would be optimized and to avoid allocations and it is much faster as writing step. As to control allocation, instead of elPrep's Slice to store a String, the new algorithm will store the internal byte[], that in turn will make writing to disk directly and all other small changes that avoid allocations (so for example when reading integers in the row, the byte array/string is parsed character by character instead of using Java APIs that allocate.
 
-This techniques will be referenced {\texttt{StreamByteArray}} algorithm.
+These techniques will be referenced \texttt{StreamByteArray} algorithm.
 
 \subsection{\uppercase{Column Store Compaction on Chunking-Batching and Extracting Parallelism}} 
 \label{subsec:batching}
@@ -372,11 +419,11 @@ while (!endOfFile) {
 The {\texttt{readRows}} method reads $chunkSize * nbOfThreads$ rows out of the SAM file for the next processing step.
 The actual reading is done using an appropriate number of threads (based on the CPU configuration), each thread reading sequentially a fixed number of rows, calculated taking into account the nature of the information being encoded.
 Having the data split into chunks, we can process in parallel the mapping between the associated text and the {\texttt{SamBatch}} data structure, where we perform data compaction and deduplication.
-The techinque of grouping similar tasks requiring the same resources in order to streamline their completion is called {\textit{batching}}.
+The technique of grouping similar tasks requiring the same resources in order to streamline their completion is called {\textit{batching}}.
 
-In our case, the advantages of chunking-batching approach are multiple:
+In our case, the advantages of the chunking-batching approach are multiple:
 \begin{itemize}
-\item Transforming data, deduplicating and DNA encoding are all executed in a single-threaded manner, which is much easier to debug and understand than a multithreaded equivalent.
+\item Transforming data, deduplicating and DNA encoding are all executed in a single-threaded manner, which is much easier to debug and understand than a multi-threaded equivalent.
 
 \item Since a {\texttt{DeduplicatedDictionary}} will now have less than $20000$ unique strings, the values needed to encode the strings could be represented on $2$ bytes, instead of $4$.
 Similarly, we can reduce the tag size from $4$ to $2$ bytes.
@@ -403,10 +450,7 @@ This new algorithm, called {\textit{Compact/Par}}, offers a small improvement in
 \subsection{\uppercase{Overview}}
 \label{subsec:overview}
 
-We have created five implementations that address the most expensive parts of the elPrep algorithm, which are reading, storing all data in the memory and writing.
-
-All implementations, measurements and logs are accessible under public repository: {\textit{https://github.com/ciplogic/elprep-study}}
-
+We have created five implementations that address the most expensive parts of the elPrep algorithm, which are reading,  storing all data in the memory and writing.
 Except for the original version, which was taken from elPrep public repository, all other algorithm implementations contain various types of optimization that are meant to improve runtime performance and to lower the memory usage, especially on large files where GC becomes a limiting factor. 
 We recap the names of the algorithms as they are used in the following sections:
 \begin{itemize}
@@ -508,7 +552,22 @@ On a $48$ GB machine, {\textit{Compact}} algorithms can process larger files: th
 We also have to note that not all of the used memory represents data related to the input file.
 For example, in the case of the original elPrep algorithm, as it creates millions of tasks even for the smallest $144$ MB BAM file, Java Streams library will create a queue of objects that will remain in memory very likely until the end. This might add maybe around $100$ MB of memory, as it is quite hard (if not impossible) to measure it.
 
-We also evaluated into an equivalent memory storage of other data set like the IP geolocation and we found that the live memory usage is the following: Original implementation is 932 MB (100 percent), after Compacting: 212 MB (23 percent) and adding more data optimizations (that are obvious and not too aggressive (like saving countries in 1 byte instead of 2, or saving extra 2 bytes just from location, that would not reduce the precision of IP location) the live memory data set wen town to 171 MB (18 percent). 
+We also evaluated into an equivalent memory storage of other data set like the IP geolocation and we found that the memory usage is
+
+\begin{small}
+	\begin{center}
+		\textbf{Memory usage of Geolocation DB in MB} \\
+		\begin{tabular}{|c|c|}
+			\hline			  	& IP location file		\\ \hline
+			Original			& 932 MB			\\ \hline
+			Compact 			& 212 MB			\\ \hline
+			Compact/Par			& 171 MB			\\ \hline
+		\end{tabular}
+	\end{center}
+\end{small}
+
+Memory usage goes dramatically down, but it could be reduced even more, but the idea of compacting
+column based store is very feasible for multiple use-cases: for example instead of country to use 2 bytes as deduplication, they can use 1 byte (as there are less than 256 countries), instead of float type a 24 bit latitude and longitude would be enough to store latitude and longitude value (using a 24 bit value, would translate into a precision of less than 3 meters, on equator), and so on.
 
 \begin{center}
 	\includegraphics[scale=0.5]{images/Geolocation_Chart.png}
@@ -538,6 +597,9 @@ Before chunking and batching is done, we split the full byte array read from fil
 This separation may not be necessary, an alternate approach being to store inside a large \texttt{byte[]} structure all the information and to use an additional array of indices in order to retrieve the actual lines of text.
 This would reduce the number of allocations and eventually speed up the execution of the main thread.
 
+A similar variation of speeding up the single threaded part is to not do the line splitting at all, but to read a block of text in advance, that would be around the expected chunk size,
+and then split it in lines in a multithreaded way.
+
 \textbf{Even more compacting} \\
 The DNA sequence uses 3 bits per DNA letter, but in reality it could use just 2 for most sequences and use a flag to distinguish for the cases when letter N appears so to fall back to 3 bytes per letter. This could translate into a typically 2/3 less memory usage. 
 
@@ -545,24 +607,29 @@ The DNA sequence uses 3 bits per DNA letter, but in reality it could use just 2 
 When Java specifications were elaborated, more than $25$ years ago, the cost of a retrieving an object from the memory and executing an arithmetic operation was approximately the same.
 On modern hardware however, the memory fetch operations are up to $1000$ times more expensive than arithmetic ones.
 This is why, the {\textit{Project Valhalla} } \cite{jdk:valhalla}, that is expected to be integrated in modern JDK releases, introduces new data structures and language constructs that improve various aspects regarding data manipulation.
-
+For example, {\textit{Value Types} } provide the necessary infrastructure for working with immutable and reference-free objects.
+In our context, this would allow us to further reduce the memory used by the {\textit{Compact} } algorithm by using an efficient by-value computation with non-primitive types.
 
 \section{\uppercase{Conclusions}}
 \label{sec:conclusions}
 This paper addresses the situation when one has to manipulate a large textual data set by reading it from a file, transforming it into objects, processing it and then writing it back to a file, and all these operations must be performed in a single in-memory session.
-What we showed in our findings is that in-memory large data sets are feasable to be stored with Java and we achieve this in various memory bound scenarios, from data sets that span from around 250 MB of data (that would expand to 1 GB of live data for an IP geolocation DB) to 12 GB BAM data (40 GB of SAM DNA sequencing textual file).
+We have analyzed a modern implementation of an algorithm for processing SAM and BAM files, elPrep \cite{herzeel:2015}, \cite{herzeel:2019}, which must handle input files up to $100$ GB. We also tested the benefits in memory usage into another more common services like an IP to location service that stores this data in memory and it is using Java.
 
-We have analyzed a modern implementation of a state of the art algorithm for processing SAM and BAM files, elPrep \cite{herzeel:2015}, \cite{herzeel:2019}, which must handle input files up to $100$ GB. 
 The conclusion of the elPrep authors was that a Java implementation for this specific problem suffers from the memory management offered by JVM \cite{costanza:2019}.
 However, when using an object-oriented programming platform, one has to take into consideration all aspects regarding memory allocation offered by that specific platform and to adapt its model and programming techniques.
+Since Java is a general purpose programming platform, it offers a standard set of classes and language constructs providing a balance between performance and ease of use.
+When dealing with hard problems, one has to analyze the default behavior of the programming interface and "tweak" it accordingly.
 
-Since Java is a general purpose programming platform, it offers a standard set of classes and language constructs providing a balance between performance and ease of use. 
-We showed that even with very small tweaks, Java would beat elPrep in the original scoring of the original paper.
-
-But the key findings of the paper is that it can be obtained large benefits in memory consumption (a measured 4x minimum savings) and lower runtime in GC by storing data by column instead of regular collections of rows and doing per-column specialised storage that does data deduplication, tags storage, sequence compaction, and so on.
+We have showed that even with small tweaks Java implementation of elPrep could even beat their original Go implementation.
+We have showed that major improvements can be obtained by using techniques that are aimed at reducing the number of created objects.
+This will not only save memory but it will also improve runtime performance by decreasing the overhead of the Garbage Collector.
+Using a column-based representation we have compacted the data set in a manner that boosted the overall score calculated as the multiplication between used memory and running time.
 The penalty incurred by the more elaborate data model was compensated by a multithreaded approach, called chunking-batching, that actually allows the algorithm to use all available machine cores when processing the input file.
-In order to optimize the usage of the I/O device, we have also implemented the {\textit{async/await} } pattern, which also offered another increase in performance.
-We have showed that even with a machine with half of cores, $8$ times less RAM, much slower IO, using off the shelf components could do similar results with the original elPrep algorithm and the IO becomes the main bottleneck.
+In order to optimize the usage of the I/O device, we have also implemented the {\textit{async/await} } pattern, which also offered a small increase in performance.
+
+Given the hardware differences between the machine used by the elPrep authors and ours, there are limits on the testing that could be done with the techniques used by this paper.
+Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $32$ GB/s) and so on.
+However, using input files ranging in size from $144$ MB to $12$ GB, we have proved that our algorithms are scalable and could perform as expected for files of any size, provided the machine has sufficient memory.
 
 
 
