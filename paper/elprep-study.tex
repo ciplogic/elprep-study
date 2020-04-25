@@ -62,7 +62,7 @@ Choosing a programming platform that offers all the required instruments to hand
 bioinformatics is important,
 as pointed out in a recent study dedicated to migrating an existing Common Lisp application, called elPrep, 
 to another platform with better support for memory management and concurrency~\cite{costanza:2019}.
-ElPrep~\cite{herzeel:2019} is a multithreaded tool for preparing sequence alignment/map files (SAM/BAM)
+ElPrep~\cite{herzeel:2019} is a multi-threaded tool for preparing sequence alignment/map files (SAM/BAM)
 for variant calling in DNA sequencing pipelines. 
 A key feature of elPrep is the ability to avoid the standard practice of creating a pipeline consisting of multiple
 command line tools invocations,
@@ -156,7 +156,7 @@ The Java Virtual Machine allocates memory either on stack or on heap~\cite{lindh
 An object allocated on the heap has a {\textit{header}} which contains information used for locking, garbage collection or the identity of that object.
 The size of the header depends on the operating system, and it may be 8 bytes on 32 bit architectures or 16 bytes on 64 bit architectures.
 Also, for performance reasons and in order to conform with most of the hardware architectures, JVM will {\textit{align}} data.
-That means that if we have an object that wraps just one byte, it will not use $8 \text{(object header)} + 1 \text{(content)} = 9 $ bytes of memory on the heap, but it will use $16$ bytes as it needs to be aligned to the next $8$ byte boundary.
+It means that if we have an object that wraps just one byte, it will not use $8 \text{(object header)} + 1 \text{(content)} = 9 $ bytes of memory on the heap, but it will use $16$ bytes as it needs to be aligned to the next $8$ byte boundary.
 
 In Java, strings are objects and they are allocated on the heap.
 %That fact that string literals are stored in a shared object pool, in order to reduce memory consumption, is of no relevance in our context.
@@ -199,10 +199,8 @@ The basic idea is that instead of having a row-based model consisting of an arra
 This way we can store the same data, minus the object headers corresponding to all the {\texttt{Point}} instances.
 Not only the memory consumption will be lower (so the GC will be triggered less often), but the structure will also take shorter time to visit, since there are only two objects now (the two arrays).
 
-Though a column store is a very good solution for size reduction, it has the downside of requiring more computational effort in order to work with multiple properties of the same object.
+Though memory compaction is a very good solution for size reduction, it has the downside of requiring more computational effort in order to work with multiple properties of the same object.
 However, when saving memory is the major concern, and especially when it comes to hundreds of GB per instance, the execution slowdown becomes far less important if we can achieve significant reductions in consumed memory.
-
-
 
 
 
@@ -321,7 +319,7 @@ When storing strings containing characters from a restricted alphabet, one optim
 The number of bits required for a character depends on the size of the alphabet.
 DNA sequences use four letters {\texttt{A,C,G,T}}, but it is possible for a machine to read incorrectly a symbol and to return {\texttt{N}}.
 In order to represent $5$ possible characters we need at least $3$ bits,
-which means that a {\texttt{long}} can store in its $64$ bits $21$ DNA letters.
+which as a result {\texttt{long}} can store in its $64$ bits $21$ DNA letters.
 %The class {\texttt{DnaEncodingSequence}} which implements this string encoding technique contains the following members:
 %\begin{verbatim}
 %  LongArrayList content;
@@ -406,14 +404,14 @@ var outputStream = alnStream
 An important technique that could improve performance when working with data is {\texttt{buffering}} \cite{oaks:2014}.
 If we take a closer look at the {\texttt{StringWriter}} class we notice that it uses an internal {\texttt{StringBuffer}} object for storing its data, which in turn has an internal primitve buffer   which has $16$ characters as default.
 The average length of a row in the input file is $325 - 330$ characters.
-As $350$ is about $10\%$ larger than the average line, based on the regular statistical distribution, this means that most lines would require no extra resizes of their corresponding buffers. This prevents the creation of extra garbage, which in turn reduces the number of times when GC is executed.
+As $350$ is about $10\%$ larger than the average line, based on the regular statistical distribution, thus most lines would require no extra resizes of their corresponding buffers. This prevents the creation of extra garbage, which in turn reduces the number of times when GC is executed.
 %So, the previous line would look like this: {\tt var sw = new StringWriter(350);}
 In the following sections, we will denote the algorithm that employs this technique as {\textit{PresizedBuffers} }.
 
 
 We will further analyze the usage of the \texttt{StringWriter} and its \texttt{StringBuffer} helper.
 To quote from its documentation, a {\texttt{StringBuffer}} is  a thread-safe, mutable sequence of characters.
-That means that most of its methods are declared as {\textit{synchronized}} in order to control the access to the buffer of characters in a multithreaded environment.
+Meaning that most of its methods are declared as {\textit{synchronized}} in order to control the access to the buffer of characters in a multi-threaded environment.
 However, in our case, each writing thread spawned by the parallel stream implementation gets its own copy of a {\texttt{StringWriter}} so there is no resource contention that would require synchronization.
 Instead of using a {\texttt{StringWriter}}, it would be better to simply use a common buffer, with no synchronization.
 Instead of creating and storing individual string representations of all the {\texttt{SamAlignment}} objects, and writing them one by one to disk, we add progressively information into the buffer.
@@ -537,7 +535,7 @@ var alnStream = inputStream.parallel()
 In the column-based model, described in section~\ref{subsec:column}, there is a single {\texttt{SamBatch}} instance storing all the data.
 Because we perform data compaction, the {\textit{read}} operation must take into account the dependencies between rows.
 Just like in the case of removing duplicates, in order to process a new row we have to inspect the values of the previously read rows.
-This means that the reading process cannot be fully parallel per-row.
+Therefore the reading process cannot be fully parallel per-row.
 In order to obtain a better performance than reading using a single thread, we propose a technique that splits the {\texttt{SamBatch}} structure in several "chunks".
 Instead of having a single large object, we will represent the data using an array of smaller {\texttt{SamBatch}} objects.
 A sketch of our {\textit{Compact}} algorithm is described by the following pseudo code:
@@ -799,7 +797,7 @@ However, when using an object-oriented programming platform, one has to take int
 We have showed that major improvements can be obtained by using techniques that are aimed at reducing the number of created objects.
 This will not only save memory but it will also improve runtime performance by decreasing the overhead of the Garbage Collector.
 Using a column-based representation we have compacted the data set in a manner that boosted the overall score calculated as the multiplication between used memory and running time.
-The penalty incurred by the more elaborate data model was compensated by a multithreaded approach, called chunking-batching, that actually allows the algorithm to use all available machine cores when processing the input file.
+The penalty incurred by the more elaborate data model was compensated by a multi-threaded approach, called chunking-batching, that actually allows the algorithm to use all available machine cores when processing the input file.
 In order to optimize the usage of the I/O device, we have implemented the {\textit{async/await} } pattern, which also offered a small increase in performance.
 
 Given the hardware differences between the machine used by the elPrep authors and ours, there are limits on the testing that could be done with the techniques used by this paper.
