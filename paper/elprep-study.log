@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  8 FEB 2020 10:29
+This is pdfTeX, Version 3.14159265-2.6-1.40.17 (MiKTeX 2.9.6210 64-bit) (preloaded format=pdflatex 2017.2.6)  25 APR 2020 12:27
 entering extended mode
 **./elprep-study.tex
 (elprep-study.tex
@@ -380,42 +380,42 @@ G,.JBIG2,.JB2,.eps]
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <14.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
-LaTeX Font Info:    Calculating math sizes for size <11> on input line 50.
-LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 50
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
+LaTeX Font Info:    Calculating math sizes for size <11> on input line 49.
+LaTeX Font Info:    Try loading font information for OT1+ptmcm on input line 49
 .
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\ot1ptmcm.fd"
 File: ot1ptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OT1/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 50
+LaTeX Font Info:    Try loading font information for OML+ptmcm on input line 49
 .
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omlptmcm.fd"
 File: omlptmcm.fd 2000/01/03 Fontinst v1.801 font definitions for OML/ptmcm.
 )
-LaTeX Font Info:    Try loading font information for OMX+psycm on input line 50
+LaTeX Font Info:    Try loading font information for OMX+psycm on input line 49
 .
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omxpsycm.fd"
 File: omxpsycm.fd 2000/01/03 Fontinst v1.801 font definitions for OMX/psycm.
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 50.
+LaTeX Font Info:    Try loading font information for U+msa on input line 49.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 50.
+LaTeX Font Info:    Try loading font information for U+msb on input line 49.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\amsfonts\umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <11> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.69997> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5.5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
 Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    date: 2020-01-14 17:15:58
 (epstopdf)                    size: 975258 bytes
@@ -424,14 +424,14 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 50.
+(epstopdf)             \includegraphics on input line 49.
 Package epstopdf Info: Output file is already uptodate.
 
 <orcid-eps-converted-to.pdf, id=1, 598.235pt x 598.235pt>
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
 
 <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 50.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 49.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    date: 2020-01-14 17:15:58
@@ -441,20 +441,20 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 50.
+(epstopdf)             \includegraphics on input line 49.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
  <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 50.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 49.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <9> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <5> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 50.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 49.
 
-Underfull \hbox (badness 10000) in paragraph at lines 50--50
+Underfull \hbox (badness 10000) in paragraph at lines 49--49
 
  []
 
@@ -466,11 +466,11 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 50.
+(epstopdf)             \includegraphics on input line 49.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
 <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 50.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 49.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    date: 2020-01-14 17:15:58
@@ -480,268 +480,215 @@ Package epstopdf Info: Source file: <orcid.eps>
 (epstopdf)                    size: 11910 bytes
 (epstopdf)             Command: <epstopdf --outfile=orcid-eps-converted-to.pdf 
 orcid.eps>
-(epstopdf)             \includegraphics on input line 50.
+(epstopdf)             \includegraphics on input line 49.
 Package epstopdf Info: Output file is already uptodate.
 File: orcid-eps-converted-to.pdf Graphic file (type pdf)
  <use orcid-eps-converted-to.pdf>
-Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 50.
+Package pdftex.def Info: orcid-eps-converted-to.pdf used on input line 49.
 (pdftex.def)             Requested size: 8.5359pt x 8.53497pt.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <13> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 52.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 51.
 
-Overfull \hbox (3.28455pt too wide) in paragraph at lines 77--80
+Overfull \hbox (3.28455pt too wide) in paragraph at lines 76--79
 \OT1/pcr/m/n/10 https://github.com/exascience/elprep-bench\OT1/ptm/m/n/10 ,
  []
 
 
-Underfull \hbox (badness 1112) in paragraph at lines 77--80
+Underfull \hbox (badness 1112) in paragraph at lines 76--79
 \OT1/ptm/m/n/10 pro-pose a se-ries of im-prove-ments that could in-
  []
 
 
-Underfull \hbox (badness 1748) in paragraph at lines 77--80
+Underfull \hbox (badness 1748) in paragraph at lines 76--79
 \OT1/ptm/m/n/10 crease sig-nif-i-cantly the per-for-mance of the Java
  []
 
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <12> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 85.
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [1{C:/Users/Cristi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 84.
+[1{C:/Users/Cristi/AppData/Local/MiKTeX/2.9/pdftex/config/pdftex.map}
 
 
 
 
  <./orcid-eps-converted-to.pdf>]
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <10> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 166.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 159.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <7.4> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 166.
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 159.
 LaTeX Font Info:    Font shape `OT1/ptm/bx/n' in size <6> not available
-(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 166.
- [2] [3]
-Underfull \hbox (badness 5008) in paragraph at lines 273--276
+(Font)              Font shape `OT1/ptm/b/n' tried instead on input line 159.
+ [2]
+Underfull \hbox (badness 5008) in paragraph at lines 253--256
 \OT1/ptm/m/n/10 for rep-re-sent-ing in a com-pact man-ner a col-
  []
 
 
-Underfull \hbox (badness 1259) in paragraph at lines 273--276
+Underfull \hbox (badness 1259) in paragraph at lines 253--256
 \OT1/ptm/m/n/10 lec-tion of strings, \OT1/pcr/m/n/10 DeduplicatedDictionary \OT
 1/ptm/m/n/10 for
  []
 
 
-Underfull \hbox (badness 1484) in paragraph at lines 273--276
+Underfull \hbox (badness 1484) in paragraph at lines 253--256
 \OT1/ptm/m/n/10 elim-i-nat-ing du-pli-cate copies of re-peat-ing strings,
  []
 
 
-Underfull \hbox (badness 1286) in paragraph at lines 273--276
+Underfull \hbox (badness 1286) in paragraph at lines 253--256
 \OT1/ptm/m/n/10 an ar-ray of \OT1/pcr/m/n/10 short \OT1/ptm/m/n/10 val-ues. We 
 have also used
  []
 
 
-Underfull \hbox (badness 2635) in paragraph at lines 273--276
+Underfull \hbox (badness 2635) in paragraph at lines 253--256
 \OT1/ptm/m/n/10 the classes \OT1/pcr/m/n/10 CharArrayList\OT1/ptm/m/n/10 , \OT1
 /pcr/m/n/10 IntArrayList \OT1/ptm/m/n/10 and
  []
 
 
-Underfull \hbox (badness 5681) in paragraph at lines 295--296
+Underfull \hbox (badness 5681) in paragraph at lines 269--270
 []\OT1/ptm/m/n/10 So, in-stead of hav-ing a large num-ber of
  []
 
-<images/MemoryBookeeping.png, id=22, 636.87938pt x 358.33875pt>
-File: images/MemoryBookeeping.png Graphic file (type png)
-
-<use images/MemoryBookeeping.png>
-Package pdftex.def Info: images/MemoryBookeeping.png used on input line 318.
-(pdftex.def)             Requested size: 222.91112pt x 125.42044pt.
-
-Overfull \hbox (9.49669pt too wide) in paragraph at lines 318--319
- [] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [4]
-LaTeX Font Info:    Try loading font information for OMS+pcr on input line 340.
-
+LaTeX Font Info:    Try loading font information for OMS+pcr on input line 299.
 
 ("C:\Program Files\MiKTeX 2.9\tex\latex\psnfss\omspcr.fd"
 File: omspcr.fd 
 )
 LaTeX Font Info:    Font shape `OMS/pcr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 340.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 299.
+ [3]
 LaTeX Font Info:    Font shape `OMS/ptm/m/n' in size <10> not available
-(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 340.
+(Font)              Font shape `OMS/pzccm/m/n' tried instead on input line 312.
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 345--347
-\OT1/ptm/m/n/10 The \OT1/pcr/m/n/10 table \OT1/ptm/m/n/10 struc-ture is based o
-n the class
+Underfull \hbox (badness 6510) in paragraph at lines 318--319
+\OT1/ptm/m/n/10 This data dedu-pli-ca-tion tech-nique (He et al.,
  []
 
 
-Underfull \hbox (badness 2689) in paragraph at lines 345--347
-\OT1/pcr/m/n/10 Object2IntOpenHashMap<String> \OT1/ptm/m/n/10 from Fas-tU-til
+Underfull \hbox (badness 1127) in paragraph at lines 320--334
+\OT1/ptm/m/n/10 per-formed is us-ing an ar-ray of prim-i-tive val-ues,
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 359--362
+Underfull \hbox (badness 10000) in paragraph at lines 320--334
 \OT1/pcr/m/n/10 00001001001001000110110110110100
  []
 
 
-Underfull \hbox (badness 6625) in paragraph at lines 386--389
-[]\OT1/ptm/m/n/10 In or-der to ad-dress \OT1/pcr/m/n/10 temps \OT1/ptm/m/n/10 a
-nd \OT1/pcr/m/n/10 TAGS \OT1/ptm/m/n/10 we
+Underfull \hbox (badness 1803) in paragraph at lines 348--355
+\OT1/pcr/m/n/10 StringSequence \OT1/ptm/m/n/10 and \OT1/pcr/m/n/10 Deduplicated
+Dictionary\OT1/ptm/m/n/10 .
  []
 
 
-Underfull \hbox (badness 2080) in paragraph at lines 386--389
-\OT1/ptm/m/n/10 is a com-bi-na-tion be-tween \OT1/pcr/m/n/10 StringSequence \OT
-1/ptm/m/n/10 and
+Underfull \hbox (badness 1112) in paragraph at lines 406--412
+\OT1/ptm/m/n/10 (Oaks, 2014). If we take a closer look at the
  []
 
-[5 <./images/MemoryBookeeping.png>]
-Overfull \hbox (5.88452pt too wide) in paragraph at lines 432--432
-[]    \OT1/pcr/m/n/10 try (var swout = new PrintWriter(sw)) {[] 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 451--458
-\OT1/ptm/m/n/10 We will fur-ther an-a-lyze the us-age of the
+[4]
+Underfull \hbox (badness 5417) in paragraph at lines 414--423
+[]\OT1/ptm/m/n/10 We will fur-ther an-a-lyze the us-age of the
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 451--458
-\OT1/pcr/m/n/10 StringWriter \OT1/ptm/m/n/10 and its \OT1/pcr/m/n/10 StringBuff
-er \OT1/ptm/m/n/10 helper.
- []
-
-
-Underfull \hbox (badness 1132) in paragraph at lines 451--458
-\OT1/ptm/m/n/10 a com-mon buffer, with no syn-chro-niza-tion. To
- []
-
-[6]
-Underfull \hbox (badness 1735) in paragraph at lines 469--470
-[]\OT1/ptm/m/n/10 Again, the \OT1/pcr/m/n/10 PrintWriter.println \OT1/ptm/m/n/1
-0 method is
- []
-
-
-Underfull \hbox (badness 3792) in paragraph at lines 469--470
-\OT1/ptm/m/n/10 us-ing a \OT1/pcr/m/n/10 synchronized \OT1/ptm/m/n/10 block in 
-or-der to ful-
- []
-
-<images/cpu_original.png, id=35, 304.13625pt x 184.43906pt>
-File: images/cpu_original.png Graphic file (type png)
-
-<use images/cpu_original.png>
-Package pdftex.def Info: images/cpu_original.png used on input line 481.
-(pdftex.def)             Requested size: 152.06775pt x 92.2193pt.
-
-<images/cpu_optimized.png, id=36, 316.93407pt x 182.93344pt>
-File: images/cpu_optimized.png Graphic file (type png)
-
-<use images/cpu_optimized.png>
-Package pdftex.def Info: images/cpu_optimized.png used on input line 503.
-(pdftex.def)             Requested size: 158.46664pt x 91.46649pt.
- [7 <./images/cpu_original.png> <./images/cpu_optimized.png>]
-Overfull \hbox (5.88452pt too wide) in paragraph at lines 537--537
+Overfull \hbox (5.88452pt too wide) in paragraph at lines 555--555
 []\OT1/pcr/m/n/10 var samBatches = new ArrayList<SamBatch>();[] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 539--543
+Underfull \hbox (badness 10000) in paragraph at lines 557--561
 []\OT1/ptm/m/n/10 The \OT1/pcr/m/n/10 readRows \OT1/ptm/m/n/10 method reads $\O
 ML/ptmcm/m/it/10 chunkSize \OMS/pzccm/m/n/10 
  []
 
 
-Underfull \hbox (badness 1147) in paragraph at lines 539--543
+Underfull \hbox (badness 1147) in paragraph at lines 557--561
 \OT1/ptm/m/n/10 in or-der to stream-line their com-ple-tion is called
  []
 
 
-Underfull \hbox (badness 2277) in paragraph at lines 548--550
-[]\OT1/ptm/m/n/10 Since a \OT1/pcr/m/n/10 DeduplicatedDictionary \OT1/ptm/m/n/1
-0 will now
+Underfull \hbox (badness 10000) in paragraph at lines 562--569
+\OT1/ptm/m/n/10 batching ap-proach are mul-ti-ple. Since a
  []
 
 
-Underfull \hbox (badness 1527) in paragraph at lines 560--563
+Underfull \hbox (badness 7362) in paragraph at lines 562--569
+\OT1/pcr/m/n/10 DeduplicatedDictionary \OT1/ptm/m/n/10 will now have less
+ []
+
+
+Underfull \hbox (badness 1028) in paragraph at lines 562--569
+\OT1/ptm/m/n/10 than $\OT1/ptmcm/m/n/10 20000$ \OT1/ptm/m/n/10 unique strings, 
+the val-ues needed to
+ []
+
+
+Underfull \hbox (badness 1577) in paragraph at lines 562--569
+\OT1/pcr/m/n/10 SamAlignment \OT1/ptm/m/n/10 ob-jects, about $\OT1/ptmcm/m/n/10
+ 105$ \OT1/pcr/m/n/10 SamBatch \OT1/ptm/m/n/10 in-
+ []
+
+
+Underfull \hbox (badness 1527) in paragraph at lines 573--576
 []\OT1/ptm/m/n/10 When it comes to writ-ing, com-pared to our
  []
 
-
-Underfull \hbox (badness 4686) in paragraph at lines 579--580
-[]\OT1/ptm/m/it/10 Original \OT1/ptm/m/n/10 , the orig-i-nal al-go-rithm de-scr
-ibed
- []
-
-[8]
-Overfull \hbox (6.57971pt too wide) in paragraph at lines 626--626
+[5]
+Overfull \hbox (6.57971pt too wide) in paragraph at lines 643--643
  []|\OT1/ptm/m/n/9 StreamByteArray| 
  []
 
-[9]
-<images/times_and_memory_chart_small_144mb_ryzen.png, id=47, 361.35pt x 256.709
-06pt>
-File: images/times_and_memory_chart_small_144mb_ryzen.png Graphic file (type pn
-g)
- <use images/times_and_memory_chart_small_144mb_ryzen.png>
-Package pdftex.def Info: images/times_and_memory_chart_small_144mb_ryzen.png us
-ed on input line 688.
-(pdftex.def)             Requested size: 180.67456pt x 128.3542pt.
+<images/runtime_perf_1_2G.png, id=29, 455.301pt x 255.95625pt>
+File: images/runtime_perf_1_2G.png Graphic file (type png)
 
-<images/times_and_memory_chart_small_144mb_intel.png, id=48, 361.35pt x 256.709
-06pt>
-File: images/times_and_memory_chart_small_144mb_intel.png Graphic file (type pn
-g)
- <use images/times_and_memory_chart_small_144mb_intel.png>
-Package pdftex.def Info: images/times_and_memory_chart_small_144mb_intel.png us
-ed on input line 699.
-(pdftex.def)             Requested size: 180.67456pt x 128.3542pt.
+<use images/runtime_perf_1_2G.png>
+Package pdftex.def Info: images/runtime_perf_1_2G.png used on input line 652.
+(pdftex.def)             Requested size: 227.64993pt x 127.9778pt.
 
-Underfull \vbox (badness 1960) has occurred while \output is active []
+Overfull \hbox (14.2355pt too wide) in paragraph at lines 652--653
+ [] 
+ []
 
- [10 <./images/times_and_memory_chart_small_144mb_ryzen.png>]
-<images/times_and_memory_chart.png, id=53, 455.45157pt x 255.95625pt>
+<images/seconds_per_gb_ryzen.png, id=31, 455.90324pt x 255.95625pt>
+File: images/seconds_per_gb_ryzen.png Graphic file (type png)
+
+<use images/seconds_per_gb_ryzen.png>
+Package pdftex.def Info: images/seconds_per_gb_ryzen.png used on input line 661
+.
+(pdftex.def)             Requested size: 227.95105pt x 127.9778pt.
+
+Overfull \hbox (14.53662pt too wide) in paragraph at lines 661--662
+ [] 
+ []
+
+[6 <./images/runtime_perf_1_2G.png> <./images/seconds_per_gb_ryzen.png>]
+<images/memory_usage_1_2G.png, id=37, 455.301pt x 255.95625pt>
+File: images/memory_usage_1_2G.png Graphic file (type png)
+
+<use images/memory_usage_1_2G.png>
+Package pdftex.def Info: images/memory_usage_1_2G.png used on input line 704.
+(pdftex.def)             Requested size: 227.64993pt x 127.9778pt.
+
+Overfull \hbox (14.2355pt too wide) in paragraph at lines 704--705
+ [] 
+ []
+
+<images/times_and_memory_chart.png, id=38, 455.301pt x 255.95625pt>
 File: images/times_and_memory_chart.png Graphic file (type png)
 
 <use images/times_and_memory_chart.png>
 Package pdftex.def Info: images/times_and_memory_chart.png used on input line 7
-06.
-(pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
+44.
+(pdftex.def)             Requested size: 227.64993pt x 127.9778pt.
 
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 706--707
+Overfull \hbox (14.2355pt too wide) in paragraph at lines 744--745
  [] 
  []
 
-<images/seconds_per_gb_ryzen.png, id=54, 455.45157pt x 255.95625pt>
-File: images/seconds_per_gb_ryzen.png Graphic file (type png)
-
-<use images/seconds_per_gb_ryzen.png>
-Package pdftex.def Info: images/seconds_per_gb_ryzen.png used on input line 715
-.
-(pdftex.def)             Requested size: 227.72522pt x 127.9778pt.
-
-Overfull \hbox (14.31079pt too wide) in paragraph at lines 715--716
- [] 
- []
-
-
-Underfull \vbox (badness 10000) has occurred while \output is active []
-
- [11 <./images/times_and_memory_chart_small_144mb_intel.png> <./images/times_an
-d_memory_chart.png> <./images/seconds_per_gb_ryzen.png>] (elprep-study.bbl
+[7 <./images/memory_usage_1_2G.png> <./images/times_and_memory_chart.png>]
+(elprep-study.bbl
 Underfull \hbox (badness 3078) in paragraph at lines 37--41
 []\OT1/ptm/m/n/9 Java Plat-form, Stan-dard Edi-tion (2019).  Java De-
  []
@@ -776,29 +723,25 @@ Underfull \hbox (badness 10000) in paragraph at lines 77--82
 \OT1/ptm/m/n/9 https://docs.oracle.com/javase/8/docs/technotes/
  []
 
-) [12] (elprep-study.aux) )
-(\end occurred inside a group at level 1)
-
-### simple group (level 1) entered at line 315 ({)
-### bottom level 
+) [8] (elprep-study.aux) ) 
 Here is how much of TeX's memory you used:
- 4818 strings out of 493333
- 69391 string characters out of 3139192
- 143386 words of memory out of 3000000
- 8228 multiletter control sequences out of 15000+200000
+ 4800 strings out of 493333
+ 68708 string characters out of 3139192
+ 141362 words of memory out of 3000000
+ 8213 multiletter control sequences out of 15000+200000
  55088 words of font info for 122 fonts, out of 3000000 for 9000
  1141 hyphenation exceptions out of 8191
- 42i,9n,40p,628b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
-{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.enc}<C:/Pr
-ogram Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/Program Fi
-les/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program Files/MiKTe
-X 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiKTeX 2.9/fo
-nts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/t
-imes/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmr8a.pfb><
-C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
-Output written on elprep-study.pdf (12 pages, 317056 bytes).
+ 42i,8n,40p,614b,271s stack positions out of 5000i,500n,10000p,200000b,50000s
+{C:/Program Files/MiKTeX 2.9/fonts/enc/dvips/base/8r.
+enc}<C:/Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmmi10.pfb><C:/
+Program Files/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmr10.pfb><C:/Program F
+iles/MiKTeX 2.9/fonts/type1/public/amsfonts/cm/cmsy10.pfb><C:/Program Files/MiK
+TeX 2.9/fonts/type1/urw/courier/ucrr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/t
+ype1/urw/times/utmb8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/ut
+mr8a.pfb><C:/Program Files/MiKTeX 2.9/fonts/type1/urw/times/utmri8a.pfb>
+Output written on elprep-study.pdf (8 pages, 190346 bytes).
 PDF statistics:
- 88 PDF objects out of 1000 (max. 8388607)
+ 72 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 41 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 26 words of extra memory for PDF output out of 10000 (max. 10000000)
 
