@@ -3,4 +3,5 @@ The style file: apalike.bst
 Database file #1: elprep-study.bib
 Warning--empty booktitle in he:2010
 Warning--empty booktitle in manogar:2014
-(There were 2 warnings)
+Warning--empty journal in schatzl:2011
+(There were 3 warnings)

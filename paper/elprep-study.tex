@@ -51,7 +51,7 @@ We also show that, by changing the manner in which data is represented, to bette
 \section{\uppercase{Introduction}}
 \label{intro}
 
-In the field of bioinformatics, DNA sequence analysis generally consists of processing large amounts of data and performing
+In the field of bioinformatics, DNA sequence analysis \cite{doring:2008} generally consists of processing large amounts of data and performing
 various operations on it,
 such as sequence alignment, variant detection, searches against biological databases, etc.
 A large variety of software tools exist for these operations, most of them having specific uses cases but with a common
@@ -150,7 +150,6 @@ simplifying the object graph and controlling the amount of memory JVM is allowed
 \label{subsec:memory}
 
 The Java Virtual Machine allocates memory either on stack or on heap~\cite{lindholm:2014}, \cite{gosling:2014}.
-
 %The {\textit{heap}} is the place where all class instances and arrays are allocated and it is shared among all threads. Each JVM thread has a private {\textit{stack}} which holds local variables and partial results  during successive method invocations and returns.
 %When working with large amounts of objects it is quite important to assess the memory consumption of a data structure, in a manner similar to the {\textit{sizeof}} construct in C or C++.
 An object allocated on the heap has a {\textit{header}} which contains information used for locking, garbage collection or the identity of that object.
@@ -182,11 +181,13 @@ We will show that replacing the \texttt{String} usage to the underlying \texttt{
 \label{subsec:compaction}
 
 Another important part of working with large data sets that have to be accessible in memory regards the format in which they are represented.
-Choosing the right format will not only reduce the amount of consumed memory but it will also reduce the GC cost to copy the objects between regions and the cost of visiting and marking them.
+Choosing the right format will not only reduce the amount of consumed memory but it will also reduce the GC cost to copy the objects between regions and the cost of visiting and marking them
+\cite{schatzl:2011}, \cite{eimouri:2016}, \cite{eimouri:2017}.
+
 
 The most common approach of representing information is in row based form, where a {\textit{row}} is a record of some kind and a {\textit{column}} is a certain property of that row.
 This type of representation is used in most relational databases management systems, where sets of rows of the same type form {\textit{tables}}.
-Despite having many advantages, this format is not necessarily optimal when it comes to data representation in memory.
+%Despite having many advantages, this format is not necessarily optimal when it comes to data representation in memory.
 
 A {\textit{column store}} model~\cite{abadi:2013} "reverses" the orientation of the tables.
 It stores data by columns and uses row identifiers in order to access a specific cell of the table.
@@ -798,10 +799,10 @@ We have showed that major improvements can be obtained by using techniques that 
 This will not only save memory but it will also improve runtime performance by decreasing the overhead of the Garbage Collector.
 Using a column-based representation we have compacted the data set in a manner that boosted the overall score calculated as the multiplication between used memory and running time.
 The penalty incurred by the more elaborate data model was compensated by a multi-threaded approach, called chunking-batching, that actually allows the algorithm to use all available machine cores when processing the input file.
-In order to optimize the usage of the I/O device, we have implemented the {\textit{async/await} } pattern, which also offered a small increase in performance.
+%In order to optimize the usage of the I/O device, we have implemented the {\textit{async/await} } pattern, which also offered a small increase in performance.
 
 Given the hardware differences between the machine used by the elPrep authors and ours, there are limits on the testing that could be done with the techniques used by this paper.
-Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $32$ GB/s) and so on.
+%Instead of a $384$ GB of memory, dual-CPU server, we have used a machine  with $8$ times less RAM, half of CPU cores, a much slower disk drive (the SSD on the Ryzen machine can barely read at 300 MB/s, while a NVMe SSD can reach $32$ GB/s) and so on.
 However, using input files ranging in size from $144$ MB to $12$ GB, we have proved that our algorithms are scalable and could perform as expected for files of any size, provided the machine has sufficient memory.
 
 
