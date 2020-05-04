@@ -631,10 +631,10 @@ As we didn't have access to such a performing machine, we did most of testing wi
 
 The following table shows a brief comparison of the running times obtained by our algorithms, in three configurations: $144$ MB file using $4$ cores and $12$ cores, and $1.2$ GB file using $12$ cores. 
 
-\begin{small}
-\begin{center}
-\textbf{Running time per algorithm in seconds} \\
-\begin{tabular}{|C{2cm}|C{1.2cm}|C{1.2cm}|C{1.2cm}|}
+\begin{table}[h]
+	  \caption{Running time per algorithm in seconds.}\centering
+	 
+\begin{tabular}{|C{2.4cm}|C{1.2cm}|C{1.2cm}|C{1.2cm}|}
 \hline
 						& 144 MB (4c)	& 144 MB (12c)		& 1.2 GB (12c)	\\ \hline
 Original				& 9.13 			& 3.938 			& 123.91 		\\ \hline
@@ -643,8 +643,7 @@ StreamByteArray			& 8.09 			& 3.43 				& 64.62 		\\ \hline
 Compact 				& 5.64 			& 3.4 	 			& 34.5			\\ \hline
 Compact/Par 			& 5.42		    & 4.68				& 26.7 			\\ \hline
 \end{tabular}
-\end{center}
-\end{small}
+\end{table}
 
 %The largest file shows the following numbers:
 \begin{center}
@@ -686,9 +685,9 @@ This is possible due to VisualVM which offers very precise information regarding
 %Having a larger machine with double memory will trigger the GC at least two times more seldom and
 %although the number of objects to be removed is the same, the overall time necessary for this operation is improved.
 
-\begin{small}
-\begin{center}
-\textbf{Memory usage per algorithm in MB} \\
+
+\begin{table}[h]
+	\caption{Memory usage per algorithm in MB.}\centering
 	\begin{tabular}{|c|c|c|}
 		\hline			  	& 144 MB file		& 1.2 GB file		\\ \hline
 		Original			& 2326 MB			& 32025 MB			\\ \hline
@@ -696,8 +695,7 @@ This is possible due to VisualVM which offers very precise information regarding
 		StreamByteArray 	& 2275 MB			& 31463 MB			\\ \hline
 		Compact/Par			& 606 MB			& 4689 MB			\\ \hline
 	\end{tabular}
-\end{center}
-\end{small}
+\end{table}
 
 \begin{center}
 	\includegraphics[scale=0.5]{images/memory_usage_1_2G.png}
