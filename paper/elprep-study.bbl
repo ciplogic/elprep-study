@@ -19,18 +19,10 @@ D{\"o}ring, A., Weese, D., Rausch, T., and Knut, R. (2008).
 
 \bibitem[Eimouri et~al., 2017]{eimouri:2017}
 Eimouri, T., Kent, K.~B., and Micic, A. (2017).
-\newblock Optimizing the jvm object model using object splitting.
+\newblock {Optimizing the JVM Object Model Using Object Splitting}.
 \newblock In {\em Proceedings of the 27th Annual International Conference on
   Computer Science and Software Engineering}, CASCON ’17, page 170–179,
   USA. IBM Corp.
-
-\bibitem[Eimouri et~al., 2016]{eimouri:2016}
-Eimouri, T., Kent, K.~B., Micic, A., and Taylor, K. (2016).
-\newblock Using field access frequency to optimize layout of objects in the
-  jvm.
-\newblock In {\em Proceedings of the 31st Annual ACM Symposium on Applied
-  Computing}, SAC ’16, page 1815–1818, New York, NY, USA. Association for
-  Computing Machinery.
 
 \bibitem[Gosling et~al., 2014]{gosling:2014}
 Gosling, J., Joy, B., Steele, G.~L., Bracha, G., and Buckley, A. (2014).
@@ -83,7 +75,7 @@ Oaks, S. (2014).
 
 \bibitem[Schatzl et~al., 2011]{schatzl:2011}
 Schatzl, T., Daynès, L., and Mössenböck, H. (2011).
-\newblock Optimized memory management for class metadata in a jvm.
+\newblock {Optimized memory management for class metadata in a JVM}.
 
 \bibitem[Valhalla, 2019]{jdk:valhalla}
 Valhalla, P. (2019).

@@ -73,7 +73,8 @@ RAM usage and the runtime performance.
 The benchmarks of the study showed that Java had a faster runtime, but a significantly higher memory usage, while Go
 offered a better balance between the two.
 
-As the Java source code for elPrep is available at {\texttt{https://github.com/exascience/elprep-bench}}, we have
+As the Java source code for elPrep is available at 
+{\small {\texttt{https://github.com/exascience/elprep-bench}}}, we have
 analyzed key aspects regarding the memory management and thread synchronization, and propose a series of improvements
 that could increase significantly the performance of the Java implementation.
 
@@ -543,10 +544,10 @@ A sketch of our {\textit{Compact}} algorithm is described by the following pseud
 
 \begin{verbatim}
 int chunkSize = 20000;
-int nbOfThreads = cpuCoreCount * 4;
-var samBatches = new ArrayList<SamBatch>();
+int nbOfThreads=cpuCoreCount * 4;
+var samBatches=new ArrayList<SamBatch>();
 while (!endOfFile) {
-  var rowsRead = parallelReadRows(
+  var rowsRead=parallelReadRows(
     batchSize, nbOfThreads);
   parallelTransformRowsIntoBatches(
     samBatches, rowsRead);
@@ -571,7 +572,7 @@ This optimization, however, reduces the overall execution time of the read opera
 
 When it comes to writing, compared to our {\textit{StreamByteWriter} } algorithm, which is anyway much faster than the original implementation, the execution time is drastically reduced from $28$ seconds (for the $12$ GB BAM file) to $12$ seconds.
 Preparing the strings that are to be written in the file can be done in almost perfect parallelism, using the available cores.
-The only limitation remains the speed of the output device, which can vary depending on its type: in-memory virtual partition, SSD, HD, etc.
+%The only limitation remains the speed of the output device, which can vary depending on its type: in-memory virtual partition, SSD, HD, etc.
 
 In order to make sure there are no dead times when using the external device, 
 we have also implemented the {\textit{async/await}} pattern.
@@ -634,9 +635,9 @@ The following table shows a brief comparison of the running times obtained by ou
 \begin{table}[h]
 	  \caption{Running time per algorithm in seconds.}\centering
 	 
-\begin{tabular}{|C{2.2cm}|C{1.2cm}|C{1.2cm}|C{1.2cm}|}
+\begin{tabular}{|C{2.3cm}|C{1.15cm}|C{1.15cm}|C{1.15cm}|}
 \hline
-						& 144 MB (4c)	& 144 MB (12c)		& 1.2 GB (12c)	\\ \hline
+						& 144M (4c)	& 144M (12c)		& 1.2G (12c)	\\ \hline
 Original				& 9.13 			& 3.938 			& 123.91 		\\ \hline
 PresizedBuffers			& 8.98 			& 4.19 				& 75.1 			\\ \hline
 StreamByteArray			& 8.09 			& 3.43 				& 64.62 		\\ \hline
