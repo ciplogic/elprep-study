@@ -631,10 +631,10 @@ As we didn't have access to such a performing machine, we did most of testing wi
 
 The following table shows a brief comparison of the running times obtained by our algorithms, in three configurations: $144$ MB file using $4$ cores and $12$ cores, and $1.2$ GB file using $12$ cores. 
 
-\begin{small}
-\begin{center}
-\textbf{Running time per algorithm in seconds} \\
-\begin{tabular}{|C{2cm}|C{1.2cm}|C{1.2cm}|C{1.2cm}|}
+\begin{table}[h]
+	  \caption{Running time per algorithm in seconds.}\centering
+	 
+\begin{tabular}{|C{2.2cm}|C{1.2cm}|C{1.2cm}|C{1.2cm}|}
 \hline
 						& 144 MB (4c)	& 144 MB (12c)		& 1.2 GB (12c)	\\ \hline
 Original				& 9.13 			& 3.938 			& 123.91 		\\ \hline
@@ -643,22 +643,25 @@ StreamByteArray			& 8.09 			& 3.43 				& 64.62 		\\ \hline
 Compact 				& 5.64 			& 3.4 	 			& 34.5			\\ \hline
 Compact/Par 			& 5.42		    & 4.68				& 26.7 			\\ \hline
 \end{tabular}
-\end{center}
-\end{small}
+\end{table}
 
 %The largest file shows the following numbers:
-\begin{center}
-	\includegraphics[scale=0.5]{images/runtime_perf_1_2G.png}
-\end{center}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.45]{images/runtime_perf_1_2G.png}
+	 \caption{Runtime Performance in seconds (1.2 GB BAM).}
+\end{figure}
 
 Comparing $4$ cores to $12$ cores, we notice that the {\textit{Original} } algorithm scales with a factor of $2.3$, {\textit{PresizedBuffers} } by a factor of $2.14$, {\textit{StreamByteArray} } scales by $2.36$ and {\textit{Compact} } would scale by $1.69$. So, at least for the small file, it seems that using larger machines will offer a better performance. It is important to notice that, in its current implementation, the {\textit{Compact} } algorithm has an explicit sequential part that reduces its scalability.
 Some potential fixes are described in section \ref{sec:future}, where we describe some techniques aimed at improving the single threaded part.
 
 A more useful way to present the algorithm is to show how it scales based on input size, and at least on the 12 core machine, we can see that both compact algorithms remain roughly in the same speed, so GC's runtime cost doesn't become in impediment:
 
-\begin{center}
-	\includegraphics[scale=0.5]{images/seconds_per_gb_ryzen.png}
-\end{center}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.4]{images/seconds_per_gb_ryzen.png}
+	\caption{Seconds per GB by algorithm and file size.}
+\end{figure}
 
 %Comparing $4$ cores to $12$ cores, we notice that the {\textit{Original} } algorithm scales with a factor of $2.3$, {\textit{PresizedBuffers} } by a factor of $2.14$, {\textit{StreamByteArray} } scales by $2.36$ and {\textit{Compact} } would scale by $1.69$. So, at least for the small file, it seems that using larger machines will offer a better performance. It is important to notice that, in its current implementation, the {\textit{Compact} } algorithm has an explicit sequential part that reduces its scalability.
 %Some potential fixes are described in section \ref{sec:future}, where we present some techniques aimed at improving the single-threaded part.
@@ -686,9 +689,9 @@ This is possible due to VisualVM which offers very precise information regarding
 %Having a larger machine with double memory will trigger the GC at least two times more seldom and
 %although the number of objects to be removed is the same, the overall time necessary for this operation is improved.
 
-\begin{small}
-\begin{center}
-\textbf{Memory usage per algorithm in MB} \\
+
+\begin{table}[h]
+	\caption{Memory usage per algorithm in MB.}\centering
 	\begin{tabular}{|c|c|c|}
 		\hline			  	& 144 MB file		& 1.2 GB file		\\ \hline
 		Original			& 2326 MB			& 32025 MB			\\ \hline
@@ -696,12 +699,13 @@ This is possible due to VisualVM which offers very precise information regarding
 		StreamByteArray 	& 2275 MB			& 31463 MB			\\ \hline
 		Compact/Par			& 606 MB			& 4689 MB			\\ \hline
 	\end{tabular}
-\end{center}
-\end{small}
+\end{table}
 
-\begin{center}
-	\includegraphics[scale=0.5]{images/memory_usage_1_2G.png}
-\end{center}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.45]{images/memory_usage_1_2G.png}
+	\caption{Live Memory Usage (in GB).}
+\end{figure}
 
 The peak usage was measured by suspending the program at the moment when the whole file was read.
 We notice that for the $1.2$ GB BAM file, the {\textit{Original} } and {\textit{Presized Buffers} } algorithms are using around $32$ GB of memory. In order to offer this amount of memory to JVM we used a machine with $48$ GB of RAM. To further reduce the overhead of GC, $64$ GB would certainly have been better.
@@ -739,9 +743,12 @@ We have used the same approach, changing only the measurement units to MB and se
 %\end{center}
 
 On the medium file ($1.2$ GB BAM) the values are conclusive from the point of view of scaling the results. The improvements resulting from our optimization techniques are now clearly visible.
-\begin{center}
-	\includegraphics[scale=0.5]{images/times_and_memory_chart.png}
-\end{center}
+\begin{figure}[!h]
+	\centering
+	\includegraphics[scale=0.45]{images/times_and_memory_chart.png}
+	
+	\caption{Memory x Times Score (Seconds x GB).}
+\end{figure}
 
 
 
